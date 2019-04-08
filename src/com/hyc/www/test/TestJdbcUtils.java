@@ -16,18 +16,29 @@
 
 package com.hyc.www.test;
 
+import com.hyc.www.util.JdbcUtils;
 
-import java.io.File;
+import java.sql.Connection;
 
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
  * @program XHotel
- * @description 用于测试与文件路径相关的方法
- * @date 2019-04-08 02:19
+ * @description 用于测试JdbcUtils
+ * @date 2019-04-08 23:24
  */
-public class TestFile {
+public class TestJdbcUtils {
     public static void main(String[] args) {
-        File file = new File("./");
-        System.out.println(file.getAbsolutePath());
+        System.out.println("测试通过jdbcUtil获取连接");
+        Connection conn = JdbcUtils.getConnection();
+
+        for (int i = 0; i < 9; i++) {
+            conn = JdbcUtils.getConnection();
+            System.out.println(conn);
+            JdbcUtils.close(conn);
+        }
+        System.out.println("释放一个连接");
+        JdbcUtils.close(null,null,conn);
+        System.out.println("当前已创建连接数 = " + JdbcUtils.getCurrentCount());
+        System.out.println("当前空闲连接数 = " + JdbcUtils.getfreeCount());
     }
 }

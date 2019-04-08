@@ -16,18 +16,25 @@
 
 package com.hyc.www.test;
 
-
-import java.io.File;
+import com.hyc.www.dao.DaoFactory;
+import com.hyc.www.dao.impl.BaseDaoImpl;
+import com.hyc.www.dao.inter.BaseDao;
+import com.hyc.www.dao.inter.UserDao;
 
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
  * @program XHotel
- * @description 用于测试与文件路径相关的方法
- * @date 2019-04-08 02:19
+ * @description 用于测试Dao实现类
+ * @date 2019-04-09 00:15
  */
-public class TestFile {
+public class TestDao {
     public static void main(String[] args) {
-        File file = new File("./");
-        System.out.println(file.getAbsolutePath());
+        UserDao userDao = DaoFactory.getInstance().getUserDao();
+        /**
+         * 测试BaseDao
+         */
+        BaseDao baseDao =new BaseDaoImpl();
+        ((BaseDaoImpl) baseDao).executeUpdate("insert into ? (user_name,balance) values (?,?)",new Object[]{"tb_user","testdao",100f});
+
     }
 }
