@@ -14,23 +14,26 @@
  * limitations under the License.
  */
 
-package com.hyc.www.dao.impl;
+package com.hyc.www.dao.inter;
 
-import com.hyc.www.dao.inter.UserDao;
-import com.hyc.www.po.User;
+
+import java.sql.ResultSet;
 
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
  * @program XHotel
- * @description 负责提供User类到数据库的CRUD操作
- * @date 2019-04-09 00:13
+ * @description 用于处理执行查询语句之后返回的结果集，将结果集映射为对象
+ * @date 2019-04-09 15:06
  */
-public class UserDaoImpl extends BaseDaoImpl implements UserDao {
-
-    String table = "tb_user";
-    @Override
-    public User getUser(String userName) {
-        String sql = "select * from "+table+" where user_name = ?";
-        return (User) super.queryList(sql,new Object[]{userName},User.class).get(0);
-    }
+public interface ResultMapper {
+    /**
+     * 负责提供一个映射数据库查询结果集的方法
+     * @name doMap
+     * @param rs 需要映射的结果集
+     * @return java.lang.Object
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/10
+     */
+    Object doMap(ResultSet rs);
 }
