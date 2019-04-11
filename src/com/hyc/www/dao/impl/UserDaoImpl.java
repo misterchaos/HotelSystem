@@ -19,6 +19,10 @@ package com.hyc.www.dao.impl;
 import com.hyc.www.dao.inter.UserDao;
 import com.hyc.www.po.User;
 
+import java.math.BigInteger;
+import java.util.LinkedList;
+import java.util.Properties;
+
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
  * @program XHotel
@@ -27,10 +31,196 @@ import com.hyc.www.po.User;
  */
 public class UserDaoImpl extends BaseDaoImpl implements UserDao {
 
-    String table = "tb_user";
+    /**
+     * 本类操作的数据库表名
+     */
+    String table = " tb_user ";
+
+    /**
+     * 表中所有字段对应的查询语句
+     */
+    String allFields = " id,user_name,password,phone_number,id_number,nick_name,"
+            + "status,balance,pay_pwd,gmt_create,gmt_modified ";
+
+
+
+    /**
+     * 添加一个用户到数据库
+     *
+     * @name addUser
+     * @param user 要添加的用户对象
+     * @return boolean
+     * @notice 无法添加用户名为空的用户
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/11
+     */
+    @Override
+    public boolean addUser(User user){
+        if(user==null||user.getUserName()==null) {
+            return false;
+        }
+        return super.insert(table,user)==1?true:false;
+    }
+
+    /**
+     * 根据用户名查询一个用户的所有信息
+     *
+     * @param userName 用户名
+     * @return com.hyc.www.po.User
+     * @name getUser
+     * @notice 如果用户名为空或者没有该用户，则返回null;
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/10
+     */
     @Override
     public User getUser(String userName) {
-        String sql = "select * from "+table+" where user_name = ?";
-        return (User) super.queryList(sql,new Object[]{userName},User.class).get(0);
+        if(userName==null){
+            return null;
+        }
+        String sql = "select " + allFields + " from " + table + " where user_name = ?";
+        return (User) super.queryObject(sql, new Object[]{userName}, User.class);
+    }
+
+    /**
+     * 返回该用户名对应的登陆密码
+     *
+     * @param userName 需要查询登陆密码的用户名
+     * @return java.lang.String
+     * @name getPassword
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/11
+     */
+    @Override
+    public String getPassword(String userName) {
+        String sql = "select password from " + table + " where user_name = ?";
+        return (String) super.queryValue(sql, new Object[]{userName});
+    }
+
+
+    /**
+     * 返回该用户名对应的id
+     *
+     * @param userName 用户名
+     * @return java.math.BigInteger
+     * @name getId
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/11
+     */
+    @Override
+    public BigInteger getId(String userName) {
+        String sql = "select id from " + table + " where user_name = ?";
+        return (BigInteger) super.queryValue(sql, new Object[]{userName});
+    }
+
+    /**
+     * 获取表中所有用户的信息，并以LinkedList的形式返回
+     *
+     * @return java.util.LinkedList
+     * @name qgetAllUsers
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/11
+     */
+    @Override
+    public LinkedList<User> getAllUsers() {
+        String sql = "select " + allFields + " from " + table;
+        LinkedList<Object> list = super.queryList(sql, null, User.class);
+        LinkedList<User> users = new LinkedList<>();
+        for (int i = 0; i < list.size(); i++) {
+            User user = (User) list.get(i);
+            users.add(user);
+        }
+        return users;
+    }
+
+
+    /**
+     * 将该id对应的用户从数据库中删除
+     *
+     * @param Id 要删除用户的id
+     * @return boolean
+     * @name deleteById
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/11
+     */
+    @Override
+    public boolean deleteById(BigInteger Id) {
+        return super.delete(table, Id) == 1 ? true : false;
+    }
+
+
+    /**
+     * 将该用户名对应的用户从数据库中删除
+     *
+     * @param userName 要删除的用户的用户名
+     * @return boolean
+     * @name deleteByUserName
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/11
+     */
+    @Override
+    public boolean deleteByUserName(String userName) {
+        return deleteById(getId(userName));
+    }
+
+    /**
+     * 将一个用户对象从数据库中删除
+     *
+     * @param user 要删除的用户对象
+     * @return boolean
+     * @name delete
+     * @notice 该用户对象必须至少包含用户的id
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/11
+     */
+    @Override
+    public boolean delete(User user) {
+        return deleteById(user.getId());
+    }
+
+
+    /**
+     * 更新一个用户的信息，不包括登陆密码和支付密码
+     *
+     * @param user 要更新的用户对象
+     * @return boolean
+     * @name update
+     * @notice 此方法不会更新用户的密码，需要更新密码请使用updateWithPassword
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/11
+     */
+    @Override
+    public boolean update(User user) {
+        if(user==null){
+            return false;
+        }
+        /**
+         * 使用克隆对象，防止影响原来对象的值
+         */
+        User clone = user.clone();
+        clone.setPassword(null);
+        clone.setPayPwd(null);
+        return super.update(table, clone) == 1 ? true : false;
+    }
+
+
+    /**
+     * 更新一个用户的信息，包括密码
+     *
+     * @param user 要更新的用户对象
+     * @return boolean
+     * @name updateAll
+     * @notice 此方法会更新用户的密码，请只在用户更新密码时使用，否则md5的摘要将覆盖原来的摘要<br>
+     * 如果传入的对象为null或者找不到该用户，则返回false
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/11
+     */
+    @Override
+    public boolean updateAll(User user) {
+        return super.update(table, user) == 1 ? true : false;
     }
 }
