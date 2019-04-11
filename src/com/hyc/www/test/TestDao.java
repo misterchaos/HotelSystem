@@ -41,16 +41,12 @@ public class TestDao {
          */
         //TODO debug
         BaseDao baseDao =new BaseDaoImpl();
-//        ((BaseDaoImpl) baseDao).executeUpdate("insert into ? (user_name,balance) values (?,?)",new Object[]{"tb_user","testdao",100f});
-//    ((BaseDaoImpl) baseDao).insert("",new User("testinsert"));
-//    ((BaseDaoImpl) baseDao).insert("tb_user",new User("testsql2"));
-       LinkedList<Object> linkedList=((BaseDaoImpl) baseDao).queryList("select id,user_name,password from tb_user where user_name = ?",new Object[]{"testsql2"},User.class);
+       LinkedList<Object> linkedList=((BaseDaoImpl) baseDao).queryList("select id,user_name,password,gmt_create from tb_user where user_name = ?",new Object[]{"test"},User.class);
         for (int i = 0; i <linkedList.size() ; i++) {
             User user = (User) linkedList.get(i);
             System.out.println(user.getUserName());
         }
-        User user = (User) linkedList.get(0);
-        user.setUserName("testupdate3");
-        ((BaseDaoImpl) baseDao).update("tb_user",user);
+
+
     }
 }
