@@ -26,14 +26,14 @@ import java.sql.Timestamp;
  * @description 对应数据库中的用户表，用来存储用户信息
  * @date 2019-04-09 20:12
  */
-public class User {
+public class User implements Cloneable{
     BigInteger id;
     String userName;
     String password;
     String phoneNumber;
     String idNumber;
     String nickName;
-    Integer status;
+    Boolean status;
     BigDecimal balance;
     String payPwd;
     Timestamp gmtCreate;
@@ -87,11 +87,11 @@ public class User {
         this.nickName = nickName;
     }
 
-    public Integer getStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 
@@ -126,4 +126,15 @@ public class User {
     public void setGmtModified(Timestamp gmtModified) {
         this.gmtModified = gmtModified;
     }
+
+    @Override
+    public User clone(){
+        try {
+            return (User) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            throw new RuntimeException("无法克隆User对象",e);
+        }
+    }
+
 }
