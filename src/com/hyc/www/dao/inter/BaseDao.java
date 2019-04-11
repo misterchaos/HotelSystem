@@ -16,17 +16,6 @@
 
 package com.hyc.www.dao.inter;
 
-import com.hyc.www.dao.impl.BaseDaoImpl;
-import com.hyc.www.exception.DaoException;
-import com.hyc.www.util.JdbcUtils;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.LinkedList;
 
 /**
@@ -52,10 +41,12 @@ public interface BaseDao {
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/9
      */
-    public int executeUpdate(String sql, Object[] params);
+    int executeUpdate(String sql, Object[] params);
 
 
     /**
+     * 执行一条预编译指令，并且填入参数
+     *
      * @param sql    要执行的预编译sql语句
      * @param params 参数
      * @param mapper 结果集映射器，需要实现ResultMapper接口的doMap方法
@@ -65,9 +56,11 @@ public interface BaseDao {
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/9
      */
-    public Object executeQuery(String sql, Object[] params, ResultMapper mapper);
+    Object executeQuery(String sql, Object[] params, ResultMapper mapper);
 
     /**
+     * 把一个对象插入一张表
+     *
      * @param table 要插入的表名
      * @param obj   要插入的对象
      * @return int 更新的数据库记录数
@@ -76,10 +69,7 @@ public interface BaseDao {
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/9
      */
-    public int insert(String table, Object obj);
-
-
-
+    int insert(String table, Object obj);
 
 
     /**
@@ -93,14 +83,14 @@ public interface BaseDao {
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/10
      */
-    public int delete(String table, Object id);
+    int delete(String table, Object id);
 
 
     /**
      * 根据传入的表名和id，从该表中更新一条记录
      *
      * @param table 要操作的目标表名
-     * @param obj 要更新的记录对应的实体类对象
+     * @param obj   要更新的记录对应的实体类对象
      * @return int 更新的数据库记录数
      * @name update
      * @notice 请注意此方法默认更新该对象中所有不为null的属性到数据库<br>
@@ -108,7 +98,7 @@ public interface BaseDao {
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/10
      */
-    public int update(String table, Object obj);
+    int update(String table, Object obj);
 
     /**
      * 执行输入的sql语句，并且将结果映射为对象集合，以LinkedList的形式返回
@@ -122,7 +112,35 @@ public interface BaseDao {
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/10
      */
-    public LinkedList<Object> queryList(String sql, Object[] params, Class clazz);
+    LinkedList<Object> queryList(String sql, Object[] params, Class clazz);
+
+    /**
+     * 执行输入的sql语句，并且将结果映射为对象，以对象的形式返回<br>
+     * 此方法用于查询单行的数据
+     * @param sql    查询的预编译sql语句
+     * @param params 预编译的参数
+     * @param clazz  用于映射结果集的实体类
+     * @return Object
+     * @name queryList
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/10
+     */
+    Object queryObject(String sql, Object[] params, Class clazz);
+
+
+    /**
+     * 执行一条sql语句，返回一个字段的值
+     *
+     * @param sql    查询的预编译sql语句
+     * @param params 预编译的参数
+     * @return 查询的字段值
+     * @name queryValue
+     * @notice 如果查询结果为空，则返回一个空的字符串
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/11
+     */
+    Object queryValue(String sql, Object[] params);
 
 
 }

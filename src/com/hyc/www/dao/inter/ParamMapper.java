@@ -16,25 +16,15 @@
 
 package com.hyc.www.dao.inter;
 
-
-import java.sql.ResultSet;
+import java.util.LinkedList;
 
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
  * @program XHotel
  * @see com.hyc.www.dao.impl.BaseDaoImpl
- * @description 用于处理执行查询语句之后返回的结果集，将结果集映射为对象
- * @date 2019-04-09 15:06
+ * @description 用于将对象的属性值映射为数组
+ * @date 2019-04-11 18:05
  */
-public interface ResultMapper {
-    /**
-     * 负责提供一个映射数据库查询结果集的方法
-     * @name doMap
-     * @param rs 需要映射的结果集
-     * @return java.lang.Object
-     * @notice none
-     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
-     * @date 2019/4/10
-     */
-    Object doMap(ResultSet rs);
+public interface ParamMapper {
+    Object[] doMap(LinkedList valueList);
 }
