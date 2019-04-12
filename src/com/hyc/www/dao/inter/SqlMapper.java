@@ -26,5 +26,9 @@ import java.util.LinkedList;
  * @date 2019-04-11 17:55
  */
 public interface SqlMapper {
-    String doMap(LinkedList nameList);
+    //TODO javadoc
+
+
+    String doMap(Object...params);
+
 }

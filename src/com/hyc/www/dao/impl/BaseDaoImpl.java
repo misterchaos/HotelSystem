@@ -120,8 +120,6 @@ public class BaseDaoImpl implements BaseDao {
     }
 
 
-
-
     /**
      * 把一个对象插入一张表
      *
@@ -135,22 +133,26 @@ public class BaseDaoImpl implements BaseDao {
      */
     @Override
     public int insert(String table, Object obj) {
-        return updateRunner(obj, nameList -> {
+        return updateRunner(obj, params -> {
             /**
-             * 根据属性名和属性值生成sql语句
+             * updateRunner会传入一个属性值LinkedList
+             */
+            LinkedList fieldNames = (LinkedList) params[0];
+            /**
+             * 根据属性名生成预编译sql插入语句
              */
             StringBuilder sql = new StringBuilder("insert into " + table + " (");
-            for (Object name : nameList.toArray()) {
+            for (Object name : fieldNames.toArray()) {
                 sql.append(name.toString() + ",");
             }
             sql.setCharAt(sql.length() - 1, ')');
             sql.append(" values (");
-            for (int i = 0; i < nameList.size(); i++) {
+            for (int i = 0; i < fieldNames.size(); i++) {
                 sql.append("?,");
             }
             sql.setCharAt(sql.length() - 1, ')');
             return sql.toString();
-        }, valueList -> valueList.toArray());
+        }, params -> (Object[]) params);
     }
 
     /**
@@ -168,21 +170,25 @@ public class BaseDaoImpl implements BaseDao {
     public int update(String table, Object obj) {
 
 
-        return updateRunner(obj, nameList -> {
+        return updateRunner(obj, params -> {
             /**
-             * 根据对象的属性名和属性值生成sql语句
+             * updateRunner会传入一个属性值LinkedList
              */
-            Object id= null;
+            LinkedList fieldNames = (LinkedList) params[0];
+            /**
+             * 根据属性名生成预编译sql更新语句
+             */
+            Object id = null;
             StringBuilder sql = new StringBuilder("update " + table + " set ");
-            for (Object name : nameList.toArray()) {
+            for (Object name : fieldNames.toArray()) {
                 sql.append(name + " = ?,");
             }
             sql.setCharAt(sql.length() - 1, ' ');
             try {
-                for (Class clazz= obj.getClass();clazz!=Object.class;clazz=clazz.getSuperclass()){
-                    try{
+                for (Class clazz = obj.getClass(); clazz != Object.class; clazz = clazz.getSuperclass()) {
+                    try {
                         id = clazz.getDeclaredMethod("getId").invoke(obj);
-                    }catch (NoSuchMethodException e){
+                    } catch (NoSuchMethodException e) {
                         /**
                          * 此处不能终止循环
                          */
@@ -195,7 +201,7 @@ public class BaseDaoImpl implements BaseDao {
                 throw new DaoException("反射执行getId方法异常：无法执行getId方法", e);
             }
             return sql.toString();
-        }, valueList -> valueList.toArray());
+        }, params -> (Object[]) params);
     }
 
     /**
@@ -211,7 +217,7 @@ public class BaseDaoImpl implements BaseDao {
      */
     @Override
     public int delete(String table, Object id) {
-        return updateRunner(id, nameList -> "delete from " + table + " where id = ?", valueList -> new Object[]{id});
+        return updateRunner(id, params -> "delete from " + table + " where id = ?", params -> new Object[]{id});
     }
 
 
@@ -281,6 +287,10 @@ public class BaseDaoImpl implements BaseDao {
         });
     }
 
+    //TODO
+    public Object queryLike() {
+        return null;
+    }
 
     /**
      * 所有更新操作，包括insert,delete,update在内的操作的共同模板<br>
@@ -299,40 +309,62 @@ public class BaseDaoImpl implements BaseDao {
         if (obj == null) {
             return 0;
         }
-        LinkedList<String> namelist = new LinkedList<>();
-        LinkedList<Object> valuelist = new LinkedList<>();
-        fieldMapper(obj, namelist, valuelist);
-        return executeUpdate(sqlMapper.doMap(namelist), paramMapper.doMap(valuelist));
+        LinkedList<String> fieldNames = new LinkedList<>();
+        LinkedList<Object> fieldValues = new LinkedList<>();
+        /**
+         * 使用fieldMapper将对象映射成要更新的字段名集合和字段值集合
+         */
+        fieldMapper(obj, fieldNames, fieldValues);
+        /**
+         * 使用sqlMapper将字段名映射成sql语句，使用paramMapper将字段值映射成属性值数组
+         */
+        return executeUpdate(sqlMapper.doMap(fieldNames.toArray()), paramMapper.doMap(fieldValues.toArray()));
     }
+
+
+    //TODO javadoc
+    private Object queryRunner(String[] selectFields, String table, String[] matchFields, Object[] params, SqlMapper sqlMapper, ParamMapper paramMapper,Class clazz) {
+        if (selectFields.length == 0) {
+            return null;
+        }
+        /**
+         * 使用sqlMapper将查询的字段集合和查询条件映射成预编译sql查询语句<br>
+         * 使用paramMapper将预编译语句的参数映射成数组<br>
+         * 使用ListMapper将结果集映射成对象集合<br>
+         */
+        return executeQuery(sqlMapper.doMap(selectFields, table, matchFields), paramMapper.doMap(params), new ListMapper(clazz));
+
+    }
+
 
     /**
      * 把一个对象映射成为属性名集合和属性值集合
      *
-     * @param obj       需要被映射的对象
-     * @param nameList  将映射的属性名返回在这个集合中
-     * @param valueList 将映射的属性值返回在这个集合中
+     * @param obj         需要被映射的对象
+     * @param fieldNames  将映射的属性名返回在这个集合中
+     * @param fieldValues 将映射的属性值返回在这个集合中
      * @name fieldMapper
      * @notice 只映射该对象中值不为null的属性
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/9
      */
-    private void fieldMapper(Object obj, LinkedList<String> nameList, LinkedList<Object> valueList) {
+    private void fieldMapper(Object obj, LinkedList<String> fieldNames, LinkedList<Object> fieldValues) {
         if (obj == null) {
             return;
         }
         ArrayList<Method> methods = new ArrayList<>();
         ArrayList<Field> fields = new ArrayList<>();
-        for (Class clazz = obj.getClass();clazz!=Object.class;clazz=clazz.getSuperclass()){
+        for (Class clazz = obj.getClass(); clazz != Object.class; clazz = clazz.getSuperclass()) {
             methods.addAll(Arrays.asList(clazz.getDeclaredMethods()));
             fields.addAll(Arrays.asList(clazz.getDeclaredFields()));
         }
 
 
-        for (Field field :fields) {
+        for (Field field : fields) {
             /**
              * 取出每个属性的值
              */
-            for (Method method :methods) {
+            for (Method method : methods) {
                 if (method.getName().startsWith("get") && method.getName().substring(3).equalsIgnoreCase(field.getName())) {
                     Object fieldVaule = null;
                     try {
@@ -345,7 +377,7 @@ public class BaseDaoImpl implements BaseDao {
                      * 只添加不为null值的字段
                      */
                     if (fieldVaule != null) {
-                        valueList.add(fieldVaule);
+                        fieldValues.add(fieldVaule);
                         /**
                          * 取出该属性的名称，映射成数据库字段名
                          */
@@ -357,13 +389,53 @@ public class BaseDaoImpl implements BaseDao {
                             }
                             fieldName.append((char) bytes[i]);
                         }
-                        nameList.add(fieldName.toString());
+                        fieldNames.add(fieldName.toString());
                     }
                 }
             }
         }
     }
 
+
+    //TODO javadoc
+    private class SelectSqlMapper implements SqlMapper {
+
+        @Override
+        public String doMap(Object... params) {
+            /**
+             * 传入的第一个参数使select字段数组，第二个参数是表名，第三个参数是where条件字段集合
+             */
+            String[] selectFields = (String[]) params[0];
+            String table = (String) params[1];
+            String[] matchFields = (String[]) params[2];
+            StringBuilder sql = new StringBuilder("select ");
+            for (int i = 0; i < selectFields.length; i++) {
+                sql.append(selectFields[i] + ",");
+            }
+            sql.deleteCharAt(sql.length() - 1);
+            sql.append(" from " + table + " where ");
+            for (int i = 0; i < matchFields.length; i++) {
+                sql.append(matchFields[i] + " = ? and ");
+            }
+            if (matchFields.length > 0) {
+                sql.delete(sql.length() - 4, sql.length());
+            } else {
+                sql.delete(sql.length() - 6, sql.length());
+            }
+            return sql.toString();
+        }
+    }
+
+    //TODO test
+    public LinkedList TestQuery(String[] select,String table,String[] match,Object[] params,Class clazz){
+        return (LinkedList) queryRunner(select, table, match, params, new SelectSqlMapper(), new ParamMapper() {
+            @Override
+            public Object[] doMap(Object params) {
+                return (Object[]) params;
+            }
+        },clazz);
+
+    }
 
     /**
      * ResultMapper的一个实现类，提供将结果集映射为一个List的方法<br>

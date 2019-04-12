@@ -26,5 +26,7 @@ import java.util.LinkedList;
  * @date 2019-04-11 18:05
  */
 public interface ParamMapper {
-    Object[] doMap(LinkedList valueList);
+    //TODO javadoc
+
+    Object[] doMap(Object params);
 }
