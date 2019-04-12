@@ -21,10 +21,7 @@ import com.hyc.www.dao.impl.BaseDaoImpl;
 import com.hyc.www.dao.inter.BaseDao;
 import com.hyc.www.dao.inter.UserDao;
 import com.hyc.www.po.User;
-import sun.nio.cs.US_ASCII;
 
-import javax.jws.soap.SOAPBinding;
-import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 
 /**
@@ -34,15 +31,14 @@ import java.util.LinkedList;
  * @date 2019-04-09 00:15
  */
 public class TestDao {
-    public static void main(String[] args) throws InvocationTargetException, IllegalAccessException {
+    public static void main(String[] args) {
         UserDao userDao = DaoFactory.getInstance().getUserDao();
         /**
          * 测试BaseDao
          */
-        //TODO debug
-        BaseDao baseDao =new BaseDaoImpl();
-       LinkedList<Object> linkedList=((BaseDaoImpl) baseDao).queryList("select id,user_name,password,gmt_create from tb_user where user_name = ?",new Object[]{"test"},User.class);
-        for (int i = 0; i <linkedList.size() ; i++) {
+        BaseDao baseDao = new BaseDaoImpl();
+        LinkedList<Object> linkedList = baseDao.queryList("select id,user_name,password,gmt_create from tb_user where user_name = ?", new Object[]{"test"}, User.class);
+        for (int i = 0; i < linkedList.size(); i++) {
             User user = (User) linkedList.get(i);
             System.out.println(user.getUserName());
         }

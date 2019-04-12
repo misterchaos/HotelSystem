@@ -34,15 +34,19 @@ public class TestUserDao {
         /**
          * 测试查询密码功能
          */
+        System.out.println("测试查询密码功能");
         System.out.println(userDao.getPassword("test"));
         /**
          * 测试查询用户全部信息功能
          */
-        User user=userDao.getUser(null);
+        System.out.println("测试查询用户全部信息功能");
+        User user=userDao.getUser("test2");
         if(user!=null){
             System.out.println(user.getUserName());
             System.out.println(user.getId());
+            System.out.println(user.getStatus());
             System.out.println(user.getPhoneNumber());
+            System.out.println(user.getGmtModified());
         }else {
             System.out.println(user);
         }
@@ -50,19 +54,23 @@ public class TestUserDao {
         /**
          * 测试获取所有用户信息的功能
          */
+        System.out.println("测试获取所有用户信息的功能");
         LinkedList list = userDao.getAllUsers();
         System.out.println(list.size());
         /**
          * 测试通过用户id删除用户的功能
          */
+        System.out.println("测试通过用户id删除用户的功能");
         System.out.println(userDao.deleteById(null));
         /**
          * 测试通过用户名删除用户的功能
          */
+        System.out.println("测试通过用户名删除用户的功能");
         System.out.println(userDao.deleteByUserName("testdao"));
         /**
          * 测试更新用户信息的功能
          */
+        System.out.println("测试更新用户信息的功能");
         user=userDao.getUser("test");
         user.setPassword("12345");
         user.setPhoneNumber("10005");
@@ -72,7 +80,10 @@ public class TestUserDao {
         /**
          * 测试增加用户的功能
          */
+        System.out.println("测试增加用户的功能");
         user= new User();
-        System.out.println(userDao.addUser(user));
+        user.setUserName("test2");
+        user.setPhoto("test");
+        System.out.println(userDao.addUser(null));
     }
 }
