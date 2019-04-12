@@ -16,6 +16,8 @@
 
 package com.hyc.www.po;
 
+import com.hyc.www.po.abs.BaseObject;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Timestamp;
@@ -26,26 +28,18 @@ import java.sql.Timestamp;
  * @description 对应数据库中的用户表，用来存储用户信息
  * @date 2019-04-09 20:12
  */
-public class User implements Cloneable{
-    BigInteger id;
-    String userName;
-    String password;
-    String phoneNumber;
-    String idNumber;
-    String nickName;
-    Boolean status;
-    BigDecimal balance;
-    String payPwd;
-    Timestamp gmtCreate;
-    Timestamp gmtModified;
+public class User extends BaseObject implements Cloneable {
+    private String userName;
+    private String password;
+    private String phoneNumber;
+    private String idNumber;
+    private String nickName;
+    private String photo;
+    private BigDecimal balance;
+    private String payPwd;
 
-    public BigInteger getId() {
-        return id;
-    }
 
-    public void setId(BigInteger id) {
-        this.id = id;
-    }
+
 
     public String getUserName() {
         return userName;
@@ -87,13 +81,15 @@ public class User implements Cloneable{
         this.nickName = nickName;
     }
 
-    public Boolean getStatus() {
-        return status;
+    public String getPhoto() {
+        return photo;
     }
 
-    public void setStatus(Boolean status) {
-        this.status = status;
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
+
+
 
     public BigDecimal getBalance() {
         return balance;
@@ -111,29 +107,15 @@ public class User implements Cloneable{
         this.payPwd = payPwd;
     }
 
-    public Timestamp getGmtCreate() {
-        return gmtCreate;
-    }
 
-    public void setGmtCreate(Timestamp gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
-    public Timestamp getGmtModified() {
-        return gmtModified;
-    }
-
-    public void setGmtModified(Timestamp gmtModified) {
-        this.gmtModified = gmtModified;
-    }
 
     @Override
-    public User clone(){
+    public User clone() {
         try {
             return (User) super.clone();
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
-            throw new RuntimeException("无法克隆User对象",e);
+            throw new RuntimeException("无法克隆User对象", e);
         }
     }
 
