@@ -21,7 +21,6 @@ import com.hyc.www.po.User;
 
 import java.math.BigInteger;
 import java.util.LinkedList;
-import java.util.Properties;
 
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
@@ -34,13 +33,14 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
     /**
      * 本类操作的数据库表名
      */
-    String table = " tb_user ";
+    String TABLE_NAME = " user ";
+
 
     /**
      * 表中所有字段对应的查询语句
      */
-    String allFields = " id,user_name,password,phone_number,id_number,nick_name,"
-            + "status,balance,pay_pwd,gmt_create,gmt_modified ";
+    String ALL_FIELD_NAME = " id,user_name,password,phone_number,id_number,nick_name,"
+            + "photo,status,balance,pay_pwd,gmt_create,gmt_modified ";
 
 
 
@@ -59,7 +59,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
         if(user==null||user.getUserName()==null) {
             return false;
         }
-        return super.insert(table,user)==1?true:false;
+        return super.insert(TABLE_NAME, user) == 1;
     }
 
     /**
@@ -77,7 +77,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
         if(userName==null){
             return null;
         }
-        String sql = "select " + allFields + " from " + table + " where user_name = ?";
+        String sql = "select " + ALL_FIELD_NAME + " from " + TABLE_NAME + " where user_name = ?";
         return (User) super.queryObject(sql, new Object[]{userName}, User.class);
     }
 
@@ -93,7 +93,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
      */
     @Override
     public String getPassword(String userName) {
-        String sql = "select password from " + table + " where user_name = ?";
+        String sql = "select password from " + TABLE_NAME + " where user_name = ?";
         return (String) super.queryValue(sql, new Object[]{userName});
     }
 
@@ -110,7 +110,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
      */
     @Override
     public BigInteger getId(String userName) {
-        String sql = "select id from " + table + " where user_name = ?";
+        String sql = "select id from " + TABLE_NAME + " where user_name = ?";
         return (BigInteger) super.queryValue(sql, new Object[]{userName});
     }
 
@@ -125,7 +125,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
      */
     @Override
     public LinkedList<User> getAllUsers() {
-        String sql = "select " + allFields + " from " + table;
+        String sql = "select " + ALL_FIELD_NAME + " from " + TABLE_NAME;
         LinkedList<Object> list = super.queryList(sql, null, User.class);
         LinkedList<User> users = new LinkedList<>();
         for (int i = 0; i < list.size(); i++) {
@@ -148,7 +148,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
      */
     @Override
     public boolean deleteById(BigInteger Id) {
-        return super.delete(table, Id) == 1 ? true : false;
+        return super.delete(TABLE_NAME, Id) == 1;
     }
 
 
@@ -204,7 +204,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
         User clone = user.clone();
         clone.setPassword(null);
         clone.setPayPwd(null);
-        return super.update(table, clone) == 1 ? true : false;
+        return super.update(TABLE_NAME, clone) == 1;
     }
 
 
@@ -221,6 +221,6 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
      */
     @Override
     public boolean updateAll(User user) {
-        return super.update(table, user) == 1 ? true : false;
+        return super.update(TABLE_NAME, user) == 1;
     }
 }
