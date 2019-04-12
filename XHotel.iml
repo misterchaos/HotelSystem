@@ -22,5 +22,6 @@
     <orderEntry type="library" name="jsp-api" level="project" />
     <orderEntry type="library" name="mysql-connector-java-8.0.15" level="project" />
     <orderEntry type="library" name="servlet-api" level="project" />
+    <orderEntry type="library" name="SORM0.8" level="project" />
   </component>
 </module>

@@ -27,6 +27,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 
 /**
@@ -165,20 +167,29 @@ public class BaseDaoImpl implements BaseDao {
     @Override
     public int update(String table, Object obj) {
 
+
         return updateRunner(obj, nameList -> {
             /**
              * 根据对象的属性名和属性值生成sql语句
              */
+            Object id= null;
             StringBuilder sql = new StringBuilder("update " + table + " set ");
             for (Object name : nameList.toArray()) {
                 sql.append(name + " = ?,");
             }
             sql.setCharAt(sql.length() - 1, ' ');
             try {
-                sql.append(" where id = " + obj.getClass().getDeclaredMethod("getId").invoke(obj));
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-                throw new DaoException("反射执行getId方法异常：找不到getId方法", e);
+                for (Class clazz= obj.getClass();clazz!=Object.class;clazz=clazz.getSuperclass()){
+                    try{
+                        id = clazz.getDeclaredMethod("getId").invoke(obj);
+                    }catch (NoSuchMethodException e){
+                        /**
+                         * 此处不能终止循环
+                         */
+                        System.out.println("查找父类getId方法...");
+                    }
+                }
+                sql.append(" where id = " + id);
             } catch (IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
                 throw new DaoException("反射执行getId方法异常：无法执行getId方法", e);
@@ -309,11 +320,19 @@ public class BaseDaoImpl implements BaseDao {
         if (obj == null) {
             return;
         }
-        for (Field field : obj.getClass().getDeclaredFields()) {
+        ArrayList<Method> methods = new ArrayList<>();
+        ArrayList<Field> fields = new ArrayList<>();
+        for (Class clazz = obj.getClass();clazz!=Object.class;clazz=clazz.getSuperclass()){
+            methods.addAll(Arrays.asList(clazz.getDeclaredMethods()));
+            fields.addAll(Arrays.asList(clazz.getDeclaredFields()));
+        }
+
+
+        for (Field field :fields) {
             /**
              * 取出每个属性的值
              */
-            for (Method method : obj.getClass().getDeclaredMethods()) {
+            for (Method method :methods) {
                 if (method.getName().startsWith("get") && method.getName().substring(3).equalsIgnoreCase(field.getName())) {
                     Object fieldVaule = null;
                     try {
