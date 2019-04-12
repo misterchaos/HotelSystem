@@ -135,8 +135,6 @@ public class JdbcUtils {
                     ps.setObject(i+1, params[i]);
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    //TODO debug
-                    System.out.println(ps.toString());
                     throw new DaoException("预编译参数异常："+ps.toString(),e);
                 }
             }
