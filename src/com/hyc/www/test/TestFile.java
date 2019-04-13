@@ -27,7 +27,7 @@ import java.io.File;
  */
 public class TestFile {
     public static void main(String[] args) {
-        File file = new File("./");
+        File file = new File("./src/db_config.properties");
         System.out.println(file.getAbsolutePath());
     }
 }

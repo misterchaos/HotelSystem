@@ -16,12 +16,14 @@
 
 package com.hyc.www.test;
 
+import com.hyc.www.dao.DaoFactory;
 import com.hyc.www.dao.impl.RoomDaoImpl;
 import com.hyc.www.dao.inter.RoomDao;
 import com.hyc.www.po.Room;
 import com.hyc.www.po.User;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.LinkedList;
 
 /**
@@ -32,7 +34,7 @@ import java.util.LinkedList;
  */
 public class TestRoomDao {
     public static void main(String[] args) {
-        RoomDao roomDao = new RoomDaoImpl();
+        RoomDao roomDao = DaoFactory.getInstance().getRoomDao();
 
         /**
          * 测试查询房间全部信息功能
@@ -59,20 +61,23 @@ public class TestRoomDao {
          * 测试通过房间id删除房间的功能
          */
         System.out.println("测试通过房间id删除房间的功能");
-        System.out.println(roomDao.deleteById(null));
+        System.out.println(roomDao.deleteById(BigInteger.valueOf(5)));
         /**
          * 测试通过房间名删除房间的功能
          */
         System.out.println("测试通过房间名删除房间的功能");
-        System.out.println(roomDao.deleteByNumber(null));
+        System.out.println(roomDao.deleteByNumber("0"));
         /**
          * 测试更新房间信息的功能
          */
         System.out.println("测试更新房间信息的功能");
         room=roomDao.getRoom("0000");
-        room.setBedWidth(BigDecimal.valueOf(2.0));
-        room.setArea(BigDecimal.valueOf(1000.90));
-        System.out.println(roomDao.update(room));
+        if(room!=null){
+            room.setBedWidth(BigDecimal.valueOf(2.0));
+            room.setArea(BigDecimal.valueOf(1000.90));
+            System.out.println(roomDao.update(room));
+        }
+
 
         /**
          * 测试增加房间的功能
@@ -82,6 +87,6 @@ public class TestRoomDao {
         room.setNumber("1020");
         room.setPrice(BigDecimal.valueOf(99.99));
         room.setPhoto("test2");
-        System.out.println(roomDao.addRoom(room));
+        System.out.println(roomDao.addRoom(null));
     }
 }

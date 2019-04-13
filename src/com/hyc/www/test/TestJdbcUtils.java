@@ -16,6 +16,8 @@
 
 package com.hyc.www.test;
 
+import com.hyc.www.po.Room;
+import com.hyc.www.po.User;
 import com.hyc.www.util.JdbcUtils;
 
 import java.sql.Connection;
@@ -40,5 +42,8 @@ public class TestJdbcUtils {
         JdbcUtils.close(null,null,conn);
         System.out.println("当前已创建连接数 = " + JdbcUtils.getCurrentCount());
         System.out.println("当前空闲连接数 = " + JdbcUtils.getfreeCount());
+
+        System.out.println(JdbcUtils.getTableName(new User()));
+        System.out.println(JdbcUtils.getTableName(new Room()));
     }
 }

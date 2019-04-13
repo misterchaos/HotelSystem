@@ -19,7 +19,7 @@ package com.hyc.www.test;
 import com.hyc.www.dao.impl.OrderRoomDaoImpl;
 import com.hyc.www.dao.inter.OrderRoomDao;
 import com.hyc.www.po.OrderRoom;
-import com.hyc.www.po.abs.BaseObject;
+import com.hyc.www.po.abs.BaseEntity;
 
 import java.math.BigDecimal;
 import java.util.LinkedList;
@@ -40,11 +40,11 @@ public class TestOrderDao {
         System.out.println("测试查询订单全部信息功能");
         OrderRoom order=orderDao.getOrderRoom("1010");
         if(order!=null){
-            BaseObject baseObject = order;
+            BaseEntity baseEntity = order;
             System.out.println(order.getNumber());
-            System.out.println(baseObject.getId());
-            System.out.println(baseObject.getStatus());
-            System.out.println(baseObject.getGmtModified());
+            System.out.println(baseEntity.getId());
+            System.out.println(baseEntity.getStatus());
+            System.out.println(baseEntity.getGmtModified());
             System.out.println(order.getAmount());
         }else {
             System.out.println(order);

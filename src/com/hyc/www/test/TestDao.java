@@ -18,11 +18,10 @@ package com.hyc.www.test;
 
 import com.hyc.www.dao.DaoFactory;
 import com.hyc.www.dao.impl.BaseDaoImpl;
-import com.hyc.www.dao.inter.BaseDao;
 import com.hyc.www.dao.inter.UserDao;
 import com.hyc.www.po.User;
 
-import java.util.LinkedList;
+import java.util.Iterator;
 
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
@@ -36,13 +35,37 @@ public class TestDao {
         /**
          * 测试BaseDao
          */
-        BaseDao baseDao = new BaseDaoImpl();
-        LinkedList<Object> linkedList = baseDao.queryList("select id,user_name,password,gmt_create from tb_user where user_name = ?", new Object[]{"test"}, User.class);
-        for (int i = 0; i < linkedList.size(); i++) {
-            User user = (User) linkedList.get(i);
+        BaseDaoImpl baseDao = new BaseDaoImpl();
+        User user = new User();
+
+        System.out.println(baseDao.queryCount("user", "balance"));
+        System.out.println(baseDao.queryWhereAndEquals(new String[]{"user_name"}, user).size());
+
+        /**
+         * 测试插入
+         */
+        user.setUserName("test");
+        baseDao.insert(null);
+
+        /***
+         * 测试分页查询
+         */
+        System.out.println("pages num " + baseDao.queryPages(new String[]{"user_name"}, "user", "30", "0").size());
+        Iterator it = baseDao.queryPages(new String[]{"user_name"}, "user", "10", "0").listIterator();
+        while (it.hasNext()) {
+            user = (User) it.next();
             System.out.println(user.getUserName());
         }
 
-
+        /**
+         * 测试模糊查询
+         */
+        user.setUserName("%new%");
+        user.setPassword("12345");
+        it = baseDao.queryWhereLikeAnd(new String[]{"user_name"}, user).listIterator();
+        while (it.hasNext()) {
+            user = (User) it.next();
+            System.out.println(user.getUserName());
+        }
     }
 }
