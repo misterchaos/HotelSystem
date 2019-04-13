@@ -20,7 +20,11 @@ import com.hyc.www.dao.impl.MyDataSourceImpl;
 import com.hyc.www.dao.inter.MyDataSource;
 import com.hyc.www.exception.DaoException;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.*;
+import java.util.Properties;
 
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
@@ -31,9 +35,9 @@ import java.sql.*;
 public class JdbcUtils {
 
     private static MyDataSource dataSrc = MyDataSourceImpl.getInstance();
+    private final static String PROP_PATH = "./src/dao_config.properties";
 
     private JdbcUtils() {
-
     }
 
 
@@ -132,13 +136,87 @@ public class JdbcUtils {
         if (params != null) {
             for (int i = 0; i < params.length; i++) {
                 try {
-                    ps.setObject(i+1, params[i]);
+                    ps.setObject(i + 1, params[i]);
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    throw new DaoException("预编译参数异常："+ps.toString(),e);
+                    throw new DaoException("预编译参数异常：" + ps.toString(), e);
                 }
             }
         }
+    }
+
+
+    /**
+     * 负责返回对象对应的表名
+     *
+     * @param obj 查询表名的对象
+     * @return java.lang.String
+     * @name getTableName
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/13
+     */
+    public static String getTableName(Object obj) {
+        return obj == null ? null : getConfig(obj.getClass().getSimpleName());
+    }
+
+
+    /**
+     * 负责返回该类对应的表名
+     *
+     * @param clazz 查询表名的类
+     * @return java.lang.String
+     * @name getTableName
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/13
+     */
+    public static String getTableName(Class clazz) {
+        return clazz == null ? null : getConfig(clazz.getSimpleName());
+    }
+
+
+    /**
+     * 负责返回该表名对应的类
+     *
+     * @param tableName 表名
+     * @return java.lang.Class
+     * @name getClass
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/13
+     */
+    public static Class getClass(String tableName) {
+        try {
+            return tableName == null ? null : Class.forName(getConfig(tableName));
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            throw new DaoException("无法加载表名对应的类:" + tableName, e);
+        }
+    }
+
+
+    /**
+     * 负责加载配置文件，向Dao层提供配置信息
+     *
+     * @param key 配置文件的键
+     * @return java.lang.String 配置文件的值
+     * @name getConfig
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/13
+     */
+    public static String getConfig(String key) {
+
+        try {
+            Properties prop = new Properties();
+            prop.load(new FileReader(new File(PROP_PATH)));
+            return key == null ? null : prop.getProperty(key);
+        } catch (IOException e) {
+            e.printStackTrace();
+            new DaoException("无法加载配置文件:dao_config.properties", e);
+        }
+        return null;
     }
 
 }
