@@ -18,6 +18,7 @@ package com.hyc.www.dao.impl;
 
 import com.hyc.www.dao.inter.MyDataSource;
 import com.hyc.www.exception.DaoException;
+import com.hyc.www.util.JdbcUtils;
 
 import java.io.File;
 import java.io.FileReader;
@@ -38,7 +39,7 @@ public class MyDataSourceImpl implements MyDataSource {
     /**
      * 配置文件路径
      */
-    private static String propPath = "./src/db_config.properties";
+    private static String propPath = JdbcUtils.getConfig("db_config_path");
     /**
      * 驱动类名称
      */

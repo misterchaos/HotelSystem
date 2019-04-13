@@ -19,6 +19,7 @@ package com.hyc.www.dao.impl;
 import com.hyc.www.dao.inter.OrderRoomDao;
 import com.hyc.www.po.OrderRoom;
 import com.hyc.www.po.Room;
+import com.hyc.www.util.JdbcUtils;
 
 import java.math.BigInteger;
 import java.util.LinkedList;
@@ -33,7 +34,7 @@ public class OrderRoomDaoImpl extends BaseDaoImpl implements OrderRoomDao {
     /**
      * 本类操作的数据库表名
      */
-    String TABLE_NAME = " order_room ";
+    String TABLE_NAME = " "+ JdbcUtils.getTableName(OrderRoom.class)+" ";
 
     /**
      * 表中所有字段对应的查询语句
@@ -42,8 +43,7 @@ public class OrderRoomDaoImpl extends BaseDaoImpl implements OrderRoomDao {
             + "status,gmt_create,gmt_modified ";
 
 
-    /**
-     * 添加一个订单到数据库
+    /**     * 添加一个订单到数据库
      *
      * @param order 要添加的订单
      * @return boolean
@@ -57,7 +57,7 @@ public class OrderRoomDaoImpl extends BaseDaoImpl implements OrderRoomDao {
         if (order == null || order.getNumber() == null) {
             return false;
         }
-        return super.insert(TABLE_NAME, order)==1;
+        return super.insert(order)==1;
     }
 
     /**
@@ -130,7 +130,7 @@ public class OrderRoomDaoImpl extends BaseDaoImpl implements OrderRoomDao {
      */
     @Override
     public boolean deleteById(BigInteger Id) {
-        return super.delete(TABLE_NAME, Id) == 1;
+        return super.delete(Id) == 1;
     }
 
 
@@ -145,7 +145,7 @@ public class OrderRoomDaoImpl extends BaseDaoImpl implements OrderRoomDao {
      * @date 2019/4/12
      */
     @Override
-    public boolean deleteByNumber(String orderNumber) {
+    public  boolean deleteByNumber(String orderNumber) {
         return deleteById(getId(orderNumber));
     }
 
@@ -180,6 +180,6 @@ public class OrderRoomDaoImpl extends BaseDaoImpl implements OrderRoomDao {
         if (order == null) {
             return false;
         }
-        return super.update(TABLE_NAME, order) == 1;
+        return super.update(order) == 1;
     }
 }

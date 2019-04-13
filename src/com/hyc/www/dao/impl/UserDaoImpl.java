@@ -18,6 +18,7 @@ package com.hyc.www.dao.impl;
 
 import com.hyc.www.dao.inter.UserDao;
 import com.hyc.www.po.User;
+import com.hyc.www.util.JdbcUtils;
 
 import java.math.BigInteger;
 import java.util.LinkedList;
@@ -33,7 +34,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
     /**
      * 本类操作的数据库表名
      */
-    String TABLE_NAME = " user ";
+    String TABLE_NAME = " "+ JdbcUtils.getTableName(User.class) +" ";
 
 
     /**
@@ -59,7 +60,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
         if(user==null||user.getUserName()==null) {
             return false;
         }
-        return super.insert(TABLE_NAME, user) == 1;
+        return super.insert(user) == 1;
     }
 
     /**
@@ -139,7 +140,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
     /**
      * 将该id对应的用户从数据库中删除
      *
-     * @param Id 要删除用户的id
+     * @param id 要删除用户的id
      * @return boolean
      * @name deleteById
      * @notice none
@@ -147,8 +148,8 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
      * @date 2019/4/11
      */
     @Override
-    public boolean deleteById(BigInteger Id) {
-        return super.delete(TABLE_NAME, Id) == 1;
+    public boolean deleteById(BigInteger id) {
+        return id ==null?false:super.delete(id) == 1;
     }
 
 
@@ -164,7 +165,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
      */
     @Override
     public boolean deleteByUserName(String userName) {
-        return deleteById(getId(userName));
+        return userName==null?false:deleteById(getId(userName));
     }
 
     /**
@@ -179,7 +180,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
      */
     @Override
     public boolean delete(User user) {
-        return deleteById(user.getId());
+        return user==null?false:deleteById(user.getId());
     }
 
 
@@ -204,7 +205,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
         User clone = user.clone();
         clone.setPassword(null);
         clone.setPayPwd(null);
-        return super.update(TABLE_NAME, clone) == 1;
+        return super.update(clone) == 1;
     }
 
 
@@ -221,6 +222,6 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
      */
     @Override
     public boolean updateAll(User user) {
-        return super.update(TABLE_NAME, user) == 1;
+        return super.update(user) == 1;
     }
 }

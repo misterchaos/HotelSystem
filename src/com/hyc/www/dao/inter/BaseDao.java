@@ -25,23 +25,24 @@ import java.util.LinkedList;
  * @date 2019-04-08 23:05
  */
 public interface BaseDao {
+
+    /***************************************************************************************
+     *          负责数据库insert,update,delete等功能
+     ***************************************************************************************/
     /**
-     * 执行一个预编译更新语句
+     * 将一个对象映射成预编译sql语句并执行<br>
+     * 需要一个SqlMapper的具体实现
      *
-     * @param sql    sql语句
-     * @param params 参数
+     * @param obj       更新的对象
+     * @param sqlMapper 用于映射sql语句的实现类
      * @return int 执行sql语句后影响记录的行数
      * @name executeUpdate
-     * @notice sql语句中的表名不能在预编译中设置，sql语句必须已经填好表名，只有字段可以使用占位符<br>
-     * 请不要使用以下这种sql语句：<br>
-     * executeUpdate("insert into ? (user_name) values (?)",new Object[]{"tb_user","testdao"});<br>
-     * 这种语句设置参数后是下面这样：<br>
-     * insert into 'tb_user' (user_name) values ('testdao')<br>
-     * 表名带上了引号，这种语句显然无法正常执行<br>
+     * @notice 必须传入一个SqlMapper的实现类用于映射预编译语句
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/9
+     * @see SqlMapper
      */
-    int executeUpdate(String sql, Object[] params);
+    int executeUpdate(Object obj,SqlMapper sqlMapper);
 
 
     /**
@@ -61,7 +62,6 @@ public interface BaseDao {
     /**
      * 把一个对象插入一张表
      *
-     * @param table 要插入的表名
      * @param obj   要插入的对象
      * @return int 更新的数据库记录数
      * @name insert
@@ -69,27 +69,24 @@ public interface BaseDao {
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/9
      */
-    int insert(String table, Object obj);
+    int insert(Object obj);
 
 
     /**
-     * 根据传入的表名和id，从该表中删除该条记录
-     *
-     * @param table 要删除记录所在的表名
-     * @param id    要删除的记录的id
-     * @return int 更新的数据库记录数
+     * 将一个对象从表中删除
      * @name delete
+     * @param obj 要删除的对象
+     * @return int
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
-     * @date 2019/4/10
+     * @date 2019/4/13
      */
-    int delete(String table, Object id);
+    int delete( Object obj);
 
 
     /**
      * 根据传入的表名和id，从该表中更新一条记录
      *
-     * @param table 要操作的目标表名
      * @param obj   要更新的记录对应的实体类对象
      * @return int 更新的数据库记录数
      * @name update
@@ -98,7 +95,7 @@ public interface BaseDao {
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/10
      */
-    int update(String table, Object obj);
+    int update( Object obj);
 
     /**
      * 执行输入的sql语句，并且将结果映射为对象集合，以LinkedList的形式返回

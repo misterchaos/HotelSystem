@@ -18,9 +18,12 @@ package com.hyc.www.dao.impl;
 
 import com.hyc.www.dao.inter.RoomDao;
 import com.hyc.www.po.Room;
+import com.hyc.www.po.User;
+import com.hyc.www.util.JdbcUtils;
 
 import java.math.BigInteger;
 import java.util.LinkedList;
+import java.util.jar.JarEntry;
 
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
@@ -32,7 +35,7 @@ public class RoomDaoImpl extends BaseDaoImpl implements RoomDao {
     /**
      * 本类操作的数据库表名
      */
-    String TABLE_NAME = " room ";
+    String TABLE_NAME = " "+ JdbcUtils.getTableName(Room.class)+" ";
 
     /**
      * 表中所有字段对应的查询语句
@@ -56,7 +59,7 @@ public class RoomDaoImpl extends BaseDaoImpl implements RoomDao {
         if (room == null || room.getNumber() == null) {
             return false;
         }
-        return super.insert(TABLE_NAME, room)==1;
+        return super.insert(room)==1;
     }
 
     /**
@@ -129,7 +132,13 @@ public class RoomDaoImpl extends BaseDaoImpl implements RoomDao {
      */
     @Override
     public boolean deleteById(BigInteger Id) {
-        return super.delete(TABLE_NAME, Id) == 1;
+        if(Id==null){
+            return false;
+        }
+        Room room = new Room();
+        room.setId(Id);
+        System.out.println("id = "+room.getId());
+        return super.delete(room) == 1;
     }
 
 
@@ -145,7 +154,7 @@ public class RoomDaoImpl extends BaseDaoImpl implements RoomDao {
      */
     @Override
     public boolean deleteByNumber(String roomNumber) {
-        return deleteById(getId(roomNumber));
+        return roomNumber==null?false:deleteById(getId(roomNumber));
     }
 
     /**
@@ -176,10 +185,7 @@ public class RoomDaoImpl extends BaseDaoImpl implements RoomDao {
      */
     @Override
     public boolean update(Room room) {
-        if (room == null) {
-            return false;
-        }
-        return super.update(TABLE_NAME, room) == 1;
+        return room == null?false:super.update(room) == 1;
     }
 
 }
