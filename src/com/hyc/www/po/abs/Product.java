@@ -16,8 +16,6 @@
 
 package com.hyc.www.po.abs;
 
-import com.hyc.www.po.abs.BaseObject;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
@@ -27,7 +25,7 @@ import java.math.BigInteger;
  * @description 所有商品的抽象父类
  * @date 2019-04-12 01:36
  */
-public abstract class Product extends BaseObject {
+public abstract class Product extends BaseEntity {
     private String number;
     private String type;
     private BigDecimal price;

@@ -16,11 +16,9 @@
 
 package com.hyc.www.po;
 
-import com.hyc.www.po.abs.BaseObject;
+import com.hyc.www.po.abs.BaseEntity;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.sql.Timestamp;
 
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
@@ -28,7 +26,7 @@ import java.sql.Timestamp;
  * @description 对应数据库中的用户表，用来存储用户信息
  * @date 2019-04-09 20:12
  */
-public class User extends BaseObject implements Cloneable {
+public class User extends BaseEntity implements Cloneable {
     private String userName;
     private String password;
     private String phoneNumber;

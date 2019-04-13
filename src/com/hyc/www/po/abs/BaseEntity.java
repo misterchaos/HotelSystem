@@ -25,7 +25,7 @@ import java.sql.Timestamp;
  * @description 所有数据库记录的父类
  * @date 2019-04-12 01:13
  */
-public abstract class BaseObject {
+public abstract class BaseEntity {
     private BigInteger id;
     private Integer status;
     private Timestamp gmtCreate;

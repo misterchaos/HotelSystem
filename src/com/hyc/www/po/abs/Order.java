@@ -16,8 +16,6 @@
 
 package com.hyc.www.po.abs;
 
-import com.hyc.www.po.abs.BaseObject;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Timestamp;
@@ -28,7 +26,7 @@ import java.sql.Timestamp;
  * @description 所有订单的抽象父类，包括房间订单，服务订单都是其子类
  * @date 2019-04-12 01:29
  */
-public abstract class Order extends BaseObject {
+public abstract class Order extends BaseEntity {
     private String number;
     private BigInteger userId;
     private Timestamp startTime;
