@@ -34,7 +34,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
     /**
      * 本类操作的数据库表名
      */
-    String TABLE_NAME = " "+ JdbcUtils.getTableName(User.class) +" ";
+    String TABLE_NAME = " " + JdbcUtils.getTableName(User.class) + " ";
 
 
     /**
@@ -43,21 +43,34 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
     String ALL_FIELD_NAME = " id,user_name,password,phone_number,id_number,nick_name,"
             + "photo,status,balance,pay_pwd,gmt_create,gmt_modified ";
 
-
+    /**
+     * 通过用户名检查一个用户是否已经存在
+     *
+     * @param userName 用户名
+     * @return boolean
+     * @name isExist
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/14
+     */
+    @Override
+    public boolean isExist(String userName) {
+        return getUser(userName) != null;
+    }
 
     /**
      * 添加一个用户到数据库
      *
-     * @name addUser
      * @param user 要添加的用户对象
      * @return boolean
+     * @name addUser
      * @notice 无法添加用户名为空的用户
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/11
      */
     @Override
-    public boolean addUser(User user){
-        if(user==null||user.getUserName()==null) {
+    public boolean addUser(User user) {
+        if (user == null || user.getUserName() == null) {
             return false;
         }
         return super.insert(user) == 1;
@@ -75,7 +88,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
      */
     @Override
     public User getUser(String userName) {
-        if(userName==null){
+        if (userName == null) {
             return null;
         }
         String sql = "select " + ALL_FIELD_NAME + " from " + TABLE_NAME + " where user_name = ?";
@@ -133,6 +146,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
             User user = (User) list.get(i);
             users.add(user);
         }
+
         return users;
     }
 
@@ -149,7 +163,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
      */
     @Override
     public boolean deleteById(BigInteger id) {
-        return id ==null?false:super.delete(id) == 1;
+        return id == null ? false : super.delete(id) == 1;
     }
 
 
@@ -165,7 +179,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
      */
     @Override
     public boolean deleteByUserName(String userName) {
-        return userName==null?false:deleteById(getId(userName));
+        return userName == null ? false : deleteById(getId(userName));
     }
 
     /**
@@ -180,7 +194,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
      */
     @Override
     public boolean delete(User user) {
-        return user==null?false:deleteById(user.getId());
+        return user == null ? false : deleteById(user.getId());
     }
 
 
@@ -196,7 +210,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
      */
     @Override
     public boolean update(User user) {
-        if(user==null){
+        if (user == null) {
             return false;
         }
         /**
