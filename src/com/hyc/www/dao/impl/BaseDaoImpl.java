@@ -388,6 +388,7 @@ public class BaseDaoImpl implements BaseDao {
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/13
      */
+    @Override
     public LinkedList queryOrderBy(String[] selectFields, String orderBy, boolean isDesc, String tableName) {
         StringBuilder sql = new StringBuilder(selectMapper(tableName, selectFields));
         if (orderBy != null) {
@@ -402,6 +403,7 @@ public class BaseDaoImpl implements BaseDao {
      **************************************************************
      */
 
+    @Override
     public Long queryCount(String tableName, String countField) {
         return (Long) queryValue(selectMapper(tableName, new String[]{"count(" + countField + ")"}), new Object[0]);
     }
@@ -429,6 +431,7 @@ public class BaseDaoImpl implements BaseDao {
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/13
      */
+    @Override
     public LinkedList queryWhere(String[] selectFields, Object obj, String conj, String condition) {
         if (selectFields.length == 0) {
             return null;
@@ -472,6 +475,7 @@ public class BaseDaoImpl implements BaseDao {
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/13
      */
+    @Override
     public LinkedList queryWhereAndEquals(String[] selectFields, Object obj) {
         return queryWhere(selectFields, obj, "and", "=");
     }
@@ -492,6 +496,7 @@ public class BaseDaoImpl implements BaseDao {
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/13
      */
+    @Override
     public LinkedList queryWhereLikeAnd(String[] selectFields, Object obj) {
         return queryWhere(selectFields,obj,"and","like");
     }
@@ -511,6 +516,7 @@ public class BaseDaoImpl implements BaseDao {
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/13
      */
+    @Override
     public LinkedList queryWhereLikeOr(String[] selectFields, Object obj) {
         return queryWhere(selectFields,obj,"or","like");
     }
@@ -533,6 +539,7 @@ public class BaseDaoImpl implements BaseDao {
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/13
      */
+    @Override
     public LinkedList queryPages(String[] selectFields, String tableName, String limit, String offset) {
         StringBuilder sql = new StringBuilder(selectMapper(tableName, selectFields));
         sql.append(pageMapper(limit, offset));
@@ -556,7 +563,8 @@ public class BaseDaoImpl implements BaseDao {
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/9
      */
-    private void fieldMapper(Object obj, LinkedList fieldNames, LinkedList fieldValues) {
+    @Override
+    public void fieldMapper(Object obj, LinkedList fieldNames, LinkedList fieldValues) {
         if (obj == null) {
             return;
         }
@@ -614,7 +622,8 @@ public class BaseDaoImpl implements BaseDao {
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/13
      */
-    private String selectMapper(String tableName, Object[] selectFields) {
+    @Override
+    public String selectMapper(String tableName, Object[] selectFields) {
         StringBuilder sql = new StringBuilder("select ");
         for (int i = 0; i < selectFields.length; i++) {
             sql.append(selectFields[i] + ",");
@@ -635,7 +644,8 @@ public class BaseDaoImpl implements BaseDao {
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/13
      */
-    private String whereMapper(Object[] whereFields, String conj, String condition) {
+    @Override
+    public String whereMapper(Object[] whereFields, String conj, String condition) {
 
         StringBuilder sql = new StringBuilder();
         if (whereFields.length == 0) {
@@ -661,7 +671,8 @@ public class BaseDaoImpl implements BaseDao {
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/13
      */
-    private String likeMapper(Object[] likeFields, String conj) {
+    @Override
+    public String likeMapper(Object[] likeFields, String conj) {
         StringBuilder sql = new StringBuilder();
         if (likeFields.length == 0) {
             return sql.toString();
@@ -686,7 +697,8 @@ public class BaseDaoImpl implements BaseDao {
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/13
      */
-    private String orderByMapper(String orderBy, boolean isDesc) {
+    @Override
+    public String orderByMapper(String orderBy, boolean isDesc) {
         /**
          * 标志是否逆序
          * true--------逆序
@@ -714,7 +726,8 @@ public class BaseDaoImpl implements BaseDao {
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/13
      */
-    private String pageMapper(String limit, String offset) {
+    @Override
+    public String pageMapper(String limit, String offset) {
         return " limit " + limit + " offset " + offset + " ";
     }
 

@@ -20,8 +20,6 @@ import com.hyc.www.dao.impl.MyDataSourceImpl;
 import com.hyc.www.dao.inter.MyDataSource;
 import com.hyc.www.exception.DaoException;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
 import java.util.Properties;
@@ -35,7 +33,7 @@ import java.util.Properties;
 public class JdbcUtils {
 
     private static MyDataSource dataSrc = MyDataSourceImpl.getInstance();
-    private final static String PROP_PATH = "./src/dao_config.properties";
+    private final static String PROP_PATH = "db_config.properties";
 
     private JdbcUtils() {
     }
@@ -209,14 +207,14 @@ public class JdbcUtils {
     public static String getConfig(String key) {
 
         try {
+            //TODO debug
             Properties prop = new Properties();
-            prop.load(new FileReader(new File(PROP_PATH)));
+            prop.load(Thread.currentThread().getContextClassLoader().getResourceAsStream(PROP_PATH));
             return key == null ? null : prop.getProperty(key);
         } catch (IOException e) {
             e.printStackTrace();
-            new DaoException("无法加载配置文件:dao_config.properties", e);
+            throw new DaoException("无法加载配置文件:"+PROP_PATH, e);
         }
-        return null;
     }
 
 }

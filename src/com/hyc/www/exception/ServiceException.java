@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2019.  黄钰朝 
- *                            
+ * Copyright (c) 2019.  黄钰朝
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *                            
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- *                            
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,17 +19,16 @@ package com.hyc.www.exception;
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
  * @program XHotel
- * @description 用于封装和抛出dao层的异常
- * @date 2019-04-08 00:47
+ * @description service层的异常类
+ * @date 2019-04-13 22:46
  */
-public class DaoException extends RuntimeException {
-
+public class ServiceException extends RuntimeException {
     /**
      * Constructs a new runtime exception with {@code null} as its
      * detail message.  The cause is not initialized, and may subsequently be
      * initialized by a call to {@link #initCause}.
      */
-    public DaoException() {
+    public ServiceException() {
         super();
     }
 
@@ -41,7 +40,7 @@ public class DaoException extends RuntimeException {
      * @param message the detail message. The detail message is saved for
      *                later retrieval by the {@link #getMessage()} method.
      */
-    public DaoException(String message) {
+    public ServiceException(String message) {
         super(message);
     }
 
@@ -59,7 +58,7 @@ public class DaoException extends RuntimeException {
      *                unknown.)
      * @since 1.4
      */
-    public DaoException(String message, Throwable cause) {
+    public ServiceException(String message, Throwable cause) {
         super(message, cause);
     }
 
@@ -76,7 +75,7 @@ public class DaoException extends RuntimeException {
      *              unknown.)
      * @since 1.4
      */
-    public DaoException(Throwable cause) {
+    public ServiceException(Throwable cause) {
         super(cause);
     }
 
@@ -94,7 +93,7 @@ public class DaoException extends RuntimeException {
      *                           be writable
      * @since 1.7
      */
-    protected DaoException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    protected ServiceException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

@@ -16,11 +16,9 @@
 
 package com.hyc.www.test;
 
-import com.hyc.www.dao.DaoFactory;
-import com.hyc.www.dao.impl.RoomDaoImpl;
+import com.hyc.www.util.BeanFactory;
 import com.hyc.www.dao.inter.RoomDao;
 import com.hyc.www.po.Room;
-import com.hyc.www.po.User;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -34,7 +32,7 @@ import java.util.LinkedList;
  */
 public class TestRoomDao {
     public static void main(String[] args) {
-        RoomDao roomDao = DaoFactory.getInstance().getRoomDao();
+        RoomDao roomDao = (RoomDao) BeanFactory.getBean(BeanFactory.DaoType.UserDao);
 
         /**
          * 测试查询房间全部信息功能

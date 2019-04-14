@@ -16,7 +16,7 @@
 
 package com.hyc.www.test;
 
-import com.hyc.www.dao.DaoFactory;
+import com.hyc.www.util.BeanFactory;
 import com.hyc.www.dao.impl.BaseDaoImpl;
 import com.hyc.www.dao.inter.UserDao;
 import com.hyc.www.po.User;
@@ -31,7 +31,7 @@ import java.util.Iterator;
  */
 public class TestDao {
     public static void main(String[] args) {
-        UserDao userDao = DaoFactory.getInstance().getUserDao();
+        UserDao userDao = (UserDao) BeanFactory.getBean(BeanFactory.DaoType.UserDao);
         /**
          * 测试BaseDao
          */

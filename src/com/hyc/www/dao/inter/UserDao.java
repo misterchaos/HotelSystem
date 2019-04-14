@@ -30,6 +30,18 @@ import java.util.LinkedList;
 public interface UserDao {
 
     /**
+     * 通过用户名检查一个用户是否已经存在
+     *
+     * @param userName 用户名
+     * @return boolean
+     * @name isExist
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/14
+     */
+    boolean isExist(String userName);
+
+    /**
      * 添加一个用户到数据库
      *
      * @param user 要添加的用户对象

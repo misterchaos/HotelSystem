@@ -39,11 +39,7 @@ public class MyDataSourceImpl implements MyDataSource {
     /**
      * 配置文件路径
      */
-    private static String propPath = JdbcUtils.getConfig("db_config_path");
-    /**
-     * 驱动类名称
-     */
-    private static String driver;
+    private static final String PROP_PATH ="data_source.properties";
     /**
      * 初始连接数
      */
@@ -72,8 +68,11 @@ public class MyDataSourceImpl implements MyDataSource {
              * 加载配置文件
              */
             Properties prop = new Properties();
-            prop.load(new FileReader(new File(propPath)));
-            driver = prop.getProperty("driver");
+            prop.load(Thread.currentThread().getContextClassLoader().getResourceAsStream(PROP_PATH));
+            /**
+             * 驱动类名称
+             */
+            String driver = prop.getProperty("driver");
             url = prop.getProperty("url");
             user = prop.getProperty("user");
             password = prop.getProperty("password");
