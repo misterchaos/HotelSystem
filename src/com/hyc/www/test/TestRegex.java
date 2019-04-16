@@ -16,26 +16,16 @@
 
 package com.hyc.www.test;
 
-import com.hyc.www.controller.constant.CtrlConsts;
-
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
  * @program XHotel
- * @description 用于测试常量类
- * @date 2019-04-14 11:32
+ * @description 用于测试正则表达式
+ * @date 2019-04-15 00:29
  */
-public class TestConstants {
+public class TestRegex {
     public static void main(String[] args) {
-        System.out.println(CtrlConsts.Method.REGIST_DO.name());
-        System.out.println(CtrlConsts.Method.valueOf("REGIST_DO"));
-        System.out.println(CtrlConsts.Method.LOGIN_DO.toString());
-        System.out.println(CtrlConsts.Method.LOGIN_DO);
-        System.out.println(CtrlConsts.Method.LOGIN_DO.getName());
-        for (CtrlConsts.Method ms : CtrlConsts.Method.values()) {
-            System.out.println(ms.getName());
-            if(ms.getName().equalsIgnoreCase("login.do")){
-                System.out.println("find method : "+ms.getName());
-            }
-        }
+        String regex = "[A-Za-z]+[0-9]+";
+        System.out.println(regex.matches("A"));
+        System.out.println("tw1".matches(regex));
     }
 }

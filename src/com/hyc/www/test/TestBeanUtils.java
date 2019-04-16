@@ -16,26 +16,29 @@
 
 package com.hyc.www.test;
 
-import com.hyc.www.controller.constant.CtrlConsts;
+import com.hyc.www.po.User;
+import com.hyc.www.util.BeanUtils;
+
+import java.util.*;
 
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
  * @program XHotel
- * @description 用于测试常量类
- * @date 2019-04-14 11:32
+ * @description 用于测试BeanUtils工具类
+ * @date 2019-04-15 18:38
  */
-public class TestConstants {
+public class TestBeanUtils {
     public static void main(String[] args) {
-        System.out.println(CtrlConsts.Method.REGIST_DO.name());
-        System.out.println(CtrlConsts.Method.valueOf("REGIST_DO"));
-        System.out.println(CtrlConsts.Method.LOGIN_DO.toString());
-        System.out.println(CtrlConsts.Method.LOGIN_DO);
-        System.out.println(CtrlConsts.Method.LOGIN_DO.getName());
-        for (CtrlConsts.Method ms : CtrlConsts.Method.values()) {
-            System.out.println(ms.getName());
-            if(ms.getName().equalsIgnoreCase("login.do")){
-                System.out.println("find method : "+ms.getName());
-            }
-        }
+        HashMap map = new HashMap();
+        String[] value = new String[1];
+        value[0]="test";
+        map.put("userName", value);
+        value[0]="3";
+        map.put("balance", value);
+        Date d = new Date();
+        Class clazz = User.class;
+        User user = (User) BeanUtils.toObject(map,clazz);
+        System.out.println(user.getUserName());
+        System.out.println(user.getBalance());
     }
 }

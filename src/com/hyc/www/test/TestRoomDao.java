@@ -32,13 +32,13 @@ import java.util.LinkedList;
  */
 public class TestRoomDao {
     public static void main(String[] args) {
-        RoomDao roomDao = (RoomDao) BeanFactory.getBean(BeanFactory.DaoType.UserDao);
+        RoomDao roomDao = (RoomDao) BeanFactory.getBean(BeanFactory.DaoType.RoomDao);
 
         /**
          * 测试查询房间全部信息功能
          */
         System.out.println("测试查询房间全部信息功能");
-        Room room=roomDao.getRoom("1010");
+        Room room=roomDao.getRoom("1020");
         if(room!=null){
             System.out.println(room.getNumber());
             System.out.println(room.getId());
@@ -55,6 +55,9 @@ public class TestRoomDao {
         System.out.println("测试获取所有房间信息的功能");
         LinkedList list = roomDao.getAllRooms();
         System.out.println(list.size());
+        room = (Room) list.get(0);
+        System.out.println(room.getGmtModified());
+        System.out.println(room.getNumber());
         /**
          * 测试通过房间id删除房间的功能
          */

@@ -40,14 +40,14 @@ public class TestUserDao {
          * 测试查询用户全部信息功能
          */
         System.out.println("测试查询用户全部信息功能");
-        User user=userDao.getUser("test2");
-        if(user!=null){
+        User user = userDao.getUser("test2");
+        if (user != null) {
             System.out.println(user.getUserName());
             System.out.println(user.getId());
             System.out.println(user.getStatus());
             System.out.println(user.getPhoneNumber());
             System.out.println(user.getGmtModified());
-        }else {
+        } else {
             System.out.println(user);
         }
 
@@ -71,7 +71,7 @@ public class TestUserDao {
          * 测试更新用户信息的功能
          */
         System.out.println("测试更新用户信息的功能");
-        user=userDao.getUser("test");
+        user = userDao.getUser("test");
         user.setPassword("12345");
         user.setPhoneNumber("10005");
         System.out.println(userDao.update(user));
@@ -81,9 +81,14 @@ public class TestUserDao {
          * 测试增加用户的功能
          */
         System.out.println("测试增加用户的功能");
-        user= new User();
+        user = new User();
         user.setUserName("test2");
         user.setPhoto("test");
+        user = userDao.getUser("test");
+        System.out.println(user.getBalance());
+        System.out.println(user.getNickName());
+        System.out.println(user.getStatus());
+        System.out.println(user.getGmtModified());
         System.out.println(userDao.addUser(null));
     }
 }

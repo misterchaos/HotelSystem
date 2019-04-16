@@ -38,7 +38,7 @@ public class TestDao {
         BaseDaoImpl baseDao = new BaseDaoImpl();
         User user = new User();
 
-        System.out.println(baseDao.queryCount("user", "balance"));
+        System.out.println(baseDao.queryCount("t_user", "balance"));
         System.out.println(baseDao.queryWhereAndEquals(new String[]{"user_name"}, user).size());
 
         /**
@@ -50,8 +50,8 @@ public class TestDao {
         /***
          * 测试分页查询
          */
-        System.out.println("pages num " + baseDao.queryPages(new String[]{"user_name"}, "user", "30", "0").size());
-        Iterator it = baseDao.queryPages(new String[]{"user_name"}, "user", "10", "0").listIterator();
+        System.out.println("pages num " + baseDao.queryPages(new String[]{"user_name"}, "t_user", "30", "0").size());
+        Iterator it = baseDao.queryPages(new String[]{"user_name"}, "t_user", "10", "0").listIterator();
         while (it.hasNext()) {
             user = (User) it.next();
             System.out.println(user.getUserName());

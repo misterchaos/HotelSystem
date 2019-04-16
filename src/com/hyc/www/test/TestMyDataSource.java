@@ -16,10 +16,12 @@
 
 package com.hyc.www.test;
 
-import com.hyc.www.dao.inter.MyDataSource;
 import com.hyc.www.dao.impl.MyDataSourceImpl;
+import com.hyc.www.dao.inter.MyDataSource;
 
-import java.sql.*;
+import java.sql.Connection;
+
+import static com.hyc.www.util.JdbcUtils.getConnection;
 
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
@@ -28,49 +30,11 @@ import java.sql.*;
  * @date 2019-04-08 02:11
  */
 public class TestMyDataSource {
-    static {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e.getMessage(),e);
-        }
-    }
 
-    public static Connection getConnection(){
-        try {
-            return DriverManager.getConnection("jdbc:mysql://localhost:3306/db_week3?serverTimezone=GMT%2B8&useSSL=false","root","6868");
-        } catch (SQLException e) {
-            throw new RuntimeException(e.getMessage(),e);
-        }
-
-    }
-    public static void free(ResultSet rs, Statement st, Connection conn) {
-        try {
-            if (rs != null) {
-                rs.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        try {
-            if (st != null) {
-                st.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        if (conn != null) {
-            try {
-                conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
     public static void main(String[] args) {
 
-       getConnection();
+        getConnection();
         System.out.println("测试直接从连接池获取连接");
         MyDataSource dataSource = MyDataSourceImpl.getInstance();
         Connection conn = dataSource.getConnection();
@@ -89,8 +53,6 @@ public class TestMyDataSource {
         dataSource.free(conn);
         System.out.println("当前已创建连接数 = " + dataSource.getCurrentCount());
         System.out.println("当前空闲连接数 = " + dataSource.getfreeCount());
-
-
 
 
     }
