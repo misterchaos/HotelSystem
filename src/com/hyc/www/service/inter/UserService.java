@@ -16,8 +16,11 @@
 
 package com.hyc.www.service.inter;
 
+import com.hyc.www.service.constant.ServeConsts;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
@@ -35,7 +38,7 @@ public interface UserService {
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/13
      */
-    boolean regist(HttpServletRequest req, HttpServletResponse resp);
+    ServeConsts.Status regist(HttpServletRequest req, HttpServletResponse resp);
 
     /**
      * 负责用户的登陆功能
@@ -44,7 +47,18 @@ public interface UserService {
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/13
      */
-    boolean login();
+    ServeConsts.Status login(HttpServletRequest req, HttpServletResponse resp);
+
+
+    /**
+     * 负责返回用户的个人信息
+     *
+     * @name myInfo
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/16
+     */
+    ServeConsts.Status myInfo(HttpServletRequest req, HttpServletResponse resp);
 
     /**
      * 负责更新用户信息的功能
@@ -54,7 +68,7 @@ public interface UserService {
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/13
      */
-    boolean updateInfo();
+    ServeConsts.Status updateInfo(HttpServletRequest req, HttpServletResponse resp);
 
     /**
      * 负责用户更新登陆密码的功能
@@ -64,6 +78,15 @@ public interface UserService {
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/13
      */
-    boolean updatePwd();
+    ServeConsts.Status updatePwd(HttpServletRequest req, HttpServletResponse resp);
 
+    /**
+     * 负责用户更新支付密码的功能
+     *
+     * @name updatePayPwd
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/13
+     */
+    ServeConsts.Status updatePayPwd(HttpServletRequest req, HttpServletResponse resp);
 }
