@@ -57,13 +57,13 @@ public interface OrderRoomDao {
      * 返回该订单编号对应的id
      *
      * @param orderNum 订单编号
-     * @return java.math.BigInteger
+     * @return java.math.String
      * @name getId
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/12
      */
-    BigInteger getId(String orderNum);
+    String getId(String orderNum);
 
     /**
      * 获取表中所有订单的信息，并以LinkedList的形式返回
@@ -87,7 +87,7 @@ public interface OrderRoomDao {
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/12
      */
-    boolean deleteById(BigInteger Id);
+    boolean deleteById(String Id);
 
 
     /**

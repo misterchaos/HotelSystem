@@ -173,7 +173,7 @@ public class BaseDaoImpl implements BaseDao {
                         System.out.println("查找父类getId方法...");
                     }
                 }
-                sql.append(" where id = " + id);
+                sql.append(" where id = \"" + id+"\"");
             } catch (IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
                 throw new DaoException("反射执行getId方法异常：无法执行getId方法", e);

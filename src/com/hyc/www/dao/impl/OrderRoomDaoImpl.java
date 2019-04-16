@@ -34,12 +34,12 @@ public class OrderRoomDaoImpl extends BaseDaoImpl implements OrderRoomDao {
     /**
      * 本类操作的数据库表名
      */
-    String TABLE_NAME = " "+ JdbcUtils.getTableName(OrderRoom.class)+" ";
+    private final String TABLE_NAME = " "+ JdbcUtils.getTableName(OrderRoom.class)+" ";
 
     /**
      * 表中所有字段对应的查询语句
      */
-    String ALL_FIELD_NAME = " id,number,user_id,room_id,start_time,end_time,amount,remark,"
+    private final String ALL_FIELD_NAME = " id,number,user_id,room_id,start_time,end_time,amount,remark,"
             + "status,gmt_create,gmt_modified ";
 
 
@@ -84,16 +84,16 @@ public class OrderRoomDaoImpl extends BaseDaoImpl implements OrderRoomDao {
      * 返回该订单编号对应的id
      *
      * @param orderNum 订单编号
-     * @return java.math.BigInteger
+     * @return java.math.String
      * @name getId
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/12
      */
     @Override
-    public BigInteger getId(String orderNum) {
+    public String getId(String orderNum) {
         String sql = "select id from " + TABLE_NAME + " where number = ?";
-        return (BigInteger) super.queryValue(sql, new Object[]{orderNum});
+        return (String) super.queryValue(sql, new Object[]{orderNum});
     }
 
     /**
@@ -129,8 +129,13 @@ public class OrderRoomDaoImpl extends BaseDaoImpl implements OrderRoomDao {
      * @date 2019/4/12
      */
     @Override
-    public boolean deleteById(BigInteger Id) {
-        return super.delete(Id) == 1;
+    public boolean deleteById(String id) {
+        if(id==null){
+            return false;
+        }
+        OrderRoom orderRoom = new OrderRoom();
+        orderRoom.setId(id);
+        return super.delete(orderRoom) == 1;
     }
 
 

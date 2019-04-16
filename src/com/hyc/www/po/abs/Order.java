@@ -17,7 +17,6 @@
 package com.hyc.www.po.abs;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.sql.Timestamp;
 
 /**
@@ -28,7 +27,7 @@ import java.sql.Timestamp;
  */
 public abstract class Order extends BaseEntity {
     private String number;
-    private BigInteger userId;
+    private String userId;
     private Timestamp startTime;
     private Timestamp endTime;
     private BigDecimal amount;
@@ -42,11 +41,11 @@ public abstract class Order extends BaseEntity {
         this.number = number;
     }
 
-    public BigInteger getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(BigInteger userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 

@@ -62,7 +62,7 @@ public class TestRoomDao {
          * 测试通过房间id删除房间的功能
          */
         System.out.println("测试通过房间id删除房间的功能");
-        System.out.println(roomDao.deleteById(BigInteger.valueOf(5)));
+        System.out.println(roomDao.deleteById("5"));
         /**
          * 测试通过房间名删除房间的功能
          */

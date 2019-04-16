@@ -14,28 +14,19 @@
  * limitations under the License.
  */
 
-package com.hyc.www.po;
+package com.hyc.www.util;
 
-import com.hyc.www.po.abs.Order;
+import java.util.UUID;
 
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
  * @program XHotel
- * @description 用于存储房间订单信息
- * @date 2019-04-12 01:27
+ * @description 用于提供一个uuid，并去除其中的横线
+ * @date 2019-04-16 20:51
  */
-public class OrderRoom extends Order {
-    private String roomId;
-
-
-
-    public String getRoomId() {
-        return roomId;
+public class UUIDUtils {
+    public static String getUUID(){
+        String uuid = UUID.randomUUID().toString();
+        return uuid.replace("-","");
     }
-
-    public void setRoomId(String roomId) {
-        this.roomId = roomId;
-    }
-
-
 }

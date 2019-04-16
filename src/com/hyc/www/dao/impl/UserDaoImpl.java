@@ -34,13 +34,13 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
     /**
      * 本类操作的数据库表名
      */
-    String TABLE_NAME = " " + JdbcUtils.getTableName(User.class) + " ";
+    private final String TABLE_NAME = " " + JdbcUtils.getTableName(User.class) + " ";
 
 
     /**
      * 表中所有字段对应的查询语句
      */
-    String ALL_FIELD_NAME = " id,user_name,password,phone_number,id_number,nick_name,"
+    private final String ALL_FIELD_NAME = " id,user_name,password,phone_number,id_number,nick_name,"
             + "photo,status,balance,pay_pwd,gmt_create,gmt_modified ";
 
     /**
@@ -123,9 +123,9 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
      * @date 2019/4/11
      */
     @Override
-    public BigInteger getId(String userName) {
+    public String getId(String userName) {
         String sql = "select id from " + TABLE_NAME + " where user_name = ?";
-        return (BigInteger) super.queryValue(sql, new Object[]{userName});
+        return (String) super.queryValue(sql, new Object[]{userName});
     }
 
     /**
@@ -162,8 +162,13 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
      * @date 2019/4/11
      */
     @Override
-    public boolean deleteById(BigInteger id) {
-        return id == null ? false : super.delete(id) == 1;
+    public boolean deleteById(String id) {
+        if(id==null){
+            return false;
+        }
+        User user = new User();
+        user.setId(id);
+        return super.delete(user) == 1;
     }
 
 
@@ -194,7 +199,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
      */
     @Override
     public boolean delete(User user) {
-        return user == null ? false : deleteById(user.getId());
+        return user != null && deleteById(user.getId());
     }
 
 

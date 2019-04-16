@@ -24,6 +24,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import static com.hyc.www.util.UUIDUtils.getUUID;
+
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
  * @program XHotel
@@ -39,5 +41,6 @@ public class TestStringUtils {
         Object obj = User.class.newInstance();
             m.invoke(obj,"test");
         System.out.println(((User) obj).getUserName());
+        System.out.println(getUUID());
     }
 }

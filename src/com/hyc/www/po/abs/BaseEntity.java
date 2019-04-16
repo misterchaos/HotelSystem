@@ -16,7 +16,6 @@
 
 package com.hyc.www.po.abs;
 
-import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -27,16 +26,16 @@ import java.util.Date;
  * @date 2019-04-12 01:13
  */
 public abstract class BaseEntity {
-    private BigInteger id;
+    private String id;
     private Integer status;
     private Date gmtCreate;
     private Date gmtModified;
 
-    public BigInteger getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(BigInteger id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -52,7 +51,7 @@ public abstract class BaseEntity {
         return gmtCreate;
     }
 
-    public void setGmtCreate(Timestamp gmtCreate) {
+    public void setGmtCreate(Date gmtCreate) {
         this.gmtCreate = gmtCreate;
     }
 

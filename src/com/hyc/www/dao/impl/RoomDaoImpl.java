@@ -35,13 +35,13 @@ public class RoomDaoImpl extends BaseDaoImpl implements RoomDao {
     /**
      * 本类操作的数据库表名
      */
-    String TABLE_NAME = " "+ JdbcUtils.getTableName(Room.class)+" ";
+    private final String TABLE_NAME = " "+ JdbcUtils.getTableName(Room.class)+" ";
 
     /**
      * 表中所有字段对应的查询语句
      */
-    String ALL_FIELD_NAME = " id,number,photo,type,area,bed_width,price,book_status,level,"
-            + "score,remark_num,hotel_id,creator_id,editor_id,status,gmt_create,gmt_modified ";
+    private final String ALL_FIELD_NAME = " id,number,photo,type,area,bed_width,price,book_status,level,"
+            + "score,remark_num,hotel_id,status,gmt_create,gmt_modified ";
 
 
     /**
@@ -86,16 +86,16 @@ public class RoomDaoImpl extends BaseDaoImpl implements RoomDao {
      * 返回该房间编号对应的id
      *
      * @param roomNum 房间编号
-     * @return java.math.BigInteger
+     * @return java.math.String
      * @name getId
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/11
      */
     @Override
-    public BigInteger getId(String roomNum) {
+    public String getId(String roomNum) {
         String sql = "select id from " + TABLE_NAME + " where number = ?";
-        return (BigInteger) super.queryValue(sql, new Object[]{roomNum});
+        return (String) super.queryValue(sql, new Object[]{roomNum});
     }
 
     /**
@@ -123,7 +123,7 @@ public class RoomDaoImpl extends BaseDaoImpl implements RoomDao {
     /**
      * 将该id对应的房间从数据库中删除
      *
-     * @param Id 要删除房间的id
+     * @param id 要删除房间的id
      * @return boolean
      * @name deleteById
      * @notice none
@@ -131,13 +131,12 @@ public class RoomDaoImpl extends BaseDaoImpl implements RoomDao {
      * @date 2019/4/11
      */
     @Override
-    public boolean deleteById(BigInteger Id) {
-        if(Id==null){
+    public boolean deleteById(String id) {
+        if(id==null){
             return false;
         }
         Room room = new Room();
-        room.setId(Id);
-        System.out.println("id = "+room.getId());
+        room.setId(id);
         return super.delete(room) == 1;
     }
 

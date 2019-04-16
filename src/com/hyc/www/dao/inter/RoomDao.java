@@ -58,13 +58,13 @@ public interface RoomDao {
      * 返回该房间编号对应的id
      *
      * @param roomNum 房间编号
-     * @return java.math.BigInteger
+     * @return java.math.String
      * @name getId
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/11
      */
-    BigInteger getId(String roomNum);
+    String getId(String roomNum);
 
     /**
      * 获取表中所有房间的信息，并以LinkedList的形式返回
@@ -88,7 +88,7 @@ public interface RoomDao {
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/11
      */
-    boolean deleteById(BigInteger Id);
+    boolean deleteById(String Id);
 
 
     /**

@@ -32,7 +32,7 @@ public abstract class Product extends BaseEntity {
     private String level;
     private BigDecimal score;
     private BigInteger remarkNum;
-    private BigInteger hotelId;
+    private String hotelId;
 
     public String getNumber() {
         return number;
@@ -82,11 +82,11 @@ public abstract class Product extends BaseEntity {
         this.remarkNum = remarkNum;
     }
 
-    public BigInteger getHotelId() {
+    public String getHotelId() {
         return hotelId;
     }
 
-    public void setHotelId(BigInteger hotelId) {
+    public void setHotelId(String hotelId) {
         this.hotelId = hotelId;
     }
 }

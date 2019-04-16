@@ -83,13 +83,13 @@ public interface UserDao {
      * 返回该用户名对应的id
      *
      * @param userName 用户名
-     * @return java.math.BigInteger
+     * @return java.math.String
      * @name getId
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/11
      */
-    BigInteger getId(String userName);
+    String getId(String userName);
 
     /**
      * 获取表中所有用户的信息，并以LinkedList的形式返回
@@ -112,7 +112,7 @@ public interface UserDao {
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/11
      */
-    boolean deleteById(BigInteger Id);
+    boolean deleteById(String Id);
 
 
     /**

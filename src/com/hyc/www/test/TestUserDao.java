@@ -22,6 +22,8 @@ import com.hyc.www.po.User;
 
 import java.util.LinkedList;
 
+import static com.hyc.www.util.UUIDUtils.getUUID;
+
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
  * @program XHotel
@@ -61,7 +63,7 @@ public class TestUserDao {
          * 测试通过用户id删除用户的功能
          */
         System.out.println("测试通过用户id删除用户的功能");
-        System.out.println(userDao.deleteById(null));
+        System.out.println(userDao.deleteById(String.valueOf(10)));
         /**
          * 测试通过用户名删除用户的功能
          */
@@ -71,10 +73,11 @@ public class TestUserDao {
          * 测试更新用户信息的功能
          */
         System.out.println("测试更新用户信息的功能");
-        user = userDao.getUser("test");
+        user = new User();
+        user = userDao.getUser("test2");
+        user.setId(getUUID());
         user.setPassword("12345");
         user.setPhoneNumber("10005");
-        System.out.println(userDao.update(user));
         System.out.println(userDao.updateAll(user));
 
         /**
@@ -84,11 +87,12 @@ public class TestUserDao {
         user = new User();
         user.setUserName("test2");
         user.setPhoto("test");
-        user = userDao.getUser("test");
+        user.setId(getUUID());
+//        user = userDao.getUser("test");
         System.out.println(user.getBalance());
         System.out.println(user.getNickName());
         System.out.println(user.getStatus());
         System.out.println(user.getGmtModified());
-        System.out.println(userDao.addUser(null));
+        System.out.println(userDao.addUser(user));
     }
 }

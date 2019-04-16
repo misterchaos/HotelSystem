@@ -22,6 +22,7 @@ import com.hyc.www.service.constant.ServeConsts.Status;
 import com.hyc.www.service.inter.UserService;
 import com.hyc.www.util.BeanFactory;
 import com.hyc.www.util.BeanUtils;
+import com.hyc.www.util.UUIDUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import static com.hyc.www.service.constant.ServeConsts.Status.*;
 import static com.hyc.www.util.Md5Utils.getDigest;
 import static com.hyc.www.util.ServiceUtils.*;
+import static com.hyc.www.util.UUIDUtils.getUUID;
 
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
@@ -58,6 +60,7 @@ public class UserServiceImpl implements UserService {
             return DATA_ILLEGAL;
         }
         user.setPassword(getDigest(user.getPassword()));
+        user.setId(getUUID());
         if (dao.addUser(user)) {
             return REGIST_SUCCESS;
         }

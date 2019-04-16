@@ -34,8 +34,7 @@ public class Room extends Product {
     private BigDecimal area;
     private BigDecimal bedWidth;
     private String bookStatus;
-    private BigInteger creatorId;
-    private BigInteger editorId;
+
 
     public String getPhoto() {
         return photo;
@@ -69,21 +68,6 @@ public class Room extends Product {
         this.bookStatus = bookStatus;
     }
 
-    public BigInteger getCreatorId() {
-        return creatorId;
-    }
-
-    public void setCreatorId(BigInteger creatorId) {
-        this.creatorId = creatorId;
-    }
-
-    public BigInteger getEditorId() {
-        return editorId;
-    }
-
-    public void setEditorId(BigInteger editorId) {
-        this.editorId = editorId;
-    }
 
 
 }

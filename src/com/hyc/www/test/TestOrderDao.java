@@ -24,6 +24,8 @@ import com.hyc.www.po.abs.BaseEntity;
 import java.math.BigDecimal;
 import java.util.LinkedList;
 
+import static com.hyc.www.util.UUIDUtils.getUUID;
+
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
  * @program XHotel
@@ -60,7 +62,7 @@ public class TestOrderDao {
          * 测试通过订单id删除订单的功能
          */
         System.out.println("测试通过订单id删除订单的功能");
-        System.out.println(orderDao.deleteById(null));
+        System.out.println(orderDao.deleteById("8"));
         /**
          * 测试通过订单名删除订单的功能
          */
@@ -79,6 +81,7 @@ public class TestOrderDao {
         System.out.println("测试增加订单的功能");
         order= new OrderRoom();
         order.setAmount(BigDecimal.valueOf(99.99));
+        order.setId(getUUID());
         order.setNumber("1020");
         System.out.println(orderDao.addOrderRoom(order));
     }
