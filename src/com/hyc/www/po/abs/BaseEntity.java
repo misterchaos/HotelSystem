@@ -18,6 +18,7 @@ package com.hyc.www.po.abs;
 
 import java.math.BigInteger;
 import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
@@ -28,8 +29,8 @@ import java.sql.Timestamp;
 public abstract class BaseEntity {
     private BigInteger id;
     private Integer status;
-    private Timestamp gmtCreate;
-    private Timestamp gmtModified;
+    private Date gmtCreate;
+    private Date gmtModified;
 
     public BigInteger getId() {
         return id;
@@ -47,7 +48,7 @@ public abstract class BaseEntity {
         this.status = status;
     }
 
-    public Timestamp getGmtCreate() {
+    public Date getGmtCreate() {
         return gmtCreate;
     }
 
@@ -55,11 +56,13 @@ public abstract class BaseEntity {
         this.gmtCreate = gmtCreate;
     }
 
-    public Timestamp getGmtModified() {
+    public Date getGmtModified() {
         return gmtModified;
     }
 
-    public void setGmtModified(Timestamp gmtModified) {
+    public void setGmtModified(Date gmtModified) {
         this.gmtModified = gmtModified;
     }
+
+
 }

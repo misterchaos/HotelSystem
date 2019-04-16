@@ -217,6 +217,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
          * 使用克隆对象，防止影响原来对象的值
          */
         User clone = user.clone();
+        clone.setId(getId(clone.getUserName()));
         clone.setPassword(null);
         clone.setPayPwd(null);
         return super.update(clone) == 1;
@@ -236,6 +237,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
      */
     @Override
     public boolean updateAll(User user) {
+        user.setId(getId(user.getUserName()));
         return super.update(user) == 1;
     }
 }

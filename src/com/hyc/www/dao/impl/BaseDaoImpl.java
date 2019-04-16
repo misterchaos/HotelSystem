@@ -29,6 +29,8 @@ import java.sql.*;
 import java.util.Arrays;
 import java.util.LinkedList;
 
+import static com.hyc.www.util.StringUtils.field2SqlField;
+
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
  * @program XHotel
@@ -86,6 +88,8 @@ public class BaseDaoImpl implements BaseDao {
              * 将ps填入参数后的完整语句赋值给sql
              */
             sql = ps.toString();
+            //TODO
+            System.out.println(sql);
             result = ps.executeUpdate();
 
         } catch (Exception e) {
@@ -271,14 +275,22 @@ public class BaseDaoImpl implements BaseDao {
             LinkedList list = new LinkedList<>();
             try {
                 ResultSetMetaData md = rs.getMetaData();
-                Method[] method = clazz.getDeclaredMethods();
+                /**
+                 * 取出包括父类方法在内的所有方法
+                 * 这里clazz必须用claz代替，否则clazz将被修改
+                 */
+                LinkedList<Method> methods = new LinkedList<>();
+                Class claz = clazz;
+                for (; claz != Object.class; claz = claz.getSuperclass()) {
+                    methods.addAll(Arrays.asList(claz.getDeclaredMethods()));
+                }
+                /**
+                 * 取得字段名,存在columns数组中，并映射成setter方法数组
+                 */
                 int colCount = md.getColumnCount();
                 String[] setters = new String[colCount + 1];
                 String[] columns = new String[colCount + 1];
                 for (int i = 0; i < colCount; i++) {
-                    /**
-                     * 取得字段名,存在columns数组中
-                     */
                     columns[i] = md.getColumnLabel(i + 1);
                     /**
                      * 取得字段名并映射为setter方法名，忽略大小写,存在setters数组中
@@ -297,7 +309,7 @@ public class BaseDaoImpl implements BaseDao {
                         /**
                          * 执行对应的set方法，忽略大小写
                          */
-                        for (Method ms : method) {
+                        for (Method ms : methods) {
                             if (ms.getName().equalsIgnoreCase(setters[i])) {
                                 ms.invoke(obj, rs.getObject(columns[i]));
                             }
@@ -570,6 +582,9 @@ public class BaseDaoImpl implements BaseDao {
         }
         LinkedList<Method> methods = new LinkedList<>();
         LinkedList<Field> fields = new LinkedList<>();
+        /**
+         * 取出包括父类在内的所有方法和属性
+         */
         for (Class clazz = obj.getClass(); clazz != Object.class; clazz = clazz.getSuperclass()) {
             methods.addAll(Arrays.asList(clazz.getDeclaredMethods()));
             fields.addAll(Arrays.asList(clazz.getDeclaredFields()));
@@ -596,15 +611,7 @@ public class BaseDaoImpl implements BaseDao {
                         /**
                          * 取出该属性的名称，映射成数据库字段名
                          */
-                        byte[] bytes = field.getName().getBytes();
-                        StringBuilder name = new StringBuilder();
-                        for (int i = 0; i < bytes.length; i++) {
-                            if (bytes[i] > 'A' && bytes[i] < 'Z') {
-                                name.append('_');
-                            }
-                            name.append((char) bytes[i]);
-                        }
-                        fieldNames.add(name.toString());
+                        fieldNames.add(field2SqlField(field.getName()));
                     }
                 }
             }
