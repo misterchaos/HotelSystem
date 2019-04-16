@@ -16,7 +16,8 @@
 
 package com.hyc.www.controller.servlet;
 
-import com.hyc.www.controller.constant.ControlConsts.Methods;
+import com.hyc.www.controller.constant.CtrlConsts;
+import com.hyc.www.service.constant.ServeConsts;
 import com.hyc.www.service.inter.UserService;
 
 import javax.servlet.ServletException;
@@ -26,8 +27,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.hyc.www.controller.constant.ControlConsts.Pages.INDEX_PAGE;
-import static com.hyc.www.controller.constant.ControlConsts.Pages.REGIST_PAGE;
+import static com.hyc.www.controller.constant.CtrlConsts.Method.getValue;
+import static com.hyc.www.controller.constant.CtrlConsts.Pages.INDEX_PAGE;
+import static com.hyc.www.controller.constant.CtrlConsts.Pages.REGIST_PAGE;
 
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
@@ -44,24 +46,34 @@ public class UserServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //TODO
-        System.out.println(req.getParameter("method"));
-        Methods method = Methods.valueOf(req.getParameter("method"));
-        /**
-         * 将请求传入service层
-         */
-        //TODO debug
-        System.out.println("method = "+method.name());
+        CtrlConsts.Method method = getValue(req.getParameter("method"));
         switch (method) {
             case REGIST_VIEW:
-                req.getRequestDispatcher(REGIST_PAGE.name()).forward(req,resp);
+                req.getRequestDispatcher(REGIST_PAGE.name()).forward(req, resp);
                 return;
             case REGIST_DO:
                 regist(req, resp);
                 return;
             case LOGIN_DO:
+                login(req, resp);
+                return;
+            case MY_INFO_DO:
+                myInfo(req,resp);
+                return;
+            case MY_INFO_VIEW:
+                return;
+            case UPDATE_DO:
+                update(req,resp);
+                return;
+            case UPDATE_PWD_DO:
+                updatePwd(req,resp);
+                return;
+            case UPDATE_PAY_PWD_DO:
+                updatePayPwd(req,resp);
                 return;
             case LOGOUT_DO:
+                return;
+            case INDEX_VIEW:
                 return;
             default:
                 resp.sendRedirect(INDEX_PAGE.name());
@@ -69,15 +81,107 @@ public class UserServlet extends HttpServlet {
 
     }
 
-    private void regist(HttpServletRequest req, HttpServletResponse resp){
+
+
+    private void regist(HttpServletRequest req, HttpServletResponse resp) {
         UserService serv = (UserService) getServletContext().getAttribute("userService");
-        serv.regist(req,resp);
-        try {
-            req.getRequestDispatcher("index.jsp").forward(req,resp);
-        } catch (ServletException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        ServeConsts.Status status = serv.regist(req, resp);
+//TODO
+        System.out.println(status.name());
+
+        switch (status) {
+            case DATA_ILLEGAL:
+
+                return;
+            case ACCOUNT_ALREADY_EXIST:
+                return;
+            case REGIST_SUCCESS:
+
+            default:
+        }
+
+    }
+
+    private void login(HttpServletRequest req, HttpServletResponse resp) {
+        UserService serv = (UserService) getServletContext().getAttribute("userService");
+        ServeConsts.Status status = serv.login(req, resp);
+        //TODO debug
+        System.out.println(status.name());
+        switch (status) {
+            case ACCOUNT_ALREADY_EXIST:
+                return;
+            case PASSWORD_INCORRECT:
+                return;
+            case LOGIN_SUCCESS:
+
+            default:
         }
     }
+
+    private void myInfo(HttpServletRequest req, HttpServletResponse resp) {
+        UserService serv = (UserService) getServletContext().getAttribute("userService");
+        ServeConsts.Status status = serv.myInfo(req, resp);
+        //TODO debug
+        System.out.println(status.name());
+        switch (status) {
+            case ACCOUNT_NOT_FOUNT:
+                return;
+
+            default:
+        }
+
+    }
+    private void update(HttpServletRequest req, HttpServletResponse resp) {
+        UserService serv = (UserService) getServletContext().getAttribute("userService");
+        ServeConsts.Status status = serv.updateInfo(req, resp);
+        //TODO debug
+        System.out.println(status.name());
+        switch (status) {
+            case DATA_ILLEGAL:
+                return;
+            case UPDATE_SUCCESS:
+                return;
+            case ERROR:
+                return;
+            default:
+        }
+    }
+    private void updatePwd(HttpServletRequest req, HttpServletResponse resp) {
+        UserService serv = (UserService) getServletContext().getAttribute("userService");
+        ServeConsts.Status status = serv.updatePwd(req, resp);
+        //TODO debug
+        System.out.println(status.name());
+        switch (status) {
+            case DATA_ILLEGAL:
+                return;
+            case PASSWORD_INCORRECT:
+                return;
+            case UPDATE_SUCCESS:
+
+                return;
+            case ERROR:
+                return;
+            default:
+        }
+    }
+
+    private void updatePayPwd(HttpServletRequest req, HttpServletResponse resp) {
+        UserService serv = (UserService) getServletContext().getAttribute("userService");
+        ServeConsts.Status status = serv.updatePayPwd(req, resp);
+        //TODO debug
+        System.out.println(status.name());
+        switch (status) {
+            case ACCOUNT_NOT_FOUNT:
+                return;
+            case PASSWORD_INCORRECT:
+                return;
+            case UPDATE_SUCCESS:
+
+                return;
+            case ERROR:
+                return;
+            default:
+        }
+    }
+
 }
