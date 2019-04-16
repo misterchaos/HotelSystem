@@ -22,6 +22,7 @@ import com.hyc.www.po.OrderRoom;
 import com.hyc.www.po.abs.BaseEntity;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.LinkedList;
 
 import static com.hyc.www.util.UUIDUtils.getUUID;
@@ -35,6 +36,10 @@ import static com.hyc.www.util.UUIDUtils.getUUID;
 public class TestOrderDao {
     public static void main(String[] args) {
         OrderRoomDao orderDao = new OrderRoomDaoImpl();
+
+        Date date = new Date();
+        OrderRoom orderRoom = new OrderRoom();
+        orderRoom.setStartTime(date);
 
         /**
          * 测试查询订单全部信息功能
