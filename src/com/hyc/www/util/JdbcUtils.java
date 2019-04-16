@@ -207,7 +207,6 @@ public class JdbcUtils {
     public static String getConfig(String key) {
 
         try {
-            //TODO debug
             Properties prop = new Properties();
             prop.load(Thread.currentThread().getContextClassLoader().getResourceAsStream(PROP_PATH));
             return key == null ? null : prop.getProperty(key);
