@@ -22,7 +22,6 @@ import com.hyc.www.service.constant.ServeConsts.Status;
 import com.hyc.www.service.inter.UserService;
 import com.hyc.www.util.BeanFactory;
 import com.hyc.www.util.BeanUtils;
-import com.hyc.www.util.UUIDUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,7 +39,7 @@ import static com.hyc.www.util.UUIDUtils.getUUID;
  */
 public class UserServiceImpl implements UserService {
 
-    UserDao dao = (UserDao) BeanFactory.getBean(BeanFactory.DaoType.UserDao);
+    private UserDao dao = (UserDao) BeanFactory.getBean(BeanFactory.DaoType.UserDao);
 
     /**
      * 负责用户的注册功能
@@ -53,6 +52,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public Status regist(HttpServletRequest req, HttpServletResponse resp) {
         User user = (User) BeanUtils.toObject(req.getParameterMap(), User.class);
+        //TODO
+        System.out.println(user.getUserName());
         if (dao.isExist(user.getUserName())) {
             return ACCOUNT_ALREADY_EXIST;
         }
@@ -119,10 +120,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public Status updateInfo(HttpServletRequest req, HttpServletResponse resp) {
         User user = (User) BeanUtils.toObject(req.getParameterMap(), User.class);
-        if(!isValidUserInfo(user)){
+        if (!isValidUserInfo(user)) {
             return DATA_ILLEGAL;
         }
-        if(dao.update(user)){
+        if (dao.update(user)) {
             return UPDATE_SUCCESS;
         }
         return ERROR;
@@ -187,9 +188,6 @@ public class UserServiceImpl implements UserService {
         }
         return ERROR;
     }
-
-
-
 
 
 }

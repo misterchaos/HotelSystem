@@ -28,10 +28,18 @@ public class CtrlConsts {
      * request中method的枚举常量
      */
     public enum Method {
+
+
         /**
          * 显示主页
          */
         INDEX_VIEW("index.view"),
+
+        /*
+         **************************************************************
+         *               用户
+         **************************************************************
+         */
         /**
          * 执行登陆方法
          */
@@ -60,7 +68,7 @@ public class CtrlConsts {
          * 执行更新信息操作
          *
          */
-        UPDATE_DO("update.do"),
+        UPDATE_INFO_DO("update_info.do"),
         /**
          * 执行更新登陆密码操作
          */
@@ -77,7 +85,37 @@ public class CtrlConsts {
         /**
          * 执行退出登陆方法
          */
-        LOGOUT_DO("logout.do");
+        LOGOUT_DO("logout.do"),
+
+        /*
+         **************************************************************
+         *               房间
+         **************************************************************
+         */
+        /**
+         * 添加房间
+         */
+        ADD_ROOM("add_room.do"),
+        /**
+         * 删除房间
+         */
+        DELETE_ROOM("delete_room.do"),
+        /**
+         * 更新房间信息
+         */
+        UPDATE_ROOM("update_room.do"),
+        /**
+         * 查找房间
+         */
+        FIND_ROOM("find_room.do"),
+
+        /*
+         **************************************************************
+         *               房间订单
+         **************************************************************
+         */
+        ADD_ORDER_ROOM("add_order_room.do"),
+        DELETE_ORDER_ROOM("delete_order_room.do");
 
         private String name;
 

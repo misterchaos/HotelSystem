@@ -14,18 +14,27 @@
  * limitations under the License.
  */
 
-package com.hyc.www.test;
+package com.hyc.www.service.inter;
+
+import com.hyc.www.service.constant.ServeConsts;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
  * @program XHotel
- * @description 用于测试正则表达式
- * @date 2019-04-15 00:29
+ * @description 负责提供房间相关的服务
+ * @date 2019-04-16 23:32
  */
-public class TestRegex {
-    public static void main(String[] args) {
-        String regex = "[A-Za-z]+[0-9]+";
-        System.out.println(regex.matches("A"));
-        System.out.println("t1".matches(regex));
-    }
+public interface RoomService {
+    ServeConsts.Status add(HttpServletRequest req, HttpServletResponse resp);
+
+    ServeConsts.Status delete(HttpServletRequest req, HttpServletResponse resp);
+
+    ServeConsts.Status update(HttpServletRequest req, HttpServletResponse resp);
+
+    ServeConsts.Status find(HttpServletRequest req, HttpServletResponse resp);
+
 }

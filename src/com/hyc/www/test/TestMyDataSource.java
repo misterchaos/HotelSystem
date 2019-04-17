@@ -32,7 +32,8 @@ import static com.hyc.www.util.JdbcUtils.getConnection;
 public class TestMyDataSource {
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ClassNotFoundException {
+
 
         getConnection();
         System.out.println("测试直接从连接池获取连接");

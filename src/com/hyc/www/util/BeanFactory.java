@@ -53,7 +53,7 @@ public class BeanFactory {
         /**
          * Service实现类
          */
-        UserService("UserService"),RoomService("RoomService");
+        UserService("UserService"),RoomService("RoomService"),OrderRoomService("OrderRoomService");
         private String name;
         ServiceType(String name) {
             this.name=name;

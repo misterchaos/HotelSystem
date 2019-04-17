@@ -27,7 +27,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.hyc.www.controller.constant.CtrlConsts.Method.getValue;
 import static com.hyc.www.controller.constant.CtrlConsts.Pages.INDEX_PAGE;
 import static com.hyc.www.controller.constant.CtrlConsts.Pages.REGIST_PAGE;
 
@@ -37,7 +36,7 @@ import static com.hyc.www.controller.constant.CtrlConsts.Pages.REGIST_PAGE;
  * @description 负责接收与用户信息相关业务的请求
  * @date 2019-04-13 23:04
  */
-@WebServlet(value = "/user")
+@WebServlet("/user")
 public class UserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -46,7 +45,8 @@ public class UserServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        CtrlConsts.Method method = getValue(req.getParameter("method"));
+        CtrlConsts.Method method = CtrlConsts.Method.getValue(req.getParameter("method"));
+        UpdateType updateType = UpdateType.getValue(method.name());
         switch (method) {
             case REGIST_VIEW:
                 req.getRequestDispatcher(REGIST_PAGE.name()).forward(req, resp);
@@ -58,18 +58,18 @@ public class UserServlet extends HttpServlet {
                 login(req, resp);
                 return;
             case MY_INFO_DO:
-                myInfo(req,resp);
+                myInfo(req, resp);
                 return;
             case MY_INFO_VIEW:
                 return;
-            case UPDATE_DO:
-                update(req,resp);
+            case UPDATE_INFO_DO:
+                update(req, resp,updateType);
                 return;
             case UPDATE_PWD_DO:
-                updatePwd(req,resp);
+                update(req, resp,updateType);
                 return;
             case UPDATE_PAY_PWD_DO:
-                updatePayPwd(req,resp);
+                update(req, resp,updateType);
                 return;
             case LOGOUT_DO:
                 return;
@@ -82,7 +82,6 @@ public class UserServlet extends HttpServlet {
     }
 
 
-
     private void regist(HttpServletRequest req, HttpServletResponse resp) {
         UserService serv = (UserService) getServletContext().getAttribute("userService");
         ServeConsts.Status status = serv.regist(req, resp);
@@ -90,13 +89,11 @@ public class UserServlet extends HttpServlet {
         System.out.println(status.name());
 
         switch (status) {
-            case DATA_ILLEGAL:
-
-                return;
             case ACCOUNT_ALREADY_EXIST:
                 return;
+            case DATA_ILLEGAL:
+                return;
             case REGIST_SUCCESS:
-
             default:
         }
 
@@ -131,11 +128,26 @@ public class UserServlet extends HttpServlet {
         }
 
     }
-    private void update(HttpServletRequest req, HttpServletResponse resp) {
+
+    private void update(HttpServletRequest req, HttpServletResponse resp, UpdateType type) {
         UserService serv = (UserService) getServletContext().getAttribute("userService");
-        ServeConsts.Status status = serv.updateInfo(req, resp);
+        ServeConsts.Status status=null;
+        switch (type) {
+            case INFO:
+                status = serv.updateInfo(req, resp);
+                break;
+            case PWD:
+                status = serv.updatePwd(req, resp);
+                break;
+            case PAY_PWD:
+                status = serv.updatePayPwd(req, resp);
+                break;
+            default:
+                break;
+        }
         //TODO debug
         System.out.println(status.name());
+
         switch (status) {
             case DATA_ILLEGAL:
                 return;
@@ -146,41 +158,43 @@ public class UserServlet extends HttpServlet {
             default:
         }
     }
-    private void updatePwd(HttpServletRequest req, HttpServletResponse resp) {
-        UserService serv = (UserService) getServletContext().getAttribute("userService");
-        ServeConsts.Status status = serv.updatePwd(req, resp);
-        //TODO debug
-        System.out.println(status.name());
-        switch (status) {
-            case DATA_ILLEGAL:
-                return;
-            case PASSWORD_INCORRECT:
-                return;
-            case UPDATE_SUCCESS:
 
-                return;
-            case ERROR:
-                return;
-            default:
-        }
-    }
 
-    private void updatePayPwd(HttpServletRequest req, HttpServletResponse resp) {
-        UserService serv = (UserService) getServletContext().getAttribute("userService");
-        ServeConsts.Status status = serv.updatePayPwd(req, resp);
-        //TODO debug
-        System.out.println(status.name());
-        switch (status) {
-            case ACCOUNT_NOT_FOUNT:
-                return;
-            case PASSWORD_INCORRECT:
-                return;
-            case UPDATE_SUCCESS:
 
-                return;
-            case ERROR:
-                return;
-            default:
+    enum UpdateType {
+        /**
+         * 更新个人信息，不包括密码
+         */
+        INFO,
+        /**
+         * 更新登陆密码
+         */
+        PWD,
+        /**
+         * 更新支付密码
+         */
+        PAY_PWD,
+        /**
+         * 默认
+         */
+        DEFAULT;
+        /**
+         * 返回该名称对应的方法
+         *
+         * @param name 方法名称
+         * @return 枚举项
+         * @name getValue
+         * @notice none
+         * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+         * @date 2019/4/17
+         */
+        public static UpdateType getValue(String name) {
+            for (UpdateType mt : UpdateType.values()) {
+                if (mt.name().replace("update_","").replace("_do","").equalsIgnoreCase(name)) {
+                    return mt;
+                }
+            }
+            return DEFAULT;
         }
     }
 

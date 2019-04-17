@@ -28,6 +28,19 @@ import java.util.LinkedList;
  * @date 2019-04-12 01:51
  */
 public interface OrderRoomDao {
+
+    /**
+     * 通过订单编号检查一个订单是否已经存在
+     *
+     * @param orderNumber 房间编号
+     * @return boolean
+     * @name isExist
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/17
+     */
+    boolean isExist(String orderNumber);
+
     /**
      * 添加一个订单到数据库
      *

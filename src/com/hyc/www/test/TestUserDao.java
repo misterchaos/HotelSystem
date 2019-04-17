@@ -88,11 +88,26 @@ public class TestUserDao {
         user.setUserName("test2");
         user.setPhoto("test");
         user.setId(getUUID());
-//        user = userDao.getUser("test");
         System.out.println(user.getBalance());
         System.out.println(user.getNickName());
         System.out.println(user.getStatus());
         System.out.println(user.getGmtModified());
         System.out.println(userDao.addUser(user));
+
+        /**
+         * 批量删除与添加
+         */
+
+        for (int i = 1; i < 0; i++) {
+            userDao.deleteById(String.valueOf(i));
+        }
+
+        for (int i = 0; i < 0; i++) {
+            user.setId(getUUID());
+            user.setUserName("test"+i);
+            userDao.addUser(user);
+        }
+
+
     }
 }

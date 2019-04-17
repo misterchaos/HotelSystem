@@ -16,7 +16,6 @@
 
 package com.hyc.www.util;
 
-import jdk.internal.dynalink.beans.StaticClass;
 
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>

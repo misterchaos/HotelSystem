@@ -16,16 +16,23 @@
 
 package com.hyc.www.test;
 
+import com.hyc.www.po.Room;
+import com.hyc.www.util.ServiceUtils;
+
+import java.math.BigDecimal;
+
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
  * @program XHotel
- * @description 用于测试正则表达式
- * @date 2019-04-15 00:29
+ * @description 用于测试ServiceUtils
+ * @date 2019-04-17 00:30
  */
-public class TestRegex {
+public class TestServiceUtils {
     public static void main(String[] args) {
-        String regex = "[A-Za-z]+[0-9]+";
-        System.out.println(regex.matches("A"));
-        System.out.println("t1".matches(regex));
+        Room room = new Room();
+        room.setPrice(BigDecimal.valueOf(999));
+        room.setArea(BigDecimal.valueOf(50));
+        room.setBedWidth(BigDecimal.valueOf(3));
+        System.out.println(ServiceUtils.isValidRoom(room));
     }
 }

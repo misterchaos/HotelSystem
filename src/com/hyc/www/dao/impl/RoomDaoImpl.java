@@ -45,6 +45,21 @@ public class RoomDaoImpl extends BaseDaoImpl implements RoomDao {
 
 
     /**
+     * 通过房间编号检查一个房间是否已经存在
+     *
+     * @param roomNumber 房间编号
+     * @return boolean
+     * @name isExist
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/16
+     */
+    @Override
+    public boolean isExist(String roomNumber) {
+        return getRoom(roomNumber) != null;
+    }
+
+    /**
      * 添加一个房间到数据库
      *
      * @param room 要添加的房间
