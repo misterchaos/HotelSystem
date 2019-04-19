@@ -17,18 +17,26 @@
 package com.hyc.www.service.impl;
 
 import com.hyc.www.dao.inter.RoomDao;
+import com.hyc.www.exception.ServiceException;
 import com.hyc.www.po.Room;
-import com.hyc.www.service.constant.ServeConsts;
+import com.hyc.www.service.constant.Status;
 import com.hyc.www.service.inter.RoomService;
 import com.hyc.www.util.BeanFactory;
 import com.hyc.www.util.BeanUtils;
 
+import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
+import java.io.IOException;
+import java.util.LinkedList;
 
-import static com.hyc.www.service.constant.ServeConsts.Status.*;
+import static com.hyc.www.service.constant.Status.*;
 import static com.hyc.www.util.ServiceUtils.isValidRoom;
+import static com.hyc.www.util.ServiceUtils.setData;
 import static com.hyc.www.util.UUIDUtils.getUUID;
+import static com.hyc.www.util.UploadUtils.upload;
 
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
@@ -36,12 +44,13 @@ import static com.hyc.www.util.UUIDUtils.getUUID;
  * @description 负责房间相关的服务
  * @date 2019-04-16 23:33
  */
+@MultipartConfig(location = "C:/Users/Misterchaos/Documents/Java Develop Workplaces/IDEA workspace/HotelSystem/web/file/photo")
 public class RoomServiceImpl implements RoomService {
 
     private RoomDao dao = (RoomDao) BeanFactory.getBean(BeanFactory.DaoType.RoomDao);
 
     @Override
-    public ServeConsts.Status add(HttpServletRequest req, HttpServletResponse resp) {
+    public Status add(HttpServletRequest req, HttpServletResponse resp) {
         Room room = (Room) BeanUtils.toObject(req.getParameterMap(), Room.class);
         if (dao.isExist(room.getNumber())) {
             return ROOM_ALREADY_EXIST;
@@ -59,7 +68,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public ServeConsts.Status delete(HttpServletRequest req, HttpServletResponse resp) {
+    public Status delete(HttpServletRequest req, HttpServletResponse resp) {
         Room room = (Room) BeanUtils.toObject(req.getParameterMap(), Room.class);
         if (!dao.isExist(room.getNumber())) {
             return ROOM_NOT_FOUND;
@@ -70,31 +79,62 @@ public class RoomServiceImpl implements RoomService {
             room.setId(dao.getId(room.getNumber()));
         }
         if (dao.delete(room)) {
-            return SUCCESS;
+            return setData(room, SUCCESS);
         }
         return ERROR;
     }
 
     @Override
-    public ServeConsts.Status update(HttpServletRequest req, HttpServletResponse resp) {
+    public Status update(HttpServletRequest req, HttpServletResponse resp) {
         Room room = (Room) BeanUtils.toObject(req.getParameterMap(), Room.class);
         if (!isValidRoom(room)) {
-            return DATA_ILLEGAL;
+            return setData(room, DATA_ILLEGAL);
         }
         if (room.getId() == null) {
             room.setId(dao.getId(room.getNumber()));
         }
+
+        try {
+            Part part = req.getPart("photo");
+            if (part.getSize()>0) {
+                room.setPhoto(upload(part));
+            }
+        } catch (IOException | ServletException e) {
+            e.printStackTrace();
+            throw new ServiceException("无法上传照片" + e);
+        }
+
         if (dao.update(room)) {
-            return SUCCESS;
+            return setData(room, SUCCESS);
+        }
+        return ERROR;
+
+    }
+
+
+    @Override
+    public Status find(HttpServletRequest req, HttpServletResponse resp) {
+        Room room = (Room) BeanUtils.toObject(req.getParameterMap(), Room.class);
+
+        room = dao.getRoom(room.getNumber());
+
+        if (room != null) {
+            return setData(room, SUCCESS);
         }
         return ERROR;
 
     }
 
     @Override
-    public ServeConsts.Status find(HttpServletRequest req, HttpServletResponse resp) {
-        return ERROR;
+    public Status listAll(HttpServletRequest req, HttpServletResponse resp) {
 
+        LinkedList<Room> rooms = dao.getAllRooms();
+        if (rooms != null && rooms.size() > 0) {
+            setData(rooms, SUCCESS);
+            return SUCCESS;
+        }
+
+        return ERROR;
     }
 
 

@@ -16,23 +16,22 @@
 
 package com.hyc.www.controller.servlet;
 
-import com.hyc.www.controller.constant.CtrlConsts;
-import com.hyc.www.service.constant.ServeConsts;
+import com.hyc.www.controller.constant.Methods;
+import com.hyc.www.controller.constant.Pages;
+import com.hyc.www.exception.ServiceException;
+import com.hyc.www.service.constant.Status;
 import com.hyc.www.service.inter.RoomService;
-import com.hyc.www.service.inter.UserService;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.hyc.www.controller.constant.CtrlConsts.Method.getValue;
-import static com.hyc.www.controller.constant.CtrlConsts.Pages.INDEX_PAGE;
-import static com.hyc.www.controller.constant.CtrlConsts.Pages.REGIST_PAGE;
-import static com.hyc.www.service.constant.ServeConsts.Status.SUCCESS;
+import static com.hyc.www.service.constant.Status.SUCCESS;
+import static com.hyc.www.util.ControllerUtils.*;
 
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
@@ -40,6 +39,7 @@ import static com.hyc.www.service.constant.ServeConsts.Status.SUCCESS;
  * @description 负责房间相关服务和显示请求的转发
  * @date 2019-04-17 00:09
  */
+@MultipartConfig(location = "C:/Users/Misterchaos/Documents/Java Develop Workplaces/IDEA workspace/HotelSystem/web/file/photo")
 @WebServlet(value = "/room")
 public class RoomServlet extends HttpServlet {
     @Override
@@ -49,69 +49,142 @@ public class RoomServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        CtrlConsts.Method method = getValue(req.getParameter("method"));
+        Methods method = getMethod(req, resp);
         //TODO
         System.out.println(method.name());
         switch (method) {
-            case ADD_ROOM:
-                add(req,resp);
+            case ADD_DO:
+                add(req, resp);
                 return;
-            case DELETE_ROOM:
+            case DELETE_DO:
                 delete(req, resp);
                 return;
-            case UPDATE_ROOM:
+            case UPDATE_DO:
                 update(req, resp);
                 return;
-            case MY_INFO_DO:
-                find(req,resp);
-                return;
-            case INDEX_VIEW:
+            case FIND_DO:
+                find(req, resp);
                 return;
             default:
-                resp.sendRedirect(INDEX_PAGE.name());
+                redirect(resp, Pages.INDEX_JSP.toString());
         }
 
     }
+
+
     private void add(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         RoomService serv = (RoomService) getServletContext().getAttribute("roomService");
-        ServeConsts.Status status = serv.add(req, resp);
+        Status status = serv.add(req, resp);
         //TODO debug
         System.out.println(status.name());
-        if(status== SUCCESS){
-            req.setAttribute("message",status);
-            req.getRequestDispatcher(INDEX_PAGE.name()).forward(req,resp);
-        }else {
+        switch (status) {
+            case SUCCESS:
 
+
+                return;
+            default:
         }
 
-    }
-
-    private void delete(HttpServletRequest req, HttpServletResponse resp) {
-        RoomService serv = (RoomService) getServletContext().getAttribute("roomService");
-        ServeConsts.Status status = serv.delete(req, resp);
-        //TODO debug
-        System.out.println(status.name());
 
     }
 
-    private void update(HttpServletRequest req, HttpServletResponse resp) {
+    private void delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         RoomService serv = (RoomService) getServletContext().getAttribute("roomService");
-        ServeConsts.Status status = serv.update(req, resp);
+        Status status = serv.delete(req, resp);
         //TODO debug
         System.out.println(status.name());
+        switch (status) {
+            case SUCCESS:
+                redirect(resp, Pages.INDEX_JSP.toString());
+                return;
+            case ERROR:
+                redirect(resp, Pages.ERROR_JSP.toString());
+                return;
+            default:
+
+        }
+    }
+
+
+    private void update(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        RoomService serv = (RoomService) getServletContext().getAttribute("roomService");
+        String message = null;
+        Status status = null;
+        try {
+            status = serv.update(req, resp);
+        } catch (ServiceException e) {
+            message = "上传图片不成功";
+        }
+        //TODO debug
+        System.out.println(status.name());
+        System.out.println("用户名: " + req.getParameter("name"));
+
+
+        switch (status) {
+            case DATA_ILLEGAL:
+                forward(req, resp, status.getData(), "数据不合法！", Pages.ROOM_JSP);
+                return;
+            case SUCCESS:
+                redirect(resp, Pages.ROOM_JSP.toString() + "?view=update&message=" + message + "&number=" + req.getParameter("number"));
+                return;
+            case ERROR:
+                redirect(resp, Pages.ERROR_JSP.toString());
+                return;
+            default:
+        }
+
     }
 
     /**
      * 需要条件指令，如果没有默认查询为所有房间
+     *
      * @param req
      * @param resp
      */
-    private void find(HttpServletRequest req, HttpServletResponse resp) {
-
+    private void find(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        RoomService serv = (RoomService) getServletContext().getAttribute("roomService");
+        Status status = null;
+        findType type = findType.valueOf(req.getParameter("find").toUpperCase());
+        switch (type) {
+            case NAME:
+                return;
+            case ALL:
+                status = serv.listAll(req, resp);
+                if (status == SUCCESS && status.getData() != null) {
+                    req.setAttribute("data", status.getData());
+                    req.getRequestDispatcher(Pages.INDEX_JSP.toString()).forward(req, resp);
+                }
+                return;
+            case THIS:
+                status = serv.find(req, resp);
+                if (status == SUCCESS && status.getData() != null) {
+                    req.setAttribute("data", status.getData());
+                    //TODO
+                    System.out.println("rediect back to room.jsp");
+                    req.getRequestDispatcher(Pages.ROOM_JSP.toString()).forward(req, resp);
+                    return;
+                } else {
+                    break;
+                }
+            default:
+        }
+        resp.sendRedirect(Pages.ERROR_JSP.toString());
     }
 
-
-
+    enum findType {
+        /**
+         * 通过名称模糊查找
+         */
+        NAME,
+        /**
+         * 查找全部
+         */
+        ALL,
+        /**
+         * 查找这一个房间
+         */
+        THIS,
+    }
 
 
 }

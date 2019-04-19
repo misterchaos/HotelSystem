@@ -14,24 +14,33 @@
  * limitations under the License.
  */
 
-package com.hyc.www.service.inter;
+package com.hyc.www.po;
 
-import com.hyc.www.service.constant.Status;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import com.hyc.www.po.abs.BaseEntity;
 
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
  * @program XHotel
- * @description 负责房间预约订单的服务
- * @date 2019-04-17 01:11
+ * @description 图片
+ * @date 2019-04-19 18:59
  */
-public interface OrderRoomService {
-    Status add(HttpServletRequest req, HttpServletResponse resp);
+public class Pictrue  extends BaseEntity {
+    String authorId;
+    String pictrue;
 
-    Status delete(HttpServletRequest req, HttpServletResponse resp);
+    public String getAuthorId() {
+        return authorId;
+    }
 
+    public void setAuthorId(String authorId) {
+        this.authorId = authorId;
+    }
 
-    Status find(HttpServletRequest req, HttpServletResponse resp);
+    public String getPictrue() {
+        return pictrue;
+    }
+
+    public void setPictrue(String pictrue) {
+        this.pictrue = pictrue;
+    }
 }

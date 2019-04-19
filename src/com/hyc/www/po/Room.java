@@ -36,6 +36,7 @@ public class Room extends Product {
     private String bookStatus;
 
 
+
     public String getPhoto() {
         return photo;
     }

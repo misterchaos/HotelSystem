@@ -14,26 +14,29 @@
  * limitations under the License.
  */
 
-package com.hyc.www.po.abs;
+package com.hyc.www.po;
+
+import com.hyc.www.po.abs.BaseEntity;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
  * @program XHotel
- * @description 所有商品的抽象父类
- * @date 2019-04-12 01:36
+ * @description 酒店实体类
+ * @date 2019-04-18 00:54
  */
-public abstract class Product extends BaseEntity {
+public class Hotel extends BaseEntity {
     private String number;
-    private String name;
+
+    private String name ;
+    private String site;
     private String type;
-    private BigDecimal price;
-    private String level;
+    private BigDecimal area;
+    private BigDecimal star;
     private BigDecimal score;
-    private BigInteger remarkNum;
-    private String hotelId;
+    private String introduction;
+    private String photo;
 
     public String getNumber() {
         return number;
@@ -51,6 +54,14 @@ public abstract class Product extends BaseEntity {
         this.name = name;
     }
 
+    public String getSite() {
+        return site;
+    }
+
+    public void setSite(String site) {
+        this.site = site;
+    }
+
     public String getType() {
         return type;
     }
@@ -59,20 +70,20 @@ public abstract class Product extends BaseEntity {
         this.type = type;
     }
 
-    public BigDecimal getPrice() {
-        return price;
+    public BigDecimal getArea() {
+        return area;
     }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
+    public void setArea(BigDecimal area) {
+        this.area = area;
     }
 
-    public String getLevel() {
-        return level;
+    public BigDecimal getStar() {
+        return star;
     }
 
-    public void setLevel(String level) {
-        this.level = level;
+    public void setStar(BigDecimal star) {
+        this.star = star;
     }
 
     public BigDecimal getScore() {
@@ -83,19 +94,19 @@ public abstract class Product extends BaseEntity {
         this.score = score;
     }
 
-    public BigInteger getRemarkNum() {
-        return remarkNum;
+    public String getIntroduction() {
+        return introduction;
     }
 
-    public void setRemarkNum(BigInteger remarkNum) {
-        this.remarkNum = remarkNum;
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
     }
 
-    public String getHotelId() {
-        return hotelId;
+    public String getPhoto() {
+        return photo;
     }
 
-    public void setHotelId(String hotelId) {
-        this.hotelId = hotelId;
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }

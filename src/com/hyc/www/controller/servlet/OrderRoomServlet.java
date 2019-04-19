@@ -16,8 +16,9 @@
 
 package com.hyc.www.controller.servlet;
 
-import com.hyc.www.controller.constant.CtrlConsts;
-import com.hyc.www.service.constant.ServeConsts;
+import com.hyc.www.controller.constant.Methods;
+import com.hyc.www.controller.constant.Pages;
+import com.hyc.www.service.constant.Status;
 import com.hyc.www.service.inter.OrderRoomService;
 
 import javax.servlet.ServletException;
@@ -27,9 +28,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.hyc.www.controller.constant.CtrlConsts.Method.getValue;
-import static com.hyc.www.controller.constant.CtrlConsts.Pages.INDEX_PAGE;
-import static com.hyc.www.service.constant.ServeConsts.Status.SUCCESS;
+import static com.hyc.www.service.constant.Status.SUCCESS;
+import static com.hyc.www.util.ControllerUtils.getMethod;
 
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
@@ -46,32 +46,31 @@ public class OrderRoomServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        CtrlConsts.Method method = getValue(req.getParameter("method"));
+        Methods method = getMethod(req, resp);
         //TODO
         System.out.println(method.name());
         switch (method) {
-            case ADD_ORDER_ROOM:
+            case ADD_DO:
                 add(req, resp);
                 return;
-            case DELETE_ORDER_ROOM:
+            case DELETE_DO:
                 delete(req, resp);
                 return;
-            case INDEX_VIEW:
-                return;
+
             default:
-                resp.sendRedirect(INDEX_PAGE.name());
+                resp.sendRedirect(Pages.INDEX_JSP.toString());
         }
 
     }
 
     private void add(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         OrderRoomService serv = (OrderRoomService) getServletContext().getAttribute("orderRoomService");
-        ServeConsts.Status status = serv.add(req, resp);
+        Status status = serv.add(req, resp);
         //TODO debug
         System.out.println(status.name());
         if (status == SUCCESS) {
             req.setAttribute("message", status);
-            req.getRequestDispatcher(INDEX_PAGE.name()).forward(req, resp);
+            req.getRequestDispatcher(Pages.INDEX_JSP.toString()).forward(req, resp);
         } else {
 
         }
@@ -80,10 +79,9 @@ public class OrderRoomServlet extends HttpServlet {
 
     private void delete(HttpServletRequest req, HttpServletResponse resp) {
         OrderRoomService serv = (OrderRoomService) getServletContext().getAttribute("orderRoomService");
-        ServeConsts.Status status = serv.delete(req, resp);
+        Status status = serv.delete(req, resp);
         //TODO debug
         System.out.println(status.name());
-
     }
 
 }

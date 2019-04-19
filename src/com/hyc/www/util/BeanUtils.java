@@ -16,6 +16,7 @@
 
 package com.hyc.www.util;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -57,6 +58,7 @@ public class BeanUtils {
         for (Class claz = clazz; claz != Object.class; claz = claz.getSuperclass()) {
             methods.addAll(Arrays.asList(claz.getDeclaredMethods()));
             fields.addAll(Arrays.asList(claz.getDeclaredFields()));
+
         }
         Object obj;
         try {
@@ -66,6 +68,7 @@ public class BeanUtils {
             throw new RuntimeException("无法实例化类：" + clazz.getName());
         }
         for (Field f : fields) {
+
             /**
              * 获取每个属性的String类型参数的构造器
              */
@@ -86,15 +89,28 @@ public class BeanUtils {
                 Object value = null;
                 try {
                     if (cons != null) {
+                        /**
+                         * 编码格式转换
+                         */
+                        param[0]=new String (param[0].getBytes(),"UTF-8");
                         value = cons.newInstance(param[0]);
                     }
                     for (Method m : methods) {
+
                         if (m.getName().equalsIgnoreCase(StringUtils.field2SetMethod(f.getName()))) {
+                            //TODO
+                            System.out.println("初始化属性："+f.getName()+"属性值："+value);
                             m.invoke(obj, value);
                         }
                     }
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                    throw new RuntimeException("无法初始化该属性 ："+param[0]);
+                    /**
+                     * 某些属性可能由于非法输入而无法初始化，这里无需处理
+                     */
+                    System.out.println("无法初始化该属性: "+f.getName()+" 属性值："+param[0]);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                    System.out.println("无法转换编码格式"+f.getName()+" 属性值："+param[0]);
                 }
             }
         }

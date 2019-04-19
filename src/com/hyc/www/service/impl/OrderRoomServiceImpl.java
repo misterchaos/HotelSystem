@@ -18,7 +18,7 @@ package com.hyc.www.service.impl;
 
 import com.hyc.www.dao.inter.OrderRoomDao;
 import com.hyc.www.po.OrderRoom;
-import com.hyc.www.service.constant.ServeConsts;
+import com.hyc.www.service.constant.Status;
 import com.hyc.www.service.inter.OrderRoomService;
 import com.hyc.www.util.BeanFactory;
 import com.hyc.www.util.BeanUtils;
@@ -26,8 +26,8 @@ import com.hyc.www.util.BeanUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.hyc.www.service.constant.ServeConsts.Status.ERROR;
-import static com.hyc.www.service.constant.ServeConsts.Status.SUCCESS;
+import static com.hyc.www.service.constant.Status.ERROR;
+import static com.hyc.www.service.constant.Status.SUCCESS;
 import static com.hyc.www.util.UUIDUtils.getUUID;
 
 /**
@@ -41,7 +41,7 @@ public class OrderRoomServiceImpl implements OrderRoomService {
     private OrderRoomDao dao = (OrderRoomDao) BeanFactory.getBean(BeanFactory.DaoType.OrderRoomDao);
 
     @Override
-    public ServeConsts.Status add(HttpServletRequest req, HttpServletResponse resp) {
+    public Status add(HttpServletRequest req, HttpServletResponse resp) {
         OrderRoom order = (OrderRoom) BeanUtils.toObject(req.getParameterMap(), OrderRoom.class);
 
         //TODO： 处理预定不可重复的问题
@@ -56,25 +56,24 @@ public class OrderRoomServiceImpl implements OrderRoomService {
     }
 
     @Override
-    public ServeConsts.Status delete(HttpServletRequest req, HttpServletResponse resp) {
+    public Status delete(HttpServletRequest req, HttpServletResponse resp) {
         OrderRoom order = (OrderRoom) BeanUtils.toObject(req.getParameterMap(), OrderRoom.class);
-        if (!dao.isExist(order.getNumber())) {
-            return ERROR;
-        }
 
         //TODO 处理房间已经有人预定的情况
         if (order.getId() == null) {
             order.setId(dao.getId(order.getNumber()));
         }
+
         if (dao.delete(order)) {
             return SUCCESS;
         }
+
         return ERROR;
     }
 
 
     @Override
-    public ServeConsts.Status find(HttpServletRequest req, HttpServletResponse resp) {
+    public Status find(HttpServletRequest req, HttpServletResponse resp) {
 
 
         return ERROR;

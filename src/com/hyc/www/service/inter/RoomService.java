@@ -16,7 +16,7 @@
 
 package com.hyc.www.service.inter;
 
-import com.hyc.www.service.constant.ServeConsts;
+import com.hyc.www.service.constant.Status;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,12 +29,14 @@ import javax.servlet.http.HttpServletResponse;
  * @date 2019-04-16 23:32
  */
 public interface RoomService {
-    ServeConsts.Status add(HttpServletRequest req, HttpServletResponse resp);
+    Status add(HttpServletRequest req, HttpServletResponse resp);
 
-    ServeConsts.Status delete(HttpServletRequest req, HttpServletResponse resp);
+    Status delete(HttpServletRequest req, HttpServletResponse resp);
 
-    ServeConsts.Status update(HttpServletRequest req, HttpServletResponse resp);
+    Status update(HttpServletRequest req, HttpServletResponse resp);
 
-    ServeConsts.Status find(HttpServletRequest req, HttpServletResponse resp);
+    Status find(HttpServletRequest req, HttpServletResponse resp);
+
+    Status listAll(HttpServletRequest req, HttpServletResponse resp);
 
 }

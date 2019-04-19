@@ -18,7 +18,7 @@ package com.hyc.www.service.impl;
 
 import com.hyc.www.dao.inter.UserDao;
 import com.hyc.www.po.User;
-import com.hyc.www.service.constant.ServeConsts.Status;
+import com.hyc.www.service.constant.Status;
 import com.hyc.www.service.inter.UserService;
 import com.hyc.www.util.BeanFactory;
 import com.hyc.www.util.BeanUtils;
@@ -26,7 +26,7 @@ import com.hyc.www.util.BeanUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.hyc.www.service.constant.ServeConsts.Status.*;
+import static com.hyc.www.service.constant.Status.*;
 import static com.hyc.www.util.Md5Utils.getDigest;
 import static com.hyc.www.util.ServiceUtils.*;
 import static com.hyc.www.util.UUIDUtils.getUUID;
@@ -63,10 +63,12 @@ public class UserServiceImpl implements UserService {
         user.setPassword(getDigest(user.getPassword()));
         user.setId(getUUID());
         if (dao.addUser(user)) {
-            return REGIST_SUCCESS;
+            return setData(user,SUCCESS);
         }
         return ERROR;
     }
+
+
 
     /**
      * 负责用户的登陆功能
@@ -84,7 +86,7 @@ public class UserServiceImpl implements UserService {
         if (!dao.getPassword(user.getUserName()).equals(getDigest(user.getPassword()))) {
             return PASSWORD_INCORRECT;
         }
-        return LOGIN_SUCCESS;
+        return setData(user,SUCCESS);
     }
 
     /**
@@ -106,7 +108,7 @@ public class UserServiceImpl implements UserService {
             return ACCOUNT_NOT_FOUNT;
         }
         //TODO 上传用户信息
-        return SUCCESS;
+        return setData(user,SUCCESS);
     }
 
     /**
@@ -124,7 +126,7 @@ public class UserServiceImpl implements UserService {
             return DATA_ILLEGAL;
         }
         if (dao.update(user)) {
-            return UPDATE_SUCCESS;
+            return setData(user,SUCCESS);
         }
         return ERROR;
     }
@@ -154,7 +156,7 @@ public class UserServiceImpl implements UserService {
         }
         user.setPassword(getDigest(newPwd));
         if (dao.updateAll(user)) {
-            return UPDATE_SUCCESS;
+            return setData(user,SUCCESS);
         }
         return ERROR;
     }
@@ -184,7 +186,7 @@ public class UserServiceImpl implements UserService {
         }
         user.setPayPwd(getDigest(newPwd));
         if (dao.updateAll(user)) {
-            return UPDATE_SUCCESS;
+            return setData(user,SUCCESS);
         }
         return ERROR;
     }

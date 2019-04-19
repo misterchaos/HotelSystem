@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2019.  黄钰朝
- *
+ * Copyright (c) 2019.  黄钰朝 
+ *                            
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ *                            
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ *                            
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,83 +16,82 @@
 
 package com.hyc.www.dao.inter;
 
-import com.hyc.www.po.Room;
+import com.hyc.www.po.Hotel;
 
 import java.util.LinkedList;
 
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
  * @program XHotel
- * @description 负责对房间进行CRUD操作
- * @date 2019-04-11 23:43
+ * @description 负责酒店的CRUD
+ * @date 2019-04-18 01:57
  */
-public interface RoomDao {
-
+public interface HotelDao {
     /**
-     * 通过房间编号检查一个房间是否已经存在
+     * 通过酒店编号检查一个酒店是否已经存在
      *
-     * @param roomNumber 房间编号
+     * @param hotelNumber 酒店编号
      * @return boolean
      * @name isExist
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/16
      */
-    boolean isExist(String roomNumber);
+    boolean isExist(String hotelNumber);
 
     /**
-     * 添加一个房间到数据库
+     * 添加一个酒店到数据库
      *
-     * @param room 要添加的房间
+     * @param hotel 要添加的酒店
      * @return boolean
-     * @name addRoom
-     * @notice 无法添加房间编号为空的用户
+     * @name addHotel
+     * @notice 无法添加酒店编号为空的用户
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/11
      */
-    boolean addRoom(Room room);
+    boolean addHotel(Hotel hotel);
 
     /**
-     * 根据房间编号查询一个房间的所有信息
+     * 根据酒店编号查询一个酒店的所有信息
      *
-     * @param roomNum
-     * @return com.hyc.www.po.Room
-     * @name getRoom
-     * @notice 如果房间为空或者没有该房间，则返回null;
+     * @param hotelNum
+     * @return com.hyc.www.po.Hotel
+     * @name getHotel
+     * @notice 如果酒店为空或者没有该酒店，则返回null;
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/10
      */
-    Room getRoom(String roomNum);
+    Hotel getHotel(String hotelNum);
 
 
     /**
-     * 返回该房间编号对应的id
+     * 返回该酒店编号对应的id
      *
-     * @param roomNum 房间编号
+     * @param hotelNum 酒店编号
      * @return java.math.String
      * @name getId
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/11
      */
-    String getId(String roomNum);
+    String getId(String hotelNum);
 
     /**
-     * 获取表中所有房间的信息，并以LinkedList的形式返回
+     * 获取表中所有酒店的信息，并以LinkedList的形式返回
      *
      * @return java.util.LinkedList
-     * @name getAllRooms
+     * @name getAllHotels
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/11
      */
-    LinkedList<Room> getAllRooms();
+    LinkedList<Hotel> getAllHotels();
 
 
     /**
-     * 将该id对应的房间从数据库中删除
+     * 将该id对应的酒店从数据库中删除
      *
-     * @param Id 要删除房间的id
+     * @param Id 要删除酒店的id
      * @return boolean
      * @name deleteById
      * @notice none
@@ -103,53 +102,52 @@ public interface RoomDao {
 
 
     /**
-     * 将该房间编号对应的房间从数据库中删除
+     * 将该酒店编号对应的酒店从数据库中删除
      *
-     * @param roomNumber 要删除的房间的房间编号
+     * @param hotelNumber 要删除的酒店的酒店编号
      * @return boolean
      * @name deleteByNumber
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/11
      */
-    boolean deleteByNumber(String roomNumber);
+    boolean deleteByNumber(String hotelNumber);
 
     /**
-     * 将一个房间对象对象从数据库中删除
+     * 将一个酒店对象对象从数据库中删除
      *
-     * @param room 要删除的房间对象
+     * @param hotel 要删除的酒店对象
      * @return boolean
      * @name delete
-     * @notice 该房间对象必须至少包含房间的id
+     * @notice 该酒店对象必须至少包含酒店的id
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/11
      */
-    boolean delete(Room room);
+    boolean delete(Hotel hotel);
 
 
     /**
-     * 更新一个房间的信息
+     * 更新一个酒店的信息
      *
-     * @param room 要更新的房间对象
+     * @param hotel 要更新的酒店对象
      * @return boolean
      * @name update
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/11
      */
-    boolean update(Room room);
+    boolean update(Hotel hotel);
 
     /**
-     * 通过房间名进行模糊查询
+     * 通过酒店名进行模糊查询
      *
-     * @param name 房间名
-     * @return java.util.LinkedList<com.hyc.www.po.Room>
+     * @param name 酒店名
+     * @return java.util.LinkedList<com.hyc.www.po.Hotel>
      * @name findByName
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/18
      */
-    LinkedList<Room> findByName(String name);
-
+    LinkedList<Hotel> findByName(String name);
 
 }

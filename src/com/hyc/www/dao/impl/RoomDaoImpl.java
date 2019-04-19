@@ -18,12 +18,9 @@ package com.hyc.www.dao.impl;
 
 import com.hyc.www.dao.inter.RoomDao;
 import com.hyc.www.po.Room;
-import com.hyc.www.po.User;
 import com.hyc.www.util.JdbcUtils;
 
-import java.math.BigInteger;
 import java.util.LinkedList;
-import java.util.jar.JarEntry;
 
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
@@ -35,13 +32,16 @@ public class RoomDaoImpl extends BaseDaoImpl implements RoomDao {
     /**
      * 本类操作的数据库表名
      */
-    private final String TABLE_NAME = " "+ JdbcUtils.getTableName(Room.class)+" ";
+    private final String TABLE_NAME = " " + JdbcUtils.getTableName(Room.class) + " ";
 
     /**
      * 表中所有字段对应的查询语句
      */
-    private final String ALL_FIELD_NAME = " id,number,photo,type,area,bed_width,price,book_status,level,"
+    private final String ALL_FIELD_NAME = " id,name,number,photo,type,area,bed_width,price,book_status,level,"
             + "score,remark_num,hotel_id,status,gmt_create,gmt_modified ";
+
+    private final String[] ALL_FIELD_ARRAY = new String[]{"id","name", "number", "photo", "type", "area", "bed_width",
+            "price", "book_status", "score", "remark_num", "hotel_id", "status", "gmt_create", "gmt_modified"};
 
 
     /**
@@ -74,7 +74,7 @@ public class RoomDaoImpl extends BaseDaoImpl implements RoomDao {
         if (room == null || room.getNumber() == null) {
             return false;
         }
-        return super.insert(room)==1;
+        return super.insert(room) == 1;
     }
 
     /**
@@ -126,12 +126,35 @@ public class RoomDaoImpl extends BaseDaoImpl implements RoomDao {
     public LinkedList<Room> getAllRooms() {
         String sql = "select " + ALL_FIELD_NAME + " from " + TABLE_NAME;
         LinkedList<Object> list = super.queryList(sql, null, Room.class);
+        return toRoom(list);
+    }
+
+    private LinkedList<Room> toRoom(LinkedList<Object> list) {
         LinkedList<Room> rooms = new LinkedList<>();
         for (int i = 0; i < list.size(); i++) {
             Room room = (Room) list.get(i);
             rooms.add(room);
         }
         return rooms;
+    }
+
+
+    /**
+     * 通过房间名进行模糊查询
+     *
+     * @param name 房间名
+     * @return java.util.LinkedList<com.hyc.www.po.Room>
+     * @name findByName
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/18
+     */
+    @Override
+    public LinkedList<Room> findByName(String name) {
+        Room room = new Room();
+        room.setName("%" + name + "%");
+        LinkedList<Object> list = super.queryWhereLikeAnd(ALL_FIELD_ARRAY, room);
+        return toRoom(list);
     }
 
 
@@ -147,7 +170,7 @@ public class RoomDaoImpl extends BaseDaoImpl implements RoomDao {
      */
     @Override
     public boolean deleteById(String id) {
-        if(id==null){
+        if (id == null) {
             return false;
         }
         Room room = new Room();
@@ -168,7 +191,7 @@ public class RoomDaoImpl extends BaseDaoImpl implements RoomDao {
      */
     @Override
     public boolean deleteByNumber(String roomNumber) {
-        return roomNumber==null?false:deleteById(getId(roomNumber));
+        return roomNumber != null && deleteById(getId(roomNumber));
     }
 
     /**
@@ -199,7 +222,7 @@ public class RoomDaoImpl extends BaseDaoImpl implements RoomDao {
      */
     @Override
     public boolean update(Room room) {
-        return room == null?false:super.update(room) == 1;
+        return room != null && super.update(room) == 1;
     }
 
 }

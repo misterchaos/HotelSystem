@@ -16,6 +16,9 @@
 
 package com.hyc.www.controller.filter;
 
+import com.hyc.www.controller.constant.Pages;
+import com.hyc.www.exception.ServiceException;
+
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.annotation.WebInitParam;
@@ -39,7 +42,7 @@ import java.io.IOException;
 )
 public class EncodingFilter implements Filter {
 
-    private  String ENCODING = null;
+    private String ENCODING = null;
 
     @Override
     public void init(FilterConfig config) {
@@ -54,12 +57,20 @@ public class EncodingFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
-        HttpServletResponse resq = (HttpServletResponse) servletResponse;
-       //TODO
-        System.out.println("do enconding filter");
-        req.setCharacterEncoding(ENCODING);
-        resq.setCharacterEncoding(ENCODING);
-        filterChain.doFilter(servletRequest, servletResponse);
+        HttpServletResponse resp = (HttpServletResponse) servletResponse;
+
+        req.setCharacterEncoding("utf-8");
+        try {
+            filterChain.doFilter(servletRequest, servletResponse);
+        }catch (IOException| ServiceException e){
+            resp.sendRedirect(Pages.ERROR_JSP.toString());
+        }
+        resp.setContentType("text/html;charset=utf-8");
+
+        //TODO debug
+        System.out.println("编码过滤器：" + "method = " + req.getParameter("method") + " view = " + req.getParameter("view") + " find = " + req.getParameter("find") + " name = " + req.getParameter("name"));
+        System.out.println("用户名：" + req.getParameter("name"));
+        System.out.println("请求链接：" + req.getQueryString());
     }
 }
 

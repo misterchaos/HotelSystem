@@ -43,7 +43,9 @@ public class BeanFactory {
         /**
          * Dao实现类
          */
-        UserDao("UserDao"), RoomDao("RoomDao"), OrderRoomDao("OrderRoomDao");
+        UserDao("UserDao"), RoomDao("RoomDao"), OrderRoomDao("OrderRoomDao"),
+        HotelDao("HotelDao");
+
         private String name;
         DaoType(String name) {
             this.name=name;
