@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.Writer;
 
 import static com.hyc.www.service.constant.Status.SUCCESS;
 import static com.hyc.www.util.ControllerUtils.*;
@@ -78,13 +79,17 @@ public class RoomServlet extends HttpServlet {
         //TODO debug
         System.out.println(status.name());
         switch (status) {
+            case DATA_ILLEGAL:
+                forward(req, resp, status.getData(), "数据不合法！", Pages.ROOM_JSP);
+                return;
+            case ROOM_ALREADY_EXIST:
+                forward(req, resp, status.getData(), "该房间编号已经存在！", Pages.ROOM_JSP);
+                return;
             case SUCCESS:
-
-
+                forward(req, resp, status.getData(), "房间添加成功！", Pages.ROOM_JSP);
                 return;
             default:
         }
-
 
     }
 
@@ -158,6 +163,7 @@ public class RoomServlet extends HttpServlet {
             case THIS:
                 status = serv.find(req, resp);
                 if (status == SUCCESS && status.getData() != null) {
+                    Writer writer = resp.getWriter();
                     req.setAttribute("data", status.getData());
                     //TODO
                     System.out.println("rediect back to room.jsp");

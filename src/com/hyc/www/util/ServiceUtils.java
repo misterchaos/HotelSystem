@@ -88,10 +88,29 @@ public class ServiceUtils {
      */
     public static Status setData(User user, Status status) {
         PagesVo vo = new PagesVo();
-        vo.setLogin(user);
+        LinkedList<User> list = new LinkedList<>();
+        list.add(user);
+        vo.setUsers(list);
         status.setData(vo);
         return status;
     }
+    /**
+     * 负责给Service层返回的Status设置数据
+     * @name setData
+     * @param users 用户数据集合
+     * @param status 状态量
+     * @return com.hyc.www.service.constant.Status
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/20
+     */
+    public static Status setUsersData(LinkedList<User> users, Status status) {
+        PagesVo vo = new PagesVo();
+        vo.setUsers(users);
+        status.setData(vo);
+        return status;
+    }
+
     /*
      **************************************************************
      *               检查用户信息
@@ -100,7 +119,7 @@ public class ServiceUtils {
 
 
     public static boolean isValidRegist(User user) {
-        return user != null && (isValidUserName(user.getUserName()) && isValidPwd(user.getPassword()));
+        return user != null && (isValidUserName(user.getName()) && isValidPwd(user.getPassword()));
     }
 
     public static boolean isValidUserInfo(User user) {
@@ -112,7 +131,7 @@ public class ServiceUtils {
         if (userName == null || userName.trim().isEmpty()) {
             return false;
         }
-        String regex = "[A-Za-z]+[0-9]+";
+        String regex = "[\\w_]{6,20}$";
         return userName.matches(regex);
     }
 
@@ -120,7 +139,7 @@ public class ServiceUtils {
         if (pwd == null || pwd.trim().isEmpty()) {
             return false;
         }
-        String regex = "[A-Za-z]+[0-9]+";
+        String regex = "[\\w_]{6,20}$";
         return pwd.matches(regex);
     }
 
@@ -155,7 +174,14 @@ public class ServiceUtils {
      */
 
     public static boolean isValidRoom(Room room) {
-        return isValidArea(room) && isValidBedWidth(room) && isValidPrice(room);
+        return isValidName(room)&&isValidArea(room) && isValidBedWidth(room) && isValidPrice(room);
+    }
+
+    /**
+     * 合理长度32
+     */
+    private static boolean isValidName(Room room){
+        return room!=null&&room.getName().length()<32;
     }
 
     /**

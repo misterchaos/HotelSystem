@@ -53,19 +53,22 @@ public class RoomServiceImpl implements RoomService {
     public Status add(HttpServletRequest req, HttpServletResponse resp) {
         Room room = (Room) BeanUtils.toObject(req.getParameterMap(), Room.class);
         if (dao.isExist(room.getNumber())) {
-            return ROOM_ALREADY_EXIST;
+            return setData(room, ROOM_ALREADY_EXIST);
         }
         if (!isValidRoom(room)) {
-            return DATA_ILLEGAL;
+            return setData(room, DATA_ILLEGAL);
         }
         room.setId(getUUID());
+
+        uploadPhoto(req, room);
         //TODO 处理房间编号，计算编号
         if (dao.addRoom(room)) {
-            return SUCCESS;
+            return setData(room, SUCCESS);
         }
         return ERROR;
 
     }
+
 
     @Override
     public Status delete(HttpServletRequest req, HttpServletResponse resp) {
@@ -88,22 +91,18 @@ public class RoomServiceImpl implements RoomService {
     public Status update(HttpServletRequest req, HttpServletResponse resp) {
         Room room = (Room) BeanUtils.toObject(req.getParameterMap(), Room.class);
         if (!isValidRoom(room)) {
+            /**
+             * 重新加载头像
+             */
+            room.setPhoto(dao.getRoom(room.getNumber()).getPhoto());
             return setData(room, DATA_ILLEGAL);
         }
         if (room.getId() == null) {
             room.setId(dao.getId(room.getNumber()));
         }
 
-        try {
-            Part part = req.getPart("photo");
-            if (part.getSize()>0) {
-                room.setPhoto(upload(part));
-            }
-        } catch (IOException | ServletException e) {
-            e.printStackTrace();
-            throw new ServiceException("无法上传照片" + e);
-        }
 
+        uploadPhoto(req, room);
         if (dao.update(room)) {
             return setData(room, SUCCESS);
         }
@@ -130,12 +129,34 @@ public class RoomServiceImpl implements RoomService {
 
         LinkedList<Room> rooms = dao.getAllRooms();
         if (rooms != null && rooms.size() > 0) {
-            setData(rooms, SUCCESS);
-            return SUCCESS;
+
+            return setData(rooms, SUCCESS);
         }
 
         return ERROR;
     }
 
+
+    /**
+     * 用于上传照片
+     *
+     * @param
+     * @return
+     * @name
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/20
+     */
+    private void uploadPhoto(HttpServletRequest req, Room room) {
+        try {
+            Part part = req.getPart("photo");
+            if (part.getSize() > 0) {
+                room.setPhoto(upload(part));
+            }
+        } catch (IOException | ServletException e) {
+            e.printStackTrace();
+            throw new ServiceException("无法上传照片" + e);
+        }
+    }
 
 }

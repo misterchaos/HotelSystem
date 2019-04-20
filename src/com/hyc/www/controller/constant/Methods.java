@@ -47,11 +47,6 @@ public enum Methods {
     REGIST_DO,
 
     /**
-     * 查看个人信息
-     */
-    MY_INFO_DO,
-
-    /**
      * 执行退出登陆方法
      */
     LOGOUT_DO,

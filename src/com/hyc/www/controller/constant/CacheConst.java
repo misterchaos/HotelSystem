@@ -14,33 +14,18 @@
  * limitations under the License.
  */
 
-package com.hyc.www.po;
-
-import com.hyc.www.po.abs.BaseEntity;
+package com.hyc.www.controller.constant;
 
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
  * @program XHotel
- * @description 图片
- * @date 2019-04-19 18:59
+ * @description 用于枚举缓存项
+ * @date 2019-04-20 21:46
  */
-public class Pictrue  extends BaseEntity {
-    String authorId;
-    String pictrue;
+public enum  CacheConst {
+    /**
+     * 登陆用户名
+     */
+    USER,
 
-    public String getAuthorId() {
-        return authorId;
-    }
-
-    public void setAuthorId(String authorId) {
-        this.authorId = authorId;
-    }
-
-    public String getPictrue() {
-        return pictrue;
-    }
-
-    public void setPictrue(String pictrue) {
-        this.pictrue = pictrue;
-    }
 }

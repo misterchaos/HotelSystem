@@ -38,7 +38,7 @@ public class TestBeanUtils {
         Date d = new Date();
         Class clazz = User.class;
         User user = (User) BeanUtils.toObject(map,clazz);
-        System.out.println(user.getUserName());
+        System.out.println(user.getName());
         System.out.println(user.getBalance());
     }
 }

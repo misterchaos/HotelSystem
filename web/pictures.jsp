@@ -34,6 +34,9 @@
           id="viewport" name="viewport">
     <link rel="stylesheet"
           href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
 <c:if test="${data==null}">
@@ -63,21 +66,20 @@
     </div>
 </nav>
 <c:if test="${message!=null}">
-    <div class="alert alert-warning" style="margin-bottom: 0">
-        <a id="message" href="#" class="close" data-dismiss="alert" >
+    <div class="alert alert-warning alert-dismissable" style="margin-bottom: 0">
+        <button type="button" class="close" data-dismiss="alert"
+                aria-hidden="true">
             &times;
-        </a>
-        <strong>警告！</strong>${message}
+        </button>
+        提示：${message}
     </div>
-
 </c:if>
 
 
 
-
-<c:if test="${data.pictrues.size()>0}">
-    <c:forEach var="i" begin="0" end="${data.pictrues.size()-1}">
-        <img src="/file/${date.pictrues[i]}" style="width: 500px ;float: left">
+<c:if test="${data.pictures.size()>0}">
+    <c:forEach var="i" begin="0" end="${data.pictures.size()-1}">
+        <img src="/file/${date.pictures[i]}" style="width: 500px ;float: left">
     </c:forEach>
 </c:if>
 

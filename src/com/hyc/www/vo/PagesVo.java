@@ -17,7 +17,7 @@
 package com.hyc.www.vo;
 
 import com.hyc.www.po.Hotel;
-import com.hyc.www.po.Pictrue;
+import com.hyc.www.po.Picture;
 import com.hyc.www.po.Room;
 import com.hyc.www.po.User;
 
@@ -34,8 +34,7 @@ public class PagesVo {
     private LinkedList<Room> rooms;
     private LinkedList<Hotel> hotels;
     private LinkedList<User> users;
-    private LinkedList<Pictrue> pictures;
-    private User login;
+    private LinkedList<Picture> pictures;
     private String message;
     private int page;
 
@@ -63,13 +62,6 @@ public class PagesVo {
         this.users = users;
     }
 
-    public User getLogin() {
-        return login;
-    }
-
-    public void setLogin(User login) {
-        this.login = login;
-    }
 
     public String getMessage() {
         return message;
@@ -79,11 +71,11 @@ public class PagesVo {
         this.message = message;
     }
 
-    public LinkedList<Pictrue> getPictures() {
+    public LinkedList<Picture> getPictures() {
         return pictures;
     }
 
-    public void setPictures(LinkedList<Pictrue> pictures) {
+    public void setPictures(LinkedList<Picture> pictures) {
         this.pictures = pictures;
     }
 

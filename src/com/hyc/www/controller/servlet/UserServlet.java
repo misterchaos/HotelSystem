@@ -23,12 +23,12 @@ import com.hyc.www.service.inter.UserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import java.io.IOException;
 
+import static com.hyc.www.controller.constant.CacheConst.USER;
+import static com.hyc.www.service.constant.Status.ACCOUNT_NOT_FOUNT;
+import static com.hyc.www.service.constant.Status.SUCCESS;
 import static com.hyc.www.util.ControllerUtils.*;
 
 
@@ -57,8 +57,8 @@ public class UserServlet extends HttpServlet {
             case LOGIN_DO:
                 login(req, resp);
                 return;
-            case MY_INFO_DO:
-                myInfo(req, resp);
+            case FIND_DO:
+                find(req, resp);
                 return;
             case UPDATE_DO:
                 update(req, resp);
@@ -84,10 +84,10 @@ public class UserServlet extends HttpServlet {
                 forward(req, resp, status.getData(), "此账户已经存在！", Pages.REGIST_JSP);
                 return;
             case DATA_ILLEGAL:
-                forward(req, resp, status.getData(), "输入不合法！", Pages.REGIST_JSP);
+                forward(req, resp, status.getData(), "输入不合法！(6-20位英文字母，数字或下划线)", Pages.REGIST_JSP);
                 return;
             case SUCCESS:
-                redirect(resp,Pages.LOGIN_JSP.toString());
+                redirect(resp, Pages.LOGIN_JSP.toString());
             default:
         }
 
@@ -103,7 +103,7 @@ public class UserServlet extends HttpServlet {
                 forward(req, resp, status.getData(), "找不到该用户！", Pages.LOGIN_JSP);
                 return;
             case DATA_ILLEGAL:
-                forward(req, resp, status.getData(), "输入不合法！", Pages.LOGIN_JSP);
+                forward(req, resp, status.getData(), "输入不合法！(6-20位英文字母，数字或下划线)", Pages.LOGIN_JSP);
 
                 return;
             case PASSWORD_INCORRECT:
@@ -111,30 +111,58 @@ public class UserServlet extends HttpServlet {
 
                 return;
             case SUCCESS:
-                Cookie cookie = new Cookie("login", status.getData().getLogin().getUserName());
-                //TODO cookie
-                cookie.setMaxAge(60);
-                resp.addCookie(cookie);
-                redirect(resp,Pages.INDEX_JSP.toString());
+                String userName = status.getData().getUsers().get(0).getName();
+                if ("true".equalsIgnoreCase(req.getParameter("autoLogin"))) {
+
+                    /**
+                     * 设置自动登陆cookie
+                     */
+                    Cookie userCookie = new Cookie(USER.toString(), userName);
+                    userCookie.setMaxAge(60 * 60 * 24 * 30);
+                    resp.addCookie(userCookie);
+                }
+                /**
+                 * 设置本次会话缓存
+                 */
+                HttpSession session = req.getSession();
+                session.setAttribute(USER.toString(), userName);
+                redirect(resp, Pages.INDEX_JSP.toString());
             default:
         }
     }
 
-    private void myInfo(HttpServletRequest req, HttpServletResponse resp) {
+
+    private void find(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UserService serv = (UserService) getServletContext().getAttribute("userService");
-        Status status = serv.myInfo(req, resp);
+        FindType type = FindType.valueOf(req.getParameter("find").toUpperCase());
+        Status status = null;
+        switch (type) {
+            case THIS:
+                status = serv.find(req, resp);
+                if (status == SUCCESS) {
+                    forward(req, resp, status.getData(), null, Pages.USER_JSP);
+
+                } else if (status == ACCOUNT_NOT_FOUNT) {
+                    forward(req, resp, status.getData(), "找不到该用户！", Pages.USER_JSP);
+                }
+                return;
+            case ALL:
+                status = serv.listAll(req, resp);
+                if (status == SUCCESS) {
+                    //TODO 要转发到管理员页面
+                    forward(req, resp, status.getData(), null, Pages.INDEX_JSP);
+                }
+                return;
+            default:
+                redirect(resp, Pages.ERROR_JSP.toString());
+        }
         //TODO debug
         System.out.println(status.name());
-        switch (status) {
-            case ACCOUNT_NOT_FOUNT:
-                return;
-
-            default:
-        }
 
     }
 
-    private void update(HttpServletRequest req, HttpServletResponse resp) {
+    private void update(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
         UserService serv = (UserService) getServletContext().getAttribute("userService");
         UpdateType type = UpdateType.valueOf(req.getParameter("update").toUpperCase());
         Status status = null;
@@ -153,6 +181,16 @@ public class UserServlet extends HttpServlet {
         }
         //TODO debug
         System.out.println(status.name());
+        switch (status) {
+
+            case DATA_ILLEGAL:
+                forward(req, resp, status.getData(), "输入不合法!", Pages.USER_JSP);
+                return;
+            case SUCCESS:
+                forward(req, resp, status.getData(), null, Pages.USER_JSP);
+                return;
+            default:
+        }
 
     }
 
@@ -171,6 +209,20 @@ public class UserServlet extends HttpServlet {
          */
         PAY_PWD,
 
+    }
+
+    enum FindType {
+        /**
+         * 查找个人信息
+         */
+        THIS,
+        /**
+         * 查找所有用户
+         */
+        ALL,
+        /**
+         *
+         */
     }
 
 }

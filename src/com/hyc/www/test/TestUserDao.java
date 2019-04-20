@@ -20,8 +20,10 @@ import com.hyc.www.dao.impl.UserDaoImpl;
 import com.hyc.www.dao.inter.UserDao;
 import com.hyc.www.po.User;
 
+import java.math.BigDecimal;
 import java.util.LinkedList;
 
+import static com.hyc.www.util.Md5Utils.getDigest;
 import static com.hyc.www.util.UUIDUtils.getUUID;
 
 /**
@@ -44,11 +46,12 @@ public class TestUserDao {
         System.out.println("测试查询用户全部信息功能");
         User user = userDao.getUser("test2");
         if (user != null) {
-            System.out.println(user.getUserName());
+            System.out.println(user.getName());
             System.out.println(user.getId());
             System.out.println(user.getStatus());
             System.out.println(user.getPhoneNumber());
             System.out.println(user.getGmtModified());
+            System.out.println(user.getType());
         } else {
             System.out.println(user);
         }
@@ -75,17 +78,14 @@ public class TestUserDao {
         System.out.println("测试更新用户信息的功能");
         user = new User();
         user = userDao.getUser("test2");
-        user.setId(getUUID());
-        user.setPassword("12345");
-        user.setPhoneNumber("10005");
-        System.out.println(userDao.updateAll(user));
+        System.out.println(userDao.updateAll(null));
 
         /**
          * 测试增加用户的功能
          */
         System.out.println("测试增加用户的功能");
         user = new User();
-        user.setUserName("test2");
+        user.setName("test2");
         user.setPhoto("test");
         user.setId(getUUID());
         System.out.println(user.getBalance());
@@ -102,9 +102,15 @@ public class TestUserDao {
             userDao.deleteById(String.valueOf(i));
         }
 
-        for (int i = 0; i < 0; i++) {
+        for (int i = 0; i <0; i++) {
             user.setId(getUUID());
-            user.setUserName("test"+i);
+            user.setPassword(getDigest("1234"));
+            user.setName("test"+i);
+            user.setNickName("tom");
+            user.setIdNumber("440823199912202118");
+            user.setBalance(new BigDecimal("999"+i*10));
+            user.setPhoto("默认头像.jpg");
+            user.setPhoneNumber("15816019724");
             userDao.addUser(user);
         }
 

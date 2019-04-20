@@ -25,6 +25,7 @@ import com.hyc.www.util.BeanUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.LinkedList;
 
 import static com.hyc.www.service.constant.Status.*;
 import static com.hyc.www.util.Md5Utils.getDigest;
@@ -53,21 +54,20 @@ public class UserServiceImpl implements UserService {
     public Status regist(HttpServletRequest req, HttpServletResponse resp) {
         User user = (User) BeanUtils.toObject(req.getParameterMap(), User.class);
         //TODO
-        System.out.println(user.getUserName());
-        if (dao.isExist(user.getUserName())) {
-            return ACCOUNT_ALREADY_EXIST;
-        }
+        System.out.println(user.getName());
         if (!isValidRegist(user)) {
             return DATA_ILLEGAL;
+        }
+        if (dao.isExist(user.getName())) {
+            return ACCOUNT_ALREADY_EXIST;
         }
         user.setPassword(getDigest(user.getPassword()));
         user.setId(getUUID());
         if (dao.addUser(user)) {
-            return setData(user,SUCCESS);
+            return setData(user, SUCCESS);
         }
         return ERROR;
     }
-
 
 
     /**
@@ -80,36 +80,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public Status login(HttpServletRequest req, HttpServletResponse resp) {
         User user = (User) BeanUtils.toObject(req.getParameterMap(), User.class);
-        if (!dao.isExist(user.getUserName())) {
+        if (!dao.isExist(user.getName())) {
             return ACCOUNT_NOT_FOUNT;
         }
-        if (!dao.getPassword(user.getUserName()).equals(getDigest(user.getPassword()))) {
+        if (!dao.getPassword(user.getName()).equals(getDigest(user.getPassword()))) {
             return PASSWORD_INCORRECT;
         }
-        return setData(user,SUCCESS);
+        return setData(user, SUCCESS);
     }
 
-    /**
-     * 负责返回用户的个人信息
-     *
-     * @param req
-     * @param resp
-     * @name myInfo
-     * @notice none
-     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
-     * @date 2019/4/16
-     */
-    @Override
-    public Status myInfo(HttpServletRequest req, HttpServletResponse resp) {
-        User user = (User) BeanUtils.toObject(req.getParameterMap(), User.class);
 
-        user = dao.getUser(user.getUserName());
-        if (user == null) {
-            return ACCOUNT_NOT_FOUNT;
-        }
-        //TODO 上传用户信息
-        return setData(user,SUCCESS);
-    }
 
     /**
      * 负责更新用户信息的功能
@@ -123,10 +103,10 @@ public class UserServiceImpl implements UserService {
     public Status updateInfo(HttpServletRequest req, HttpServletResponse resp) {
         User user = (User) BeanUtils.toObject(req.getParameterMap(), User.class);
         if (!isValidUserInfo(user)) {
-            return DATA_ILLEGAL;
+            return setData(user, DATA_ILLEGAL);
         }
         if (dao.update(user)) {
-            return setData(user,SUCCESS);
+            return setData(user, SUCCESS);
         }
         return ERROR;
     }
@@ -147,16 +127,16 @@ public class UserServiceImpl implements UserService {
         if (!isValidPwd(newPwd)) {
             return DATA_ILLEGAL;
         }
-        if (!dao.getPassword(user.getUserName()).equals(getDigest(user.getPassword()))) {
+        if (!dao.getPassword(user.getName()).equals(getDigest(user.getPassword()))) {
             return PASSWORD_INCORRECT;
         }
-        user = dao.getUser(user.getUserName());
+        user = dao.getUser(user.getName());
         if (user == null) {
             return ACCOUNT_NOT_FOUNT;
         }
         user.setPassword(getDigest(newPwd));
         if (dao.updateAll(user)) {
-            return setData(user,SUCCESS);
+            return setData(user, SUCCESS);
         }
         return ERROR;
     }
@@ -174,20 +154,54 @@ public class UserServiceImpl implements UserService {
         User user = (User) BeanUtils.toObject(req.getParameterMap(), User.class);
         String newPwd = req.getParameter("newPwd");
         String oldPwd = user.getPayPwd();
-        user = dao.getUser(user.getUserName());
-        if (user == null) {
-            return ACCOUNT_NOT_FOUNT;
-        }
+        user = dao.getUser(user.getName());
         if (!isValidPwd(newPwd)) {
             return DATA_ILLEGAL;
+        }
+        if (user == null) {
+            return ACCOUNT_NOT_FOUNT;
         }
         if (!user.getPayPwd().equals(getDigest(oldPwd))) {
             return PASSWORD_INCORRECT;
         }
         user.setPayPwd(getDigest(newPwd));
         if (dao.updateAll(user)) {
-            return setData(user,SUCCESS);
+            return setData(user, SUCCESS);
         }
+        return ERROR;
+    }
+    /**
+     * 负责返回用户的个人信息
+     *
+     * @param req
+     * @param resp
+     * @name myInfo
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/16
+     */
+    @Override
+    public Status find(HttpServletRequest req, HttpServletResponse resp) {
+        User user = (User) BeanUtils.toObject(req.getParameterMap(), User.class);
+
+        user = dao.getUser(user.getName());
+
+        if (user != null) {
+            return setData(user, SUCCESS);
+        }else {
+
+            return setData(user, ACCOUNT_NOT_FOUNT);
+        }
+    }
+
+    @Override
+    public Status listAll(HttpServletRequest req, HttpServletResponse resp) {
+
+        LinkedList<User> users = dao.getAllUsers();
+        if (users != null && users.size() > 0) {
+            return setUsersData(users, SUCCESS);
+        }
+
         return ERROR;
     }
 

@@ -44,7 +44,7 @@ public class TestDao {
         /**
          * 测试插入
          */
-        user.setUserName("test");
+        user.setName("test");
         baseDao.insert(null);
 
         /***
@@ -54,18 +54,22 @@ public class TestDao {
         Iterator it = baseDao.queryPages(new String[]{"user_name"}, "t_user", "10", "0").listIterator();
         while (it.hasNext()) {
             user = (User) it.next();
-            System.out.println(user.getUserName());
+            System.out.println(user.getName());
         }
 
         /**
          * 测试模糊查询
          */
-        user.setUserName("%new%");
+        user.setName("%new%");
         user.setPassword("12345");
         it = baseDao.queryWhereLikeAnd(new String[]{"user_name"}, user).listIterator();
         while (it.hasNext()) {
             user = (User) it.next();
-            System.out.println(user.getUserName());
+            System.out.println(user.getName());
         }
+        /**
+         * 测试查询很多记录
+         */
+        System.out.println(baseDao.queryList("select * from t_user",new Object[]{},User.class).size());
     }
 }

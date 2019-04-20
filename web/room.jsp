@@ -33,8 +33,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet"
           href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
-    </script>
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
 
@@ -55,18 +55,21 @@
             <ul class="nav navbar-nav">
                 <li class="active"><a href="${Pages.LOGIN_JSP.toString()}">登陆</a></li>
                 <li><a href="${Pages.REGIST_JSP.toString()}">注册</a></li>
+                <c:if test="${login!=null}">
+                    <li><a href="${pageContext.request.contextPath}/room?method=${Methods.ADD_DO}">添加房间</a></li>
+                </c:if>
             </ul>
         </div>
     </div>
 </nav>
 <c:if test="${message!=null}">
-    <div class="alert alert-warning" style="margin-bottom: 0">
-        <a id="message" href="#" class="close" data-dismiss="alert">
+    <div class="alert alert-warning alert-dismissable" style="margin-bottom: 0">
+        <button type="button" class="close" data-dismiss="alert"
+                aria-hidden="true">
             &times;
-        </a>
-        <strong>警告！</strong>${message}
+        </button>
+        提示：${message}
     </div>
-
 </c:if>
 
 
@@ -81,7 +84,7 @@
         <div class="info-panel">
                 <%-- 主图和名称--%>
             <div class="photo-name">
-                <img class="main_info" src="/" width="300" height="300">
+                <img class="main_info" src="/file/${data.rooms[0].photo}" width="300" height="300">
                 <h3>${data.rooms[0].name}</h3>
             </div>
             <!-- 基本信息 -->
@@ -137,7 +140,7 @@
     </div>
     <!-- 购买链接-->
     <div class="color-input-field">
-        <form action="${pageContext.request.contextPath}/order/room?method=${Methods.ADD_DO}&roomId=${data.rooms[0].id}&userId=${data.login.id}"
+        <form action="${pageContext.request.contextPath}/order/room?method=${Methods.ADD_DO}&roomId=${data.rooms[0].id}&userId=${data.users[0].id}"
               method="post">
             <input type="submit" class="form-control" value="立即预定" style="background-color: orangered;
         width: 270px;height: 50px;float:right;margin-right: 230px;color:#FFFFFF;">
@@ -225,7 +228,7 @@
                                 </tr>
                                 <tr>
                                     <td>备注信息：</td>
-                                    <td><input type="text" required="required" class="form-control" name="remark"
+                                    <td><input type="text"  class="form-control" name="remark"
                                                placeholder="请输入备注信息" align="center"></td>
                                 </tr>
                                 <tr>

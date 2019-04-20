@@ -26,17 +26,18 @@
 <html>
 <head>
     <title>Title</title>
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
 <c:if test="${message!=null}">
-    <div class="alert alert-warning" style="margin-bottom: 0">
-        <a id="message" href="#" class="close" data-dismiss="alert" >
+    <div class="alert alert-warning alert-dismissable" style="margin-bottom: 0">
+        <button type="button" class="close" data-dismiss="alert"
+                aria-hidden="true">
             &times;
-        </a>
-        <strong>警告！</strong>${message}
+        </button>
+        提示：${message}
     </div>
-
 </c:if>
-
 </body>
 </html>

@@ -29,6 +29,8 @@ import java.sql.*;
 import java.util.Arrays;
 import java.util.LinkedList;
 
+import static com.hyc.www.util.ReflectUtils.getFields;
+import static com.hyc.www.util.ReflectUtils.getMethods;
 import static com.hyc.www.util.StringUtils.field2SqlField;
 
 /**
@@ -173,7 +175,7 @@ public class BaseDaoImpl implements BaseDao {
                         System.out.println("查找父类getId方法...");
                     }
                 }
-                sql.append(" where id = \"" + id+"\"");
+                sql.append(" where id = \"" + id + "\"");
             } catch (IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
                 throw new DaoException("反射执行getId方法异常：无法执行getId方法", e);
@@ -279,11 +281,7 @@ public class BaseDaoImpl implements BaseDao {
                  * 取出包括父类方法在内的所有方法
                  * 这里clazz必须用claz代替，否则clazz将被修改
                  */
-                LinkedList<Method> methods = new LinkedList<>();
-                Class claz = clazz;
-                for (; claz != Object.class; claz = claz.getSuperclass()) {
-                    methods.addAll(Arrays.asList(claz.getDeclaredMethods()));
-                }
+                LinkedList<Method> methods =getMethods(clazz.newInstance());
                 /**
                  * 取得字段名,存在columns数组中，并映射成setter方法数组
                  */
@@ -464,7 +462,7 @@ public class BaseDaoImpl implements BaseDao {
              * 检查是否为模糊查询
              */
             if (conj.equalsIgnoreCase("like")) {
-                sql.append(likeMapper(fieldNames.toArray(),conj));
+                sql.append(likeMapper(fieldNames.toArray(), conj));
             } else {
                 sql.append(whereMapper(fieldNames.toArray(), conj, condition));
             }
@@ -494,9 +492,8 @@ public class BaseDaoImpl implements BaseDao {
 
 
     /**
-     *
      * 返回一个where A like B and C like D 形式查询语句的查询结果
-     * @name queryWhereLikeAnd
+     *
      * @param selectFields 查询的字段数组，如{"user_name","password"}
      * @param obj          用于描述附加查询条件的对象<br>
      *                     查询时，将匹配该对象已经被赋值的属性<br>
@@ -504,19 +501,19 @@ public class BaseDaoImpl implements BaseDao {
      *                     则会匹配所有id为1的用户记录，如果属性全为null<br>
      *                     则会匹配所有用户记录
      * @return java.util.LinkedList
+     * @name queryWhereLikeAnd
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/13
      */
     @Override
     public LinkedList queryWhereLikeAnd(String[] selectFields, Object obj) {
-        return queryWhere(selectFields,obj,"and","like");
+        return queryWhere(selectFields, obj, "and", "like");
     }
 
     /**
-     *
      * 返回一个where A like B or C like D 形式查询语句的查询结果
-     * @name queryWhereLikeAnd
+     *
      * @param selectFields 查询的字段数组，如{"user_name","password"}
      * @param obj          用于描述附加查询条件的对象<br>
      *                     查询时，将匹配该对象已经被赋值的属性<br>
@@ -524,13 +521,14 @@ public class BaseDaoImpl implements BaseDao {
      *                     则会匹配所有id为1的用户记录，如果属性全为null<br>
      *                     则会匹配所有用户记录
      * @return java.util.LinkedList
+     * @name queryWhereLikeAnd
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/13
      */
     @Override
     public LinkedList queryWhereLikeOr(String[] selectFields, Object obj) {
-        return queryWhere(selectFields,obj,"or","like");
+        return queryWhere(selectFields, obj, "or", "like");
     }
 
     /*
@@ -538,6 +536,7 @@ public class BaseDaoImpl implements BaseDao {
      *              分页查询
      **************************************************************
      */
+
     /**
      * 返回一个分页查询的结果
      *
@@ -580,16 +579,12 @@ public class BaseDaoImpl implements BaseDao {
         if (obj == null) {
             return;
         }
-        LinkedList<Method> methods = new LinkedList<>();
-        LinkedList<Field> fields = new LinkedList<>();
+
         /**
          * 取出包括父类在内的所有方法和属性
          */
-        for (Class clazz = obj.getClass(); clazz != Object.class; clazz = clazz.getSuperclass()) {
-            methods.addAll(Arrays.asList(clazz.getDeclaredMethods()));
-            fields.addAll(Arrays.asList(clazz.getDeclaredFields()));
-        }
-
+        LinkedList<Method> methods = getMethods(obj);
+        LinkedList<Field> fields = getFields(obj);
         for (Field field : fields) {
             /**
              * 取出每个属性的值
@@ -617,6 +612,7 @@ public class BaseDaoImpl implements BaseDao {
             }
         }
     }
+
 
     /**
      * 根据传入的表名生成一个select语句，如select user_name from user
@@ -671,7 +667,7 @@ public class BaseDaoImpl implements BaseDao {
      * 生成一个where like 语句，如where id like ?
      *
      * @param likeFields where条件的字段名数组,比如where id like 1,应该传入 {id}
-     * @param conj        逻辑连接词：and , or , not
+     * @param conj       逻辑连接词：and , or , not
      * @return java.lang.String 返回映射之后的预编译where语句,如where id like ? and user_name like ?
      * @name likeMapper
      * @notice 请注意此语句只用于追加where语句，不能单独用来查询

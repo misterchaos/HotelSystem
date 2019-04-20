@@ -16,7 +16,6 @@
 
 package com.hyc.www.po.abs;
 
-import java.sql.Timestamp;
 import java.util.Date;
 
 /**

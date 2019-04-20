@@ -38,6 +38,7 @@ public enum Pages {
      * 登陆界面
      */
     LOGIN_JSP,
+    USER_JSP,
     PICTRUES_JSP;
 
 

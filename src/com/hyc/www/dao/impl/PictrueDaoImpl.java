@@ -16,7 +16,7 @@
 
 package com.hyc.www.dao.impl;
 
-import com.hyc.www.po.Pictrue;
+import com.hyc.www.po.Picture;
 import com.hyc.www.util.JdbcUtils;
 
 import java.util.LinkedList;
@@ -31,7 +31,7 @@ public class PictrueDaoImpl extends BaseDaoImpl {
     /**
      * 本类操作的数据库表名
      */
-    private final String TABLE_NAME = " " + JdbcUtils.getTableName(Pictrue.class) + " ";
+    private final String TABLE_NAME = " " + JdbcUtils.getTableName(Picture.class) + " ";
 
 
     /**
@@ -39,25 +39,25 @@ public class PictrueDaoImpl extends BaseDaoImpl {
      */
     private final String ALL_FIELD_NAME = " id,author_id,pictrue,gmt_create,gmt_modified ";
 private String[] ALL_FIELD_ARRAY = new String[]{ "id","author_id","pictrue","gmt_create","gmt_modified" };
-    public boolean add(Pictrue pictrue){
-        if(pictrue!=null){
-            return super.insert(pictrue)==1;
+    public boolean add(Picture picture){
+        if(picture !=null){
+            return super.insert(picture)==1;
         }
         return false;
     }
 
-    public LinkedList<Pictrue> list(String authorId){
+    public LinkedList<Picture> list(String authorId){
         if(authorId!=null){
-            Pictrue pictrue = new Pictrue();
-            pictrue.setId(authorId);
+            Picture picture = new Picture();
+            picture.setId(authorId);
             LinkedList list=  new LinkedList<>();
-            LinkedList<Pictrue> pictrues = new LinkedList();
-            list = super.queryWhereAndEquals(ALL_FIELD_ARRAY,pictrue);
+            LinkedList<Picture> pictures = new LinkedList();
+            list = super.queryWhereAndEquals(ALL_FIELD_ARRAY, picture);
             for(int i=0;i<list.size();i++){
-                Pictrue pic = (Pictrue) list.get(i);
-                pictrues.add(pic);
+                Picture pic = (Picture) list.get(i);
+                pictures.add(pic);
             }
-            return pictrues;
+            return pictures;
         }
         return null;
     }

@@ -50,15 +50,8 @@ public interface UserService {
     Status login(HttpServletRequest req, HttpServletResponse resp);
 
 
-    /**
-     * 负责返回用户的个人信息
-     *
-     * @name myInfo
-     * @notice none
-     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
-     * @date 2019/4/16
-     */
-    Status myInfo(HttpServletRequest req, HttpServletResponse resp);
+
+
 
     /**
      * 负责更新用户信息的功能
@@ -89,4 +82,28 @@ public interface UserService {
      * @date 2019/4/13
      */
     Status updatePayPwd(HttpServletRequest req, HttpServletResponse resp);
+
+
+    /**
+     * 负责返回用户的个人信息
+     *
+     * @name myInfo
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/16
+     */
+    Status find(HttpServletRequest req, HttpServletResponse resp);
+
+
+    /**
+     * 负责查找用户
+     *
+     * @return com.hyc.www.service.constant.Status
+     * @name listAll
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/20
+     */
+    Status listAll(HttpServletRequest req, HttpServletResponse resp);
+
 }

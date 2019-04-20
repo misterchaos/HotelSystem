@@ -14,21 +14,33 @@
  * limitations under the License.
  */
 
-package com.hyc.www.test;
+package com.hyc.www.po;
+
+import com.hyc.www.po.abs.BaseEntity;
 
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
  * @program XHotel
- * @description 用于测试正则表达式
- * @date 2019-04-15 00:29
+ * @description 图片
+ * @date 2019-04-19 18:59
  */
-public class TestRegex {
-    public static void main(String[] args) {
-        String regex = "[\\w_]{6,20}$";
-        System.out.println(regex.matches(""));
-        System.out.println("tdsflj14321fasdf\n".matches(regex));
-        String regex1= "login*";
+public class Picture extends BaseEntity {
+    String authorId;
+    String pictrue;
 
-        System.out.println("alogin".matches(regex1));
+    public String getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(String authorId) {
+        this.authorId = authorId;
+    }
+
+    public String getPictrue() {
+        return pictrue;
+    }
+
+    public void setPictrue(String pictrue) {
+        this.pictrue = pictrue;
     }
 }

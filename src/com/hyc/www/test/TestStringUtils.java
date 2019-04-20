@@ -18,7 +18,6 @@ package com.hyc.www.test;
 
 import com.hyc.www.po.User;
 import com.hyc.www.util.StringUtils;
-import sun.awt.SunHints;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -37,10 +36,10 @@ public class TestStringUtils {
         System.out.println(StringUtils.field2GetMethod("userName"));
         System.out.println(StringUtils.field2SqlField("userName"));
         Field f = User.class.getDeclaredField("userName");
-        Method m = User.class.getDeclaredMethod("setUserName",f.getType());
+        Method m = User.class.getDeclaredMethod("setName",f.getType());
         Object obj = User.class.newInstance();
             m.invoke(obj,"test");
-        System.out.println(((User) obj).getUserName());
+        System.out.println(((User) obj).getName());
         System.out.println(getUUID());
     }
 }

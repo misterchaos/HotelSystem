@@ -34,31 +34,13 @@
           id="viewport" name="viewport">
     <link rel="stylesheet"
           href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
 <c:if test="${data==null}">
     <c:redirect url="${pageContext.request.contextPath}/room?method=${Methods.FIND_DO.name()}&find=all"/>
 </c:if>
-<script>
-    fuction()
-    {
-        var ajax;
-        //
-
-        onreadesa(){
-            ( 4  200){
-                var data
-            fia
-
-        }
-        }
-        =
-        send
-
-
-    }
-</script>
 
 
 <%-- 网页头部 --%>
@@ -76,20 +58,26 @@
         </div>
         <div class="collapse navbar-collapse" id="example-navbar-collapse">
             <ul class="nav navbar-nav">
+                <c:if test="${data.users==null}">
                 <li class="active"><a href="${Pages.LOGIN_JSP.toString()}">登陆</a></li>
+                </c:if>
+                <c:if test="${data.users!=null}">
+                    <li class="active"><a href="${Pages.USER_JSP.toString()}">个人中心</a></li>
+                </c:if>
                 <li><a href="${Pages.REGIST_JSP.toString()}">注册</a></li>
+                <li><label style="float: right;margin-right: 10px"></label></li>
             </ul>
         </div>
     </div>
 </nav>
 <c:if test="${message!=null}">
-    <div class="alert alert-warning" style="margin-bottom: 0">
-        <a id="message" href="#" class="close" data-dismiss="alert">
+    <div class="alert alert-warning alert-dismissable" style="margin-bottom: 0">
+        <button type="button" class="close" data-dismiss="alert"
+                aria-hidden="true">
             &times;
-        </a>
-        <strong>警告！</strong>${message}
+        </button>
+        提示：${message}
     </div>
-
 </c:if>
 
 

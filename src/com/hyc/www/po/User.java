@@ -27,24 +27,31 @@ import java.math.BigDecimal;
  * @date 2019-04-09 20:12
  */
 public class User extends BaseEntity implements Cloneable {
-    private String userName;
+    private String name;
     private String password;
     private String phoneNumber;
     private String idNumber;
+    private String type;
     private String nickName;
     private String photo;
     private BigDecimal balance;
     private String payPwd;
 
 
-
-
-    public String getUserName() {
-        return userName;
+    public String getType() {
+        return type;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPassword() {

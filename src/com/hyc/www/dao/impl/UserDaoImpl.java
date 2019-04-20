@@ -20,7 +20,6 @@ import com.hyc.www.dao.inter.UserDao;
 import com.hyc.www.po.User;
 import com.hyc.www.util.JdbcUtils;
 
-import java.math.BigInteger;
 import java.util.LinkedList;
 
 /**
@@ -40,7 +39,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
     /**
      * 表中所有字段对应的查询语句
      */
-    private final String ALL_FIELD_NAME = " id,user_name,password,phone_number,id_number,nick_name,"
+    private final String ALL_FIELD_NAME = " id,name,password,phone_number,type,id_number,nick_name,"
             + "photo,status,balance,pay_pwd,gmt_create,gmt_modified ";
 
     /**
@@ -70,7 +69,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
      */
     @Override
     public boolean addUser(User user) {
-        if (user == null || user.getUserName() == null) {
+        if (user == null || user.getName() == null) {
             return false;
         }
         return super.insert(user) == 1;
@@ -91,7 +90,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
         if (userName == null) {
             return null;
         }
-        String sql = "select " + ALL_FIELD_NAME + " from " + TABLE_NAME + " where user_name = ?";
+        String sql = "select " + ALL_FIELD_NAME + " from " + TABLE_NAME + " where name = ?";
         return (User) super.queryObject(sql, new Object[]{userName}, User.class);
     }
 
@@ -107,7 +106,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
      */
     @Override
     public String getPassword(String userName) {
-        String sql = "select password from " + TABLE_NAME + " where user_name = ?";
+        String sql = "select password from " + TABLE_NAME + " where name = ?";
         return (String) super.queryValue(sql, new Object[]{userName});
     }
 
@@ -124,7 +123,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
      */
     @Override
     public String getId(String userName) {
-        String sql = "select id from " + TABLE_NAME + " where user_name = ?";
+        String sql = "select id from " + TABLE_NAME + " where name = ?";
         return (String) super.queryValue(sql, new Object[]{userName});
     }
 
@@ -222,7 +221,7 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
          * 使用克隆对象，防止影响原来对象的值
          */
         User clone = user.clone();
-        clone.setId(getId(clone.getUserName()));
+        clone.setId(getId(clone.getName()));
         clone.setPassword(null);
         clone.setPayPwd(null);
         return super.update(clone) == 1;
@@ -242,7 +241,10 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
      */
     @Override
     public boolean updateAll(User user) {
-        user.setId(getId(user.getUserName()));
+        if(user==null){
+            return false;
+        }
+        user.setId(getId(user.getName()));
         return super.update(user) == 1;
     }
 }

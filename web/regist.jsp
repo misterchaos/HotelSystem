@@ -1,4 +1,3 @@
-
 <%--
   ~ Copyright (c) 2019.  黄钰朝
   ~
@@ -23,7 +22,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page import="com.hyc.www.controller.constant.Methods"%>
+<%@page import="com.hyc.www.controller.constant.Methods" %>
 <%@page import="com.hyc.www.controller.constant.Pages" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 
@@ -34,7 +33,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet"
           href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 
 <body>
@@ -45,24 +45,21 @@
         <a href="/${Pages.INDEX_JSP.toString()}"><h2 style="text-align: left">Xhotel酒店管理系统</h2></a>
     </div>
 </div>
+
 <c:if test="${message!=null}">
-    <div class="alert alert-warning" style="margin-bottom: 0">
-        <a id="message" href="#" class="close" data-dismiss="alert" >
+    <div class="alert alert-warning alert-dismissable" style="margin-bottom: 0">
+        <button type="button" class="close" data-dismiss="alert"
+                aria-hidden="true">
             &times;
-        </a>
-        <strong>警告！</strong>${message}
+        </button>
+        提示：${message}
     </div>
-
 </c:if>
-
-
 
 
 <div class="login-body" style="overflow: hidden;position: absolute">
     <img src="${pageContext.request.contextPath}/login.jpg" width="1920" height="674">
 </div>
-
-
 
 
 <div class="login-body">
@@ -76,9 +73,11 @@
                     <div class="color-input-field">
                         <form name="login" action="${pageContext.request.contextPath}/user?method=${Methods.REGIST_DO}"
                               method="post">
-                            <input type="text" required="required" class="form-control" name="userName" placeholder="请输入用户名" align="center">
+                            <input type="text" required="required" class="form-control" name="name"
+                                   placeholder="请输入用户名(6-20位英文字母，数字或下划线)" align="center">
                             <br>
-                            <input type="text" required="required" class="form-control" name="password" placeholder="请输入密码"
+                            <input type="password" required="required" class="form-control" name="password"
+                                   placeholder="请输入密码(6-20位英文字母，数字或下划线)"
                                    align="center"><br>
                             <input type="submit" class="form-control" value="注册"
                                    style="background-color: darkorchid;color: #FFFFFF">
