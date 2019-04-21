@@ -29,8 +29,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.Writer;
 
+import static com.hyc.www.service.constant.Status.NO_RESULT;
 import static com.hyc.www.service.constant.Status.SUCCESS;
 import static com.hyc.www.util.ControllerUtils.*;
 
@@ -152,22 +152,23 @@ public class RoomServlet extends HttpServlet {
         findType type = findType.valueOf(req.getParameter("find").toUpperCase());
         switch (type) {
             case NAME:
+                status = serv.listByName(req, resp);
+                if (status == SUCCESS) {
+                    forward(req, resp, status.getData(), "查询的结果如下", Pages.INDEX_JSP);
+                }else if(status==NO_RESULT){
+                    forward(req,resp,status.getData(),"没有相关房间！",Pages.INDEX_JSP);
+                }
                 return;
             case ALL:
-                status = serv.listAll(req, resp);
+                status = serv.listByName(req, resp);
                 if (status == SUCCESS && status.getData() != null) {
-                    req.setAttribute("data", status.getData());
-                    req.getRequestDispatcher(Pages.INDEX_JSP.toString()).forward(req, resp);
+                    forward(req, resp, status.getData(), null, Pages.INDEX_JSP);
                 }
                 return;
             case THIS:
                 status = serv.find(req, resp);
                 if (status == SUCCESS && status.getData() != null) {
-                    Writer writer = resp.getWriter();
-                    req.setAttribute("data", status.getData());
-                    //TODO
-                    System.out.println("rediect back to room.jsp");
-                    req.getRequestDispatcher(Pages.ROOM_JSP.toString()).forward(req, resp);
+                    forward(req, resp, status.getData(), null, Pages.ROOM_JSP);
                     return;
                 } else {
                     break;

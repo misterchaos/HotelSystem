@@ -21,11 +21,10 @@
   Time: 18:37
   To change this template use File | Settings | File Templates.
 --%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="com.hyc.www.controller.constant.Methods" %>
 <%@ page import="com.hyc.www.controller.constant.Pages" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
-
 <html>
 <head>
     <title>房间</title>
@@ -80,7 +79,7 @@
                 url="${pageContext.request.contextPath}/room?method=${Methods.FIND_DO.name()}&view=${param.view}&find=this&number=${param.number}"/>
     </c:if>
     <%-- 网页主体摘要--%>
-    <div class="page-summary" style="height: 500px;width:1920px">
+    <div class="maxPage-summary" style="height: 500px;width:1920px">
         <div class="info-panel">
                 <%-- 主图和名称--%>
             <div class="photo-name">
@@ -122,12 +121,16 @@
                         <td>${data.rooms[0].bedWidth}</td>
                     </tr>
                     <tr>
+                        <td>预订状态：</td>
+                        <td>${data.rooms[0].bookStatus}</td>
+                    </tr>
+                    <tr>
                         <td>房间评分：</td>
                         <td>${data.rooms[0].score}</td>
                     </tr>
                     <tr>
                         <td>房间价格：</td>
-                        <td>${data.rooms[0].price}</td>
+                        <td><strong><p style="color: red">$${data.rooms[0].price}</p></strong></td>
                     </tr>
                     <tr>
                         <td>备注信息：</td>
@@ -140,26 +143,25 @@
     </div>
     <!-- 购买链接-->
     <div class="color-input-field">
-        <form action="${pageContext.request.contextPath}/order/room?method=${Methods.ADD_DO}&roomId=${data.rooms[0].id}&userId=${data.users[0].id}"
-              method="post">
+        <form action="${pageContext.request.contextPath}/${Pages.ORDER_JSP.toString()}?view=add&roomId=${data.rooms[0].id}&userId=${data.users[0].id}&user=${data.users[0].name}&room=${data.rooms[0].number}&hotel=1234&price=${data.rooms[0].price}" method="post">
             <input type="submit" class="form-control" value="立即预定" style="background-color: orangered;
         width: 270px;height: 50px;float:right;margin-right: 230px;color:#FFFFFF;">
         </form>
     </div>
     <%-- 网页主体细节--%>
-    <div class="page-detail">
+    <div class="maxPage-detail">
     </div>
 </c:if>
 
 
-<!-- 更新房间信息/添加房间 -->
+<%--修改/添加房间 --%>
 <c:if test="${param.view=='update'||param.view=='add'}">
     <c:if test="${param.view=='update'&&data==null}">
         <c:redirect
                 url="${pageContext.request.contextPath}/room?method=${Methods.FIND_DO}&view=${param.view}&find=this&number=${param.number}"/>
     </c:if>
     <%-- 网页主体摘要--%>
-    <div class="page-summary" style="height: 500px;width:1920px">
+    <div class="maxPage-summary" style="height: 500px;width:1920px">
         <div class="info-panel">
             <c:if test="${param.view=='update'}">
             <form class="input-info"
@@ -174,7 +176,7 @@
                         <img class="main_info" src="/file/${data.rooms[0].photo}" width="300" height="300" alt="房间图片">
                         <h3>${data.rooms[0].name}</h3>
                         <input type="file" class="file" name="photo" multiple>
-                        </div>
+                    </div>
 
                     <!-- 基本信息 -->
                     <div class="panel panel-default" style="margin-left: 30px ;width: 510px">
@@ -192,7 +194,8 @@
                                 <tr>
                                     <td>房间编号：</td>
                                     <td><input type="text" required="required" class="form-control" name="number"
-                                               placeholder="请输入房间编号" value="${data.rooms[0].number}" align="center">
+                                               placeholder="请输入房间编号(唯一标识)" value="${data.rooms[0].number}"
+                                               align="center">
                                     </td>
                                 </tr>
                                 <tr>
@@ -212,24 +215,27 @@
                                 <tr>
                                     <td>房间面积：</td>
                                     <td><input type="text" required="required" class="form-control" name="area"
-                                               placeholder="请输入房间面积" value="${data.rooms[0].area}" align="center"></td>
+                                               placeholder="请输入房间面积(10-300)" value="${data.rooms[0].area}"
+                                               align="center"></td>
                                 </tr>
                                 <tr>
                                     <td>床宽：</td>
                                     <td>
                                         <input type="text" required="required" class="form-control" name="bedWidth"
-                                               placeholder="请输入房间床宽" value="${data.rooms[0].bedWidth}" align="center">
+                                               placeholder="请输入房间床宽(1-5)" value="${data.rooms[0].bedWidth}"
+                                               align="center">
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>房间价格：</td>
                                     <td><input type="text" required="required" class="form-control" name="price"
-                                               placeholder="请输入房间价格" value="${data.rooms[0].price}" align="center"></td>
+                                               placeholder="请输入房间价格(0-100000)" value="${data.rooms[0].price}"
+                                               align="center"></td>
                                 </tr>
                                 <tr>
                                     <td>备注信息：</td>
-                                    <td><input type="text"  class="form-control" name="remark"
-                                               placeholder="请输入备注信息" align="center"></td>
+                                    <td><input type="text" class="form-control" name="remark"
+                                               placeholder="请输入备注信息(选填)" align="center"></td>
                                 </tr>
                                 <tr>
                                     <td>执行操作：</td>
@@ -244,7 +250,7 @@
         </div>
     </div>
     <%-- 网页主体细节--%>
-    <div class="page-detail">
+    <div class="maxPage-detail">
 
     </div>
 
@@ -254,7 +260,7 @@
 
 <!-- 扩展信息 -->
 
-<div class="page-extension">
+<div class="maxPage-extension">
 
 </div>
 

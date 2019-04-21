@@ -76,6 +76,26 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
     }
 
     /**
+     * 根据id查询一个用户的所有信息
+     *
+     * @param id 用户id
+     * @return com.hyc.www.po.User
+     * @name getUser
+     * @notice 如果id为空或者没有该用户，则返回null;
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/21
+     */
+    @Override
+    public User getUserById(String id) {
+        if (id == null) {
+            return null;
+        }
+        String sql = "select " + ALL_FIELD_NAME + " from " + TABLE_NAME + " where id = ?";
+        return (User) super.queryObject(sql, new Object[]{id}, User.class);
+    }
+
+
+    /**
      * 根据用户名查询一个用户的所有信息
      *
      * @param userName 用户名

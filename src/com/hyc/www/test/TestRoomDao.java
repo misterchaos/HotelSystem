@@ -56,7 +56,7 @@ public class TestRoomDao {
         System.out.println("测试获取所有房间信息的功能");
         LinkedList list = roomDao.getAllRooms();
         System.out.println(list.size());
-        for (int i = 0; i <list.size() ; i++) {
+        for (int i = 0; i <0 ; i++) {
         room = (Room) list.get(i);
         System.out.println(room.getGmtModified());
         System.out.println(room.getNumber());
@@ -99,6 +99,7 @@ public class TestRoomDao {
          * 测试模糊查询
          */
         System.out.println(roomDao.findByName("test").size());
+        System.out.println(roomDao.findByName(null,1).size());
         /**
          * 批量增加房间
          */

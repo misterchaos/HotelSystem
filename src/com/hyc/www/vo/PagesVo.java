@@ -16,10 +16,7 @@
 
 package com.hyc.www.vo;
 
-import com.hyc.www.po.Hotel;
-import com.hyc.www.po.Picture;
-import com.hyc.www.po.Room;
-import com.hyc.www.po.User;
+import com.hyc.www.po.*;
 
 import java.util.LinkedList;
 
@@ -34,9 +31,11 @@ public class PagesVo {
     private LinkedList<Room> rooms;
     private LinkedList<Hotel> hotels;
     private LinkedList<User> users;
+    private LinkedList<OrderRoom> orderRooms;
     private LinkedList<Picture> pictures;
     private String message;
-    private int page;
+    private int maxPage;
+    private int count;
 
     public LinkedList<Room> getRooms() {
         return rooms;
@@ -79,11 +78,27 @@ public class PagesVo {
         this.pictures = pictures;
     }
 
-    public int getPage() {
-        return page;
+    public int getMaxPage() {
+        return maxPage;
     }
 
-    public void setPage(int page) {
-        this.page = page;
+    public void setMaxPage(int maxPage) {
+        this.maxPage = maxPage;
+    }
+
+    public LinkedList<OrderRoom> getOrderRooms() {
+        return orderRooms;
+    }
+
+    public void setOrderRooms(LinkedList<OrderRoom> orderRooms) {
+        this.orderRooms = orderRooms;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 }

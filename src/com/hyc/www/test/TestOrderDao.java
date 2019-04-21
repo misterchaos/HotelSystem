@@ -39,7 +39,7 @@ public class TestOrderDao {
 
         Date date = new Date();
         OrderRoom orderRoom = new OrderRoom();
-        orderRoom.setStartTime(date);
+        orderRoom.setStartTime(String.valueOf(date));
 
         /**
          * 测试查询订单全部信息功能

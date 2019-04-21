@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.hyc.www.service.constant.Status.SUCCESS;
+import static com.hyc.www.util.ControllerUtils.forward;
 import static com.hyc.www.util.ControllerUtils.getMethod;
 
 /**
@@ -37,7 +37,7 @@ import static com.hyc.www.util.ControllerUtils.getMethod;
  * @description 负责房间订单的请求转发
  * @date 2019-04-17 01:31
  */
-@WebServlet("/order/room")
+@WebServlet("/order_room")
 public class OrderRoomServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -56,11 +56,31 @@ public class OrderRoomServlet extends HttpServlet {
             case DELETE_DO:
                 delete(req, resp);
                 return;
-
+            case FIND_DO:
+                find(req, resp);
+                return;
             default:
                 resp.sendRedirect(Pages.INDEX_JSP.toString());
         }
 
+    }
+
+    private void find(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        OrderRoomService serv = (OrderRoomService) getServletContext().getAttribute("orderRoomService");
+        Status status = serv.find(req, resp);
+        //TODO debug
+        System.out.println(status.name());
+
+
+        switch (status) {
+            case NOT_FOUNT:
+                forward(req, resp, status.getData(), "没有相关订单！", Pages.ORDER_JSP);
+                return;
+            case SUCCESS:
+                forward(req, resp, status.getData(), "您的订单如下！", Pages.ORDER_JSP);
+                return;
+            default:
+        }
     }
 
     private void add(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -68,13 +88,15 @@ public class OrderRoomServlet extends HttpServlet {
         Status status = serv.add(req, resp);
         //TODO debug
         System.out.println(status.name());
-        if (status == SUCCESS) {
-            req.setAttribute("message", status);
-            req.getRequestDispatcher(Pages.INDEX_JSP.toString()).forward(req, resp);
-        } else {
-
+        switch (status) {
+            case ALREADY_BOOKED:
+                forward(req, resp, status.getData(), "房间已被预订！", Pages.ORDER_JSP);
+                return;
+            case SUCCESS:
+                forward(req, resp, status.getData(), "订单添加成功！", Pages.SUCCESS_JSP);
+                return;
+            default:
         }
-
     }
 
     private void delete(HttpServletRequest req, HttpServletResponse resp) {

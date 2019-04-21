@@ -369,4 +369,19 @@ public interface BaseDao {
      * @date 2019/4/13
      */
     String pageMapper(String limit, String offset);
+
+
+    /**
+     * 返回一个每页LIMIT条记录的分页查询语句，如limit 10 offset 0
+     * LIMIT 由本类的成员变量控制
+     *
+     * @param offset 该页查询的起始记录数
+     * @return java.lang.String
+     * @name pageMapper
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/13
+     */
+    String pageOffsetMapper(String offset);
+
 }

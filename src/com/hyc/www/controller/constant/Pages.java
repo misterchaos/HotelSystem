@@ -31,14 +31,37 @@ public enum Pages {
      * 注册界面
      */
     REGIST_JSP,
+    /**
+     * 网站首页
+     */
     INDEX_JSP,
+    /**
+     * 错误页面
+     */
     ERROR_JSP,
+    /**
+     * 房间页面
+     */
     ROOM_JSP,
     /**
      * 登陆界面
      */
     LOGIN_JSP,
+    /**
+     * 用户界面
+     */
     USER_JSP,
+    /**
+     * 订单界面
+     */
+    ORDER_JSP,
+    /**
+     * 成功页面
+     */
+    SUCCESS_JSP,
+    /**
+     * 相册页面
+     */
     PICTRUES_JSP;
 
 

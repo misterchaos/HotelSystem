@@ -79,7 +79,7 @@
     <body-content>JSP</body-content>
     <description>
         Retrieves an absolute or relative URL and exposes its contents
-        to either the page, a String in 'var', or a Reader in 'varReader'.
+        to either the maxPage, a String in 'var', or a Reader in 'varReader'.
     </description>
     <attribute>
         <name>url</name>

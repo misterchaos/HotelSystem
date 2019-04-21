@@ -17,26 +17,23 @@
 package com.hyc.www.service.impl;
 
 import com.hyc.www.dao.inter.RoomDao;
-import com.hyc.www.exception.ServiceException;
 import com.hyc.www.po.Room;
 import com.hyc.www.service.constant.Status;
 import com.hyc.www.service.inter.RoomService;
 import com.hyc.www.util.BeanFactory;
 import com.hyc.www.util.BeanUtils;
+import com.hyc.www.vo.PagesVo;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
-import java.io.IOException;
 import java.util.LinkedList;
 
 import static com.hyc.www.service.constant.Status.*;
 import static com.hyc.www.util.ServiceUtils.isValidRoom;
 import static com.hyc.www.util.ServiceUtils.setData;
 import static com.hyc.www.util.UUIDUtils.getUUID;
-import static com.hyc.www.util.UploadUtils.upload;
+import static com.hyc.www.util.UploadUtils.uploadPhoto;
 
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
@@ -74,7 +71,7 @@ public class RoomServiceImpl implements RoomService {
     public Status delete(HttpServletRequest req, HttpServletResponse resp) {
         Room room = (Room) BeanUtils.toObject(req.getParameterMap(), Room.class);
         if (!dao.isExist(room.getNumber())) {
-            return ROOM_NOT_FOUND;
+            return NOT_FOUNT;
         }
 
         //TODO 处理房间已经有人预定的情况
@@ -100,8 +97,6 @@ public class RoomServiceImpl implements RoomService {
         if (room.getId() == null) {
             room.setId(dao.getId(room.getNumber()));
         }
-
-
         uploadPhoto(req, room);
         if (dao.update(room)) {
             return setData(room, SUCCESS);
@@ -114,9 +109,7 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public Status find(HttpServletRequest req, HttpServletResponse resp) {
         Room room = (Room) BeanUtils.toObject(req.getParameterMap(), Room.class);
-
         room = dao.getRoom(room.getNumber());
-
         if (room != null) {
             return setData(room, SUCCESS);
         }
@@ -124,39 +117,51 @@ public class RoomServiceImpl implements RoomService {
 
     }
 
+    /**
+     * 返回所有的房间
+     *
+     * @return com.hyc.www.service.constant.Status
+     * @name listAll
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/21
+     */
     @Override
     public Status listAll(HttpServletRequest req, HttpServletResponse resp) {
-
-        LinkedList<Room> rooms = dao.getAllRooms();
+        int page = Integer.parseInt(req.getParameter("page"));
+        LinkedList<Room> rooms = dao.findByName(null, page);
         if (rooms != null && rooms.size() > 0) {
-
             return setData(rooms, SUCCESS);
         }
-
         return ERROR;
     }
 
 
     /**
-     * 用于上传照片
+     * 通过名称模糊查询相关的房间
      *
-     * @param
-     * @return
-     * @name
+     * @return com.hyc.www.service.constant.Status
+     * @name listByName
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
-     * @date 2019/4/20
+     * @date 2019/4/21
      */
-    private void uploadPhoto(HttpServletRequest req, Room room) {
-        try {
-            Part part = req.getPart("photo");
-            if (part.getSize() > 0) {
-                room.setPhoto(upload(part));
-            }
-        } catch (IOException | ServletException e) {
-            e.printStackTrace();
-            throw new ServiceException("无法上传照片" + e);
+    @Override
+    public Status listByName(HttpServletRequest req, HttpServletResponse resp) {
+        int page = Integer.parseInt(req.getParameter("page"));
+        String name = req.getParameter("name");
+        LinkedList<Room> rooms = dao.findByName(name, page);
+        if (rooms != null && rooms.size() > 0) {
+            PagesVo vo = new PagesVo();
+            vo.setRooms(rooms);
+            vo.setMaxPage(dao.getMaxPageByName(name));
+            SUCCESS.setData(vo);
+            return SUCCESS;
         }
+        return setData(rooms, NO_RESULT);
     }
+
+
+
 
 }

@@ -31,6 +31,17 @@ import javax.servlet.http.HttpServletResponse;
 public interface UserService {
 
     /**
+     * 用于添加一个用户
+     *
+     * @name add
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/21
+     */
+    Status add(HttpServletRequest req, HttpServletResponse resp);
+
+
+    /**
      * 负责用户的注册功能
      *
      * @name regist
@@ -48,9 +59,6 @@ public interface UserService {
      * @date 2019/4/13
      */
     Status login(HttpServletRequest req, HttpServletResponse resp);
-
-
-
 
 
     /**

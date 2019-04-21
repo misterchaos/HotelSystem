@@ -64,6 +64,18 @@ public interface RoomDao {
      */
     Room getRoom(String roomNum);
 
+    /**
+     * 根据房间id查询一个房间的所有信息
+     *
+     * @param id
+     * @return com.hyc.www.po.Room
+     * @name getRoom
+     * @notice 如果id为空或者没有该房间，则返回null;
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/10
+     */
+    Room getRoomById(String id);
+
 
     /**
      * 返回该房间编号对应的id
@@ -143,6 +155,20 @@ public interface RoomDao {
      * 通过房间名进行模糊查询
      *
      * @param name 房间名
+     * @param page 页数
+     * @return java.util.LinkedList<com.hyc.www.po.Room>
+     * @name findByName
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/18
+     */
+    LinkedList<Room> findByName(String name, int page);
+
+
+    /**
+     * 通过房间名进行模糊查询
+     *
+     * @param name 房间名
      * @return java.util.LinkedList<com.hyc.www.po.Room>
      * @name findByName
      * @notice none
@@ -152,4 +178,23 @@ public interface RoomDao {
     LinkedList<Room> findByName(String name);
 
 
+    /**
+     * 统计通过名称模糊查询的记录数
+     *
+     * @name
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/21
+     */
+    int getCountByName(String name);
+    /**
+     * 统计通过名称模糊查询的记录页数
+     *
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/21
+     */
+    int getMaxPageByName(String name);
 }
+
+

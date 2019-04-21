@@ -93,7 +93,7 @@ Scope for var.
   <tag>
     <description>
         Retrieves an absolute or relative URL and exposes its contents
-        to either the page, a String in 'var', or a Reader in 'varReader'.
+        to either the maxPage, a String in 'var', or a Reader in 'varReader'.
     </description>
     <name>import</name>
     <tag-class>org.apache.taglibs.standard.tag.rt.core.ImportTag</tag-class>

@@ -37,6 +37,27 @@ public interface RoomService {
 
     Status find(HttpServletRequest req, HttpServletResponse resp);
 
+
+    /**
+     * 返回所有的房间
+     *
+     * @return com.hyc.www.service.constant.Status
+     * @name listAll
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/21
+     */
     Status listAll(HttpServletRequest req, HttpServletResponse resp);
 
+
+    /**
+     * 通过名称模糊查询相关的房间
+     *
+     * @return com.hyc.www.service.constant.Status
+     * @name listByName
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/21
+     */
+    Status listByName(HttpServletRequest req, HttpServletResponse resp);
 }

@@ -1,4 +1,3 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   ~ Copyright (c) 2019.  黄钰朝
   ~
@@ -22,8 +21,10 @@
   Time: 0:38
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="com.hyc.www.controller.constant.Methods" %>
+<%@ page import="com.hyc.www.controller.constant.Pages" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <head>
     <title>Title</title>
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>

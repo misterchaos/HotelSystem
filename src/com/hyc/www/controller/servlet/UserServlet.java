@@ -16,18 +16,20 @@
 
 package com.hyc.www.controller.servlet;
 
+import com.hyc.www.controller.constant.CacheConst;
 import com.hyc.www.controller.constant.Methods;
 import com.hyc.www.controller.constant.Pages;
 import com.hyc.www.service.constant.Status;
 import com.hyc.www.service.inter.UserService;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 
-import static com.hyc.www.controller.constant.CacheConst.USER;
-import static com.hyc.www.service.constant.Status.ACCOUNT_NOT_FOUNT;
+import static com.hyc.www.controller.constant.CacheConst.*;
+import static com.hyc.www.service.constant.Status.NOT_FOUNT;
 import static com.hyc.www.service.constant.Status.SUCCESS;
 import static com.hyc.www.util.ControllerUtils.*;
 
@@ -38,6 +40,7 @@ import static com.hyc.www.util.ControllerUtils.*;
  * @description 负责接收与用户信息相关业务的请求
  * @date 2019-04-13 23:04
  */
+@MultipartConfig(location = "C:/Users/Misterchaos/Documents/Java Develop Workplaces/IDEA workspace/HotelSystem/web/file/photo")
 @WebServlet("/user")
 public class UserServlet extends HttpServlet {
     @Override
@@ -64,12 +67,40 @@ public class UserServlet extends HttpServlet {
                 update(req, resp);
                 return;
             case LOGOUT_DO:
+                logout(req, resp);
                 return;
-
+            case ADD_DO:
+                add(req, resp);
+                return;
             default:
                 resp.sendRedirect(Pages.INDEX_JSP.toString());
         }
 
+    }
+
+
+    private void add(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        UserService serv = (UserService) getServletContext().getAttribute("userService");
+        Status status = serv.add(req, resp);
+        //TODO debug
+        System.out.println(status.name());
+        switch (status) {
+            case DATA_ILLEGAL:
+                forward(req, resp, status.getData(), "数据不合法！", Pages.USER_JSP);
+                return;
+            case ACCOUNT_ALREADY_EXIST:
+                forward(req, resp, status.getData(), "该账户已经存在！", Pages.USER_JSP);
+                return;
+            case SUCCESS:
+                forward(req, resp, status.getData(), "用户添加成功！", Pages.USER_JSP);
+                return;
+            default:
+        }
+
+    }
+    private void logout(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.getSession().invalidate();
+        forward(req, resp, null, "您已成功退出登陆！", Pages.LOGIN_JSP);
     }
 
 
@@ -99,7 +130,7 @@ public class UserServlet extends HttpServlet {
         //TODO debug
         System.out.println(status.name());
         switch (status) {
-            case ACCOUNT_NOT_FOUNT:
+            case NOT_FOUNT:
                 forward(req, resp, status.getData(), "找不到该用户！", Pages.LOGIN_JSP);
                 return;
             case DATA_ILLEGAL:
@@ -111,24 +142,50 @@ public class UserServlet extends HttpServlet {
 
                 return;
             case SUCCESS:
+                String userType = status.getData().getUsers().get(0).getType();
                 String userName = status.getData().getUsers().get(0).getName();
-                if ("true".equalsIgnoreCase(req.getParameter("autoLogin"))) {
-
-                    /**
-                     * 设置自动登陆cookie
-                     */
-                    Cookie userCookie = new Cookie(USER.toString(), userName);
-                    userCookie.setMaxAge(60 * 60 * 24 * 30);
-                    resp.addCookie(userCookie);
-                }
                 /**
-                 * 设置本次会话缓存
+                 * 用户登陆
                  */
                 HttpSession session = req.getSession();
-                session.setAttribute(USER.toString(), userName);
+                //TODO
+                System.out.println("用户类型为" + userType);
+                CacheConst type = CacheConst.valueOf(userType);
+                switch (type) {
+                    case USER:
+                        if (TRUE.toString().equalsIgnoreCase(req.getParameter(AUTO_LOGIN.toString().toLowerCase()))) {
+
+                            /**
+                             * 设置自动登陆cookie
+                             */
+                            setCookie(resp, USER, userName);
+                        }
+                        session.setAttribute(USER.toString(), userName);
+                        break;
+                    case ADMIN:
+                        if (TRUE.toString().equalsIgnoreCase(req.getParameter(AUTO_LOGIN.toString().toLowerCase()))) {
+                            setCookie(resp, USER, userName);
+                            setCookie(resp, ADMIN, userName);
+                        }
+                        session.setAttribute(USER.toString(), userName);
+                        session.setAttribute(ADMIN.toString(), userName);
+                        break;
+                    case SUPER:
+                        break;
+                    default:
+                }
                 redirect(resp, Pages.INDEX_JSP.toString());
             default:
         }
+    }
+
+    private static void setCookie(HttpServletResponse resp, CacheConst userType, String userName) {
+        /**
+         * 设置自动登陆cookie
+         */
+        Cookie userCookie = new Cookie(userType.toString(), userName);
+        userCookie.setMaxAge(60 * 60 * 24 * 30);
+        resp.addCookie(userCookie);
     }
 
 
@@ -142,7 +199,7 @@ public class UserServlet extends HttpServlet {
                 if (status == SUCCESS) {
                     forward(req, resp, status.getData(), null, Pages.USER_JSP);
 
-                } else if (status == ACCOUNT_NOT_FOUNT) {
+                } else if (status == NOT_FOUNT) {
                     forward(req, resp, status.getData(), "找不到该用户！", Pages.USER_JSP);
                 }
                 return;
@@ -186,8 +243,11 @@ public class UserServlet extends HttpServlet {
             case DATA_ILLEGAL:
                 forward(req, resp, status.getData(), "输入不合法!", Pages.USER_JSP);
                 return;
+            case PASSWORD_INCORRECT:
+                forward(req, resp, status.getData(), "密码不正确！", Pages.USER_JSP);
             case SUCCESS:
-                forward(req, resp, status.getData(), null, Pages.USER_JSP);
+                String name = status.getData().getUsers().get(0).getName();
+                redirect(resp, Pages.USER_JSP.toString() + "?view=user&name=" + name);
                 return;
             default:
         }

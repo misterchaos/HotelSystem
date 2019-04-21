@@ -22,10 +22,9 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page import="com.hyc.www.controller.constant.Methods"%>
-<%@page import="com.hyc.www.controller.constant.Pages" %>
+<%@ page import="com.hyc.www.controller.constant.Methods" %>
+<%@ page import="com.hyc.www.controller.constant.Pages" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
-
 <html>
 <head>
     <title>${param.title}</title>
@@ -72,7 +71,7 @@
                             <br>
                             <input type="password" required="required" class="form-control" name="password" placeholder="请输入密码"
                                    align="center">
-                            <input type="checkbox" name="autoLogin" value="true" style="margin-bottom: 13px">记住登陆
+                            <input type="checkbox" name="auto_login" value="true" style="margin-bottom: 13px">记住登陆
                             <input type="submit" class="form-control" value="登陆"
                                    style="background-color: darkorchid;color: #FFFFFF">
                         </form>

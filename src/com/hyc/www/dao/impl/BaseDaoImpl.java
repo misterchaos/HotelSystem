@@ -26,7 +26,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.*;
-import java.util.Arrays;
 import java.util.LinkedList;
 
 import static com.hyc.www.util.ReflectUtils.getFields;
@@ -40,6 +39,8 @@ import static com.hyc.www.util.StringUtils.field2SqlField;
  * @date 2019-04-09 00:26
  */
 public class BaseDaoImpl implements BaseDao {
+
+
 
     /*
      **************************************************************
@@ -281,7 +282,7 @@ public class BaseDaoImpl implements BaseDao {
                  * 取出包括父类方法在内的所有方法
                  * 这里clazz必须用claz代替，否则clazz将被修改
                  */
-                LinkedList<Method> methods =getMethods(clazz.newInstance());
+                LinkedList<Method> methods = getMethods(clazz.newInstance());
                 /**
                  * 取得字段名,存在columns数组中，并映射成setter方法数组
                  */
@@ -732,6 +733,27 @@ public class BaseDaoImpl implements BaseDao {
     @Override
     public String pageMapper(String limit, String offset) {
         return " limit " + limit + " offset " + offset + " ";
+    }
+
+
+    /**
+     * 返回一个每页LIMIT条记录的分页查询语句，如limit 10 offset 0
+     * LIMIT 由本类的成员变量控制
+     *
+     * @param offset 该页查询的起始记录数
+     * @return java.lang.String
+     * @name pageMapper
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/13
+     */
+    @Override
+    public String pageOffsetMapper(String offset) {
+        /**
+         * pageOffsetMapper的固定每页记录数
+         */
+        final int LIMIT = 10;
+        return " limit " + LIMIT + " offset " + offset + " ";
     }
 
 

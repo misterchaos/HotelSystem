@@ -16,6 +16,12 @@
 
 package com.hyc.www.util;
 
+import com.hyc.www.exception.ServiceException;
+import com.hyc.www.po.Room;
+import com.hyc.www.po.User;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 import java.io.IOException;
 
@@ -44,5 +50,41 @@ public class UploadUtils {
         String filename = getUUID() + head.substring(head.lastIndexOf("."), head.lastIndexOf("\""));
         part.write(filename);
         return filename;
+    }
+
+
+    /**
+     * 用于上传照片
+     *
+     * @param
+     * @return
+     * @name
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/20
+     */
+    public static void uploadPhoto(HttpServletRequest req, Object obj) {
+        String photo = null;
+        try {
+            Part part = req.getPart("photo");
+            if (part == null) {
+                photo="default.jpg";
+            } else if (part.getSize() > 0) {
+                photo = upload(part);
+            }
+        } catch (IOException | ServletException |
+                NullPointerException e) {
+            e.printStackTrace();
+            throw new ServiceException("无法上传照片" + e);
+        }
+
+        if (obj instanceof User) {
+            User user = (User) obj;
+            user.setPhoto(photo);
+        }
+        if (obj instanceof Room) {
+            Room room = (Room) obj;
+            room.setPhoto(photo);
+        }
     }
 }

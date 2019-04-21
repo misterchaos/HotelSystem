@@ -22,8 +22,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page import="com.hyc.www.controller.constant.Methods" %>
-<%@page import="com.hyc.www.controller.constant.Pages" %>
+<%@ page import="com.hyc.www.controller.constant.Methods" %>
+<%@ page import="com.hyc.www.controller.constant.Pages" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 
 <html>

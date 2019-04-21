@@ -29,6 +29,12 @@ import java.util.LinkedList;
  * @date 2019-04-11 23:45
  */
 public class RoomDaoImpl extends BaseDaoImpl implements RoomDao {
+
+    /**
+     *
+     */
+    private final int limit = 10;
+
     /**
      * 本类操作的数据库表名
      */
@@ -40,7 +46,7 @@ public class RoomDaoImpl extends BaseDaoImpl implements RoomDao {
     private final String ALL_FIELD_NAME = " id,name,number,photo,type,area,bed_width,price,book_status,level,"
             + "score,remark_num,hotel_id,status,gmt_create,gmt_modified ";
 
-    private final String[] ALL_FIELD_ARRAY = new String[]{"id","name", "number", "photo", "type", "area", "bed_width",
+    private final String[] ALL_FIELD_ARRAY = new String[]{"id", "name", "number", "photo", "type", "area", "bed_width",
             "price", "book_status", "score", "remark_num", "hotel_id", "status", "gmt_create", "gmt_modified"};
 
 
@@ -96,6 +102,24 @@ public class RoomDaoImpl extends BaseDaoImpl implements RoomDao {
         return (Room) super.queryObject(sql, new Object[]{roomNum}, Room.class);
     }
 
+    /**
+     * 根据房间id查询一个房间的所有信息
+     *
+     * @param id
+     * @return com.hyc.www.po.Room
+     * @name getRoom
+     * @notice 如果id为空或者没有该房间，则返回null;
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/10
+     */
+    @Override
+    public Room getRoomById(String id) {
+        if (id == null) {
+            return null;
+        }
+        String sql = "select " + ALL_FIELD_NAME + " from " + TABLE_NAME + " where id  = ?";
+        return (Room) super.queryObject(sql, new Object[]{id}, Room.class);
+    }
 
     /**
      * 返回该房间编号对应的id
@@ -126,10 +150,10 @@ public class RoomDaoImpl extends BaseDaoImpl implements RoomDao {
     public LinkedList<Room> getAllRooms() {
         String sql = "select " + ALL_FIELD_NAME + " from " + TABLE_NAME;
         LinkedList<Object> list = super.queryList(sql, null, Room.class);
-        return toRoom(list);
+        return toRoomList(list);
     }
 
-    private LinkedList<Room> toRoom(LinkedList<Object> list) {
+    private LinkedList<Room> toRoomList(LinkedList<Object> list) {
         LinkedList<Room> rooms = new LinkedList<>();
         for (int i = 0; i < list.size(); i++) {
             Room room = (Room) list.get(i);
@@ -154,9 +178,71 @@ public class RoomDaoImpl extends BaseDaoImpl implements RoomDao {
         Room room = new Room();
         room.setName("%" + name + "%");
         LinkedList<Object> list = super.queryWhereLikeAnd(ALL_FIELD_ARRAY, room);
-        return toRoom(list);
+        return toRoomList(list);
     }
 
+    /**
+     * 通过房间名进行模糊查询
+     * 当name为null值时将查询所有记录
+     *
+     * @param name 房间名
+     * @param page 页数
+     * @return java.util.LinkedList<com.hyc.www.po.Room>
+     * @name findByName
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/18
+     */
+    @Override
+    public LinkedList<Room> findByName(String name, int page) {
+
+        /**
+         * 不允许page小于1
+         */
+        page = page < 1 ? 1 : page;
+        int offset = (page - 1) * limit;
+        int maxOffset = getCountByName(name);
+        /**
+         * 不允许offset大于maxOffset
+         */
+        offset = offset > maxOffset ? maxOffset : offset;
+        LinkedList list = null;
+        if (name != null) {
+            String sql = "select " + ALL_FIELD_NAME + " from " + TABLE_NAME +
+                    " where name like ? limit " + limit + " offset " + offset;
+            list = super.queryList(sql, new String[]{"%" + name + "%"}, Room.class);
+        } else {
+            String sql = "select " + ALL_FIELD_NAME + " from " + TABLE_NAME +
+                    " limit " + limit + " offset " + offset;
+            list = super.queryList(sql, new String[0], Room.class);
+        }
+        return toRoomList(list);
+    }
+
+    /**
+     * 统计通过名称模糊查询的记录数
+     *
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/21
+     */
+    @Override
+    public int getCountByName(String name) {
+        String sql = "select count(*) from " + TABLE_NAME + " where name like ? ";
+        return Math.toIntExact((long) super.queryValue(sql, new String[]{"%" + name + "%"}));
+    }
+
+    /**
+     * 统计通过名称模糊查询的记录页数
+     *
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/21
+     */
+    @Override
+    public int getMaxPageByName(String name) {
+        return getCountByName(name)/limit+1;
+    }
 
     /**
      * 将该id对应的房间从数据库中删除

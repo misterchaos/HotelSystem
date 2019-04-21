@@ -16,6 +16,7 @@
 
 package com.hyc.www.util;
 
+import com.hyc.www.po.OrderRoom;
 import com.hyc.www.po.Room;
 import com.hyc.www.po.User;
 import com.hyc.www.service.constant.Status;
@@ -32,6 +33,7 @@ import java.util.LinkedList;
  */
 public class ServiceUtils {
 
+
     /*
      **************************************************************
      *               返回数据
@@ -40,10 +42,11 @@ public class ServiceUtils {
 
     /**
      * 负责给Service层返回的Status设置数据
-     * @name setData
-     * @param room 房间数据
+     *
+     * @param room   房间数据
      * @param status 状态量
      * @return com.hyc.www.service.constant.Status
+     * @name setData
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/20
@@ -60,10 +63,11 @@ public class ServiceUtils {
 
     /**
      * 负责给Service层返回的Status设置数据
-     * @name setData
-     * @param rooms 房间数据集合
+     *
+     * @param rooms  房间数据集合
      * @param status 状态量
      * @return com.hyc.www.service.constant.Status
+     * @name setData
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/20
@@ -78,10 +82,11 @@ public class ServiceUtils {
 
     /**
      * 负责给Service层返回的Status设置数据
-     * @name setData
-     * @param user 用户数据
+     *
+     * @param user   用户数据
      * @param status 状态量
      * @return com.hyc.www.service.constant.Status
+     * @name setData
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/20
@@ -94,12 +99,14 @@ public class ServiceUtils {
         status.setData(vo);
         return status;
     }
+
     /**
      * 负责给Service层返回的Status设置数据
-     * @name setData
-     * @param users 用户数据集合
+     *
+     * @param users  用户数据集合
      * @param status 状态量
      * @return com.hyc.www.service.constant.Status
+     * @name setData
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/20
@@ -110,6 +117,45 @@ public class ServiceUtils {
         status.setData(vo);
         return status;
     }
+
+    /**
+     * 负责给Service层返回的Status设置数据
+     *
+     * @param orderRooms 订单数据集合
+     * @param status     状态量
+     * @return com.hyc.www.service.constant.Status
+     * @name setData
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/20
+     */
+    public static Status setOrderRoomData(LinkedList<OrderRoom> orderRooms, Status status) {
+        PagesVo vo = new PagesVo();
+        vo.setOrderRooms(orderRooms);
+        status.setData(vo);
+        return status;
+    }
+
+    /**
+     * 负责给Service层返回的Status设置数据
+     *
+     * @param orderRoom 订单数据
+     * @param status    状态量
+     * @return com.hyc.www.service.constant.Status
+     * @name setData
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/20
+     */
+    public static Status setData(OrderRoom orderRoom, Status status) {
+        PagesVo vo = new PagesVo();
+        LinkedList<OrderRoom> list = new LinkedList<>();
+        list.add(orderRoom);
+        vo.setOrderRooms(list);
+        status.setData(vo);
+        return status;
+    }
+
 
     /*
      **************************************************************
@@ -160,11 +206,10 @@ public class ServiceUtils {
     }
 
     public static boolean isValidNickName(String name) {
-        if (name == null || name.trim().isEmpty()) {
+        if (name == null || name.trim().isEmpty() || name.length() > 20) {
             return false;
         }
-        String regex = "[A-Za-z]+[0-9]+";
-        return name.matches(regex);
+        return true;
     }
 
     /*
@@ -174,14 +219,14 @@ public class ServiceUtils {
      */
 
     public static boolean isValidRoom(Room room) {
-        return isValidName(room)&&isValidArea(room) && isValidBedWidth(room) && isValidPrice(room);
+        return isValidName(room) && isValidArea(room) && isValidBedWidth(room) && isValidPrice(room);
     }
 
     /**
      * 合理长度32
      */
-    private static boolean isValidName(Room room){
-        return room!=null&&room.getName().length()<32;
+    private static boolean isValidName(Room room) {
+        return room != null && room.getName().length() < 32;
     }
 
     /**
@@ -211,5 +256,17 @@ public class ServiceUtils {
         return room != null && room.getPrice() != null && room.getPrice().compareTo(new BigDecimal(0)) > 0 && room.getPrice().compareTo(new BigDecimal(100000)) < 0;
     }
 
+    /*
+     **************************************************************
+     *               检查订单信息
+     **************************************************************
+     */
+
+    /**
+     * 检查订单
+     */
+    public static boolean isValidRoomOrder(OrderRoom order) {
+        return true;
+    }
 
 }

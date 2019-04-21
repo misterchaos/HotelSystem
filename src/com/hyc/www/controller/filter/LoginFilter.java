@@ -29,6 +29,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
+import static com.hyc.www.controller.constant.CacheConst.ADMIN;
 import static com.hyc.www.controller.constant.CacheConst.USER;
 import static com.hyc.www.util.ControllerUtils.redirect;
 
@@ -74,6 +75,10 @@ public class LoginFilter implements Filter {
                         if (USER.toString().equalsIgnoreCase(name)) {
                             sess = req.getSession(true);
                             sess.setAttribute(USER.toString(), cookie.getValue());
+                        }
+                        if(ADMIN.toString().equalsIgnoreCase(name)){
+                            sess=req.getSession(true);
+                            sess.setAttribute(ADMIN.toString(),cookie.getValue());
                         }
                     }
                 }

@@ -23,6 +23,7 @@ import com.hyc.www.service.inter.UserService;
 import com.hyc.www.util.BeanFactory;
 import com.hyc.www.util.BeanUtils;
 
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.LinkedList;
@@ -31,6 +32,7 @@ import static com.hyc.www.service.constant.Status.*;
 import static com.hyc.www.util.Md5Utils.getDigest;
 import static com.hyc.www.util.ServiceUtils.*;
 import static com.hyc.www.util.UUIDUtils.getUUID;
+import static com.hyc.www.util.UploadUtils.uploadPhoto;
 
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
@@ -38,9 +40,38 @@ import static com.hyc.www.util.UUIDUtils.getUUID;
  * @description 负责用户相关的业务逻辑，包括用户注册登陆的功能
  * @date 2019-04-13 18:24
  */
+@MultipartConfig(location = "C:/Users/Misterchaos/Documents/Java Develop Workplaces/IDEA workspace/HotelSystem/web/file/photo")
 public class UserServiceImpl implements UserService {
 
     private UserDao dao = (UserDao) BeanFactory.getBean(BeanFactory.DaoType.UserDao);
+
+    /**
+     * 用于添加一个用户
+     *
+     * @name add
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/21
+     */
+    @Override
+    public Status add(HttpServletRequest req, HttpServletResponse resp) {
+        User user = (User) BeanUtils.toObject(req.getParameterMap(), User.class);
+        if (dao.isExist(user.getName())) {
+            return setData(user, Status.NOT_FOUNT);
+        }
+        if (!isValidUserInfo(user)) {
+            return setData(user, DATA_ILLEGAL);
+        }
+        user.setId(getUUID());
+        user.setPassword(getDigest(user.getPassword()));
+        uploadPhoto(req, user);
+        if (dao.addUser(user)) {
+            return setData(user, SUCCESS);
+        }
+        return ERROR;
+
+    }
+
 
     /**
      * 负责用户的注册功能
@@ -81,14 +112,14 @@ public class UserServiceImpl implements UserService {
     public Status login(HttpServletRequest req, HttpServletResponse resp) {
         User user = (User) BeanUtils.toObject(req.getParameterMap(), User.class);
         if (!dao.isExist(user.getName())) {
-            return ACCOUNT_NOT_FOUNT;
+            return Status.NOT_FOUNT;
         }
         if (!dao.getPassword(user.getName()).equals(getDigest(user.getPassword()))) {
             return PASSWORD_INCORRECT;
         }
+        user.setType(dao.getUser(user.getName()).getType());
         return setData(user, SUCCESS);
     }
-
 
 
     /**
@@ -105,6 +136,7 @@ public class UserServiceImpl implements UserService {
         if (!isValidUserInfo(user)) {
             return setData(user, DATA_ILLEGAL);
         }
+        uploadPhoto(req, user);
         if (dao.update(user)) {
             return setData(user, SUCCESS);
         }
@@ -125,14 +157,14 @@ public class UserServiceImpl implements UserService {
         String newPwd = req.getParameter("newPwd");
 
         if (!isValidPwd(newPwd)) {
-            return DATA_ILLEGAL;
+            return setData(user, DATA_ILLEGAL);
         }
         if (!dao.getPassword(user.getName()).equals(getDigest(user.getPassword()))) {
-            return PASSWORD_INCORRECT;
+            return setData(user, PASSWORD_INCORRECT);
         }
         user = dao.getUser(user.getName());
         if (user == null) {
-            return ACCOUNT_NOT_FOUNT;
+            return setData(user, Status.NOT_FOUNT);
         }
         user.setPassword(getDigest(newPwd));
         if (dao.updateAll(user)) {
@@ -156,13 +188,13 @@ public class UserServiceImpl implements UserService {
         String oldPwd = user.getPayPwd();
         user = dao.getUser(user.getName());
         if (!isValidPwd(newPwd)) {
-            return DATA_ILLEGAL;
+            return setData(user, DATA_ILLEGAL);
         }
         if (user == null) {
-            return ACCOUNT_NOT_FOUNT;
+            return setData(user, Status.NOT_FOUNT);
         }
         if (!user.getPayPwd().equals(getDigest(oldPwd))) {
-            return PASSWORD_INCORRECT;
+            return setData(user, PASSWORD_INCORRECT);
         }
         user.setPayPwd(getDigest(newPwd));
         if (dao.updateAll(user)) {
@@ -170,6 +202,7 @@ public class UserServiceImpl implements UserService {
         }
         return ERROR;
     }
+
     /**
      * 负责返回用户的个人信息
      *
@@ -188,9 +221,9 @@ public class UserServiceImpl implements UserService {
 
         if (user != null) {
             return setData(user, SUCCESS);
-        }else {
+        } else {
 
-            return setData(user, ACCOUNT_NOT_FOUNT);
+            return setData(user, Status.NOT_FOUNT);
         }
     }
 

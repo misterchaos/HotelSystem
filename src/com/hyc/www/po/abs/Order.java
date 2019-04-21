@@ -17,7 +17,6 @@
 package com.hyc.www.po.abs;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
@@ -28,8 +27,8 @@ import java.util.Date;
 public abstract class Order extends BaseEntity {
     private String number;
     private String userId;
-    private Date startTime;
-    private Date endTime;
+    private String startTime;
+    private String endTime;
     private BigDecimal amount;
     private String remark;
 
@@ -49,19 +48,19 @@ public abstract class Order extends BaseEntity {
         this.userId = userId;
     }
 
-    public Date getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public Date getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 

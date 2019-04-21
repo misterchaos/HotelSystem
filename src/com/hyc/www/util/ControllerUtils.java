@@ -87,8 +87,33 @@ public class ControllerUtils {
     }
 
 
+
+
+    /**
+     * 封装控制层的转发，设置参数等行为
+     *
+     * @param req     请求
+     * @param resp    响应
+     * @param data    返回的数据
+     * @param message 返回的消息
+     * @param path   转发的目标路径
+     * @return void
+     * @name forward
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/20
+     */
+    public static void forward(HttpServletRequest req, HttpServletResponse resp, PagesVo data, String message, String path) throws ServletException, IOException {
+        req.setAttribute("data", data);
+        req.setAttribute("message", message);
+        req.getRequestDispatcher(path).forward(req, resp);
+    }
+
+
     public static void redirect(HttpServletResponse resp, String path) throws ServletException, IOException {
         resp.sendRedirect(path);
     }
+
+
 
 }
