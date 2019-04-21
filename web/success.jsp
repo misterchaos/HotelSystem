@@ -17,8 +17,8 @@
 <%--
   Created by IntelliJ IDEA.
   User: Misterchaos
-  Date: 2019/4/7
-  Time: 20:44
+  Date: 2019/4/21
+  Time: 21:55
   To change this template use File | Settings | File Templates.
 --%>
 <%@page contentType="text/html;charset=UTF-8" language="java" %>
@@ -77,9 +77,6 @@
                             <li>
                                 <a href="${Pages.USER_JSP.toString()}?view=update&update=pay_pwd&name=${USER}">修改支付密码</a>
                             </li>
-                            <li>
-                                <a href="#${Pages.ORDER_JSP.toString()}?view=order&user=${USER}">查看个人订单(暂不可用)</a>
-                            </li>
                             <li><a href="/user?method=${Methods.LOGOUT_DO.toString()}">退出登陆</a></li>
                         </ul>
                     </li>
@@ -89,9 +86,13 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">管理员中心<b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="/hotel.html">查看酒店信息</a></li>
+                            <li><a href="${Pages.USER_JSP.toString()}?view=user&name=${USER}">查看酒店信息</a></li>
+                            <li><a href="${Pages.USER_JSP.toString()}?view=update&update=info&name=${USER}">编辑酒店信息</a>
+                            </li>
                             <li><a href="${Pages.ROOM_JSP.toString()}?view=add">添加房间</a></li>
                             <li><a href="${Pages.USER_JSP.toString()}?view=add">添加用户</a></li>
+                            <li><a href="${Pages.USER_JSP.toString()}?view=update&update=pay_pwd&name=${USER}">添加服务</a>
+                            </li>
                             <li><a href="/user?method=${Methods.LOGOUT_DO.toString()}">退出登陆</a></li>
 
                         </ul>
@@ -123,171 +124,12 @@
 </nav>
 
 <c:if test="${message!=null}">
-    <div class="alert alert-warning alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert"
-                aria-hidden="true">
-            &times;
-        </button>
-        提示：${message}
-    </div>
-</c:if>
-
-<div class="page-head">
-
+<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert"
+            aria-hidden="true">
+        &times;
+    </button>
+    提示：${message}
 </div>
-<ul class="pagination pagination-lg" style="position: fixed;left: 30%">
-    <li>
-        <a href="room?method=${Methods.FIND_DO}&find=${param.find}&name=${param.name}&page=${param.page>1?param.page-1:1}">&laquo;</a>
-    </li>
-    <c:forEach var="i" begin="1" end="${data.maxPage}">
-        <li><a href="room?method=${Methods.FIND_DO}&find=${param.find}&name=${param.name}&page=${i}">${i}</a></li>
-    </c:forEach>
-    <li>
-        <a href="room?method=${Methods.FIND_DO}&find=${param.find}&name=${param.name}&page=${param.page<data.maxPage?param.page+1:data.maxPage}">&raquo;</a>
-    </li>
-</ul>
-<br>
-
-<c:if test="${data.rooms.size()>0}">
-    <c:forEach var="i" begin="0" end="${data.rooms.size()-1}">
-        <div class="info-panel">
-            <div class="well well-lg" style="height: 234px;width: 80%">
-                <a href="${pageContext.request.contextPath}/room.jsp?view=room&number=${data.rooms[i].number}">
-                        <%-- 主图和名称--%>
-                    <div class="photo-name">
-                        <img class="main_info" src="/file/${data.rooms[i].photo}" width="150" height="150">
-                        <h4>${data.rooms[i].name}</h4>
-
-                    </div>
-                    <div class="room-info">
-                        <p>
-                            房间名称： ${data.rooms[i].name}
-                        </p>
-                        <p>
-
-                            房间编号：${data.rooms[i].number}
-
-                        </p>
-                        <p>
-                            房间类型：${data.rooms[i].type}
-
-                        </p>
-                        <p>
-                            房间面积：${data.rooms[i].area}
-
-                        </p>
-                        <p>
-                            床宽：${data.rooms[i].bedWidth}|
-                            预订状态：${data.rooms[i].bookStatus}|
-                            房间等级：${data.rooms[i].level}|
-                            房间评分：${data.rooms[i].score}|
-                            评价数量：${data.rooms[i].remarkNum}
-                        </p>
-                        <strong>
-                            <h1 style="text-align: right;color: red">
-                                $${data.rooms[i].price}
-                            </h1>
-                        </strong>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="color-input-field" style="
-    height: 40px;">
-            <form name="delete" onsubmit="return deleteRoom()"
-                  action="${pageContext.request.contextPath}/room?method=${Methods.DELETE_DO}&number=${data.rooms[i].number}"
-                  method="post">
-                <input type="submit" class="form-control" value="删除房间" style="
-       background-color: orangered;
-    width: 200px;
-    height: 40px;
-    /* float: right; */
-    color: #FFFFFF;
-    position: absolute;
-    right: 430px;">
-            </form>
-            <form name="update"
-                  action="${pageContext.request.contextPath}/${Pages.ROOM_JSP.toString()}?view=update&number=${data.rooms[i].number}"
-                  method="post">
-                <input type="submit" class="form-control" value="修改房间" style="
-       background-color: seagreen;
-    width: 200px;
-    height: 40px;
-    /* float: right; */
-    color: #FFFFFF;
-    position: absolute;
-    right: 650px">
-            </form>
-        </div>
-        <script>
-            function
-
-            deleteRoom() {
-                if (confirm("此操作将会永久删除此房间，是否继续？")) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-
-        </script>
-    </c:forEach>
 </c:if>
-<style>
-    .info-panel {
-        width: 80%;
-        position: relative;
-        left: 5%;
-        margin-top: 30px;
-        margin-left: 50px;
-    }
 
-    .photo-name {
-        height: 180px;
-        width: 20%;
-        float: left;
-        margin-right: 30px;
-
-    }
-
-    .room-info {
-        height: 180px;
-        width: 600px;
-        position: relative;
-        float: left;
-    }
-
-    .navbar-default {
-        width: 100%;
-        position: fixed;
-        z-index: 999
-    }
-
-    .pagination-lg {
-        position: fixed;
-        z-index: 999;
-        top: 90%;
-        left: 52%;
-    }
-
-    .alert-warning {
-        margin-bottom: 0;
-        z-index: 998;
-        position: fixed;
-        margin-top: 65px;
-        width: 100%;
-    }
-    .background{
-        background-image: linear-gradient(to top, #7A88FF, #7AFFAF);
-        position: fixed;
-        height: 100%;
-        width: 100%;
-    }
-    .page-head{
-        position: relative;
-        height: 100px;
-    }
-</style>
-
-</body>
-</html>

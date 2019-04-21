@@ -1,12 +1,12 @@
 <%--
-  ~ Copyright (c) 2019.  黄钰朝
-  ~
+  ~ Copyright (c) 2019.  黄钰朝 
+  ~                            
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
   ~ You may obtain a copy of the License at
-  ~
+  ~                            
   ~      http://www.apache.org/licenses/LICENSE-2.0
-  ~
+  ~                            
   ~ Unless required by applicable law or agreed to in writing, software
   ~ distributed under the License is distributed on an "AS IS" BASIS,
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,8 +17,8 @@
 <%--
   Created by IntelliJ IDEA.
   User: Misterchaos
-  Date: 2019/4/17
-  Time: 18:37
+  Date: 2019/4/21
+  Time: 22:09
   To change this template use File | Settings | File Templates.
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -27,7 +27,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <html>
 <head>
-    <title>房间</title>
+    <title>酒店</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet"
@@ -36,10 +36,8 @@
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div class="background"  >
-</div>
 
-<%-- 网页头部 --%>
+<!-- 网页头部 -->
 <nav class="navbar navbar-default" role="navigation">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -54,68 +52,15 @@
         </div>
         <div class="collapse navbar-collapse" id="example-navbar-collapse">
             <ul class="nav navbar-nav">
-
-                <c:if test="${USER==null}">
-                    <li class="active"><a href="${Pages.LOGIN_JSP.toString()}">登陆</a></li>
-                </c:if>
-                <c:if test="${USER!=null}">
-                    <li class="active"></li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">个人中心<b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="${Pages.USER_JSP.toString()}?view=user&name=${USER}">查看个人信息</a></li>
-                            <li><a href="${Pages.USER_JSP.toString()}?view=update&update=info&name=${USER}">编辑个人信息</a>
-                            </li>
-                            <li><a href="${Pages.USER_JSP.toString()}?view=update&update=pwd&name=${USER}">修改登陆密码</a>
-                            </li>
-                            <li>
-                                <a href="${Pages.USER_JSP.toString()}?view=update&update=pay_pwd&name=${USER}">修改支付密码</a>
-                            </li>
-                            <li>
-                                <a href="#${Pages.ORDER_JSP.toString()}?view=order&user=${USER}">查看个人订单(暂不可用)</a>
-                            </li>
-                            <li><a href="/user?method=${Methods.LOGOUT_DO.toString()}">退出登陆</a></li>
-                        </ul>
-                    </li>
-                </c:if>
-                <c:if test="${ADMIN!=null}">
-                    <li class="active"></li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">管理员中心<b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="/hotel.html">查看酒店信息</a></li>
-                            <li><a href="${Pages.ROOM_JSP.toString()}?view=add">添加房间</a></li>
-                            <li><a href="${Pages.USER_JSP.toString()}?view=add">添加用户</a></li>
-                            <li><a href="/user?method=${Methods.LOGOUT_DO.toString()}">退出登陆</a></li>
-
-                        </ul>
-                    </li>
-                </c:if>
-
+                <li class="active"><a href="${Pages.LOGIN_JSP.toString()}">登陆</a></li>
                 <li><a href="${Pages.REGIST_JSP.toString()}">注册</a></li>
-                <li>
-                    <form id="search" class="bs-example bs-example-form" role="form"
-                          action="room?method=${Methods.FIND_DO}&find=name&page=1"
-                          method="post">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="input-group"
-                                     style="width: 400px; position: relative; left: 20%;margin-top: 15px">
-                                    <input type="text" required="required" class="form-control" name="name"
-                                           placeholder="请输入关键词" value="${param.name}">
-                                    <span class="input-group-btn"><input type="submit" value="搜索"
-                                                                         class="btn btn-default"></span>
-
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </li>
+                <c:if test="${login!=null}">
+                    <li><a href="${pageContext.request.contextPath}/room?method=${Methods.ADD_DO}">添加酒店</a></li>
+                </c:if>
             </ul>
         </div>
     </div>
 </nav>
-
 <c:if test="${message!=null}">
     <div class="alert alert-warning alert-dismissable" style="margin-bottom: 0">
         <button type="button" class="close" data-dismiss="alert"
@@ -127,7 +72,7 @@
 </c:if>
 
 
-<!-- 查看房间信息 -->
+<!-- 查看酒店信息 -->
 <c:if test="${param.view=='room'}">
     <c:if test="${data==null}">
         <c:redirect
@@ -138,21 +83,21 @@
         <div class="info-panel">
                 <%-- 主图和名称--%>
             <div class="photo-name">
-                <img class="main_info" src="/file/${data.rooms[0].photo}" width="300" height="300">
+                <img class="main_info" src="/file/${data.hotels[0].photo}" width="300" height="300">
                 <h3>${data.rooms[0].name}</h3>
             </div>
             <!-- 基本信息 -->
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">房间详情</h3>
+                    <h3 class="panel-title">酒店详情</h3>
                 </div>
                 <table class="table">
                     <tr>
-                        <td>房间名称：</td>
+                        <td>酒店名称：</td>
                         <td>${data.rooms[0].name}</td>
                     </tr>
                     <tr>
-                        <td>房间编号：</td>
+                        <td>酒店编号：</td>
                         <td>${data.rooms[0].number}</td>
                     </tr>
                     <tr>
@@ -160,15 +105,15 @@
                         <td>${data.rooms[0].number}</td>
                     </tr>
                     <tr>
-                        <td>房间类型：</td>
+                        <td>酒店类型：</td>
                         <td>${data.rooms[0].type}</td>
                     </tr>
                     <tr>
-                        <td>房间级别：</td>
+                        <td>酒店级别：</td>
                         <td>${data.rooms[0].level}</td>
                     </tr>
                     <tr>
-                        <td>房间面积：</td>
+                        <td>酒店面积：</td>
                         <td>${data.rooms[0].area}</td>
                     </tr>
                     <tr>
@@ -176,15 +121,11 @@
                         <td>${data.rooms[0].bedWidth}</td>
                     </tr>
                     <tr>
-                        <td>预订状态：</td>
-                        <td>${data.rooms[0].bookStatus}</td>
-                    </tr>
-                    <tr>
-                        <td>房间评分：</td>
+                        <td>酒店评分：</td>
                         <td>${data.rooms[0].score}</td>
                     </tr>
                     <tr>
-                        <td>房间价格：</td>
+                        <td>酒店价格：</td>
                         <td><strong><p style="color: red">$${data.rooms[0].price}</p></strong></td>
                     </tr>
                     <tr>
@@ -209,7 +150,7 @@
 </c:if>
 
 
-<%--修改/添加房间 --%>
+<%--修改/添加酒店 --%>
 <c:if test="${param.view=='update'||param.view=='add'}">
     <c:if test="${param.view=='update'&&data==null}">
         <c:redirect
@@ -228,7 +169,7 @@
                       method="post" enctype="multipart/form-data"></c:if>
                         <%-- 主图和名称--%>
                     <div class="photo-name">
-                        <img class="main_info" src="/file/${data.rooms[0].photo}" width="300" height="300" alt="房间图片">
+                        <img class="main_info" src="/file/${data.rooms[0].photo}" width="300" height="300" alt="酒店图片">
                         <h3>${data.rooms[0].name}</h3>
                         <input type="file" class="file" name="photo" multiple>
                     </div>
@@ -236,20 +177,20 @@
                     <!-- 基本信息 -->
                     <div class="panel panel-default" style="margin-left: 30px ;width: 510px">
                         <div class="panel-heading">
-                            <h3 class="panel-title">房间详情</h3>
+                            <h3 class="panel-title">酒店详情</h3>
                         </div>
                         <div class="color-input-field" style="float: left;width: 500px;height: 520px">
 
                             <table class="table">
                                 <tr>
-                                    <td>房间名称：</td>
+                                    <td>酒店名称：</td>
                                     <td><input type="text" required="required" class="form-control" name="name"
-                                               placeholder="请输入房间名称" value="${data.rooms[0].name}" align="center"></td>
+                                               placeholder="请输入酒店名称" value="${data.rooms[0].name}" align="center"></td>
                                 </tr>
                                 <tr>
-                                    <td>房间编号：</td>
+                                    <td>酒店编号：</td>
                                     <td><input type="text" required="required" class="form-control" name="number"
-                                               placeholder="请输入房间编号(唯一标识)" value="${data.rooms[0].number}"
+                                               placeholder="请输入酒店编号(唯一标识)" value="${data.rooms[0].number}"
                                                align="center">
                                     </td>
                                 </tr>
@@ -258,33 +199,33 @@
                                     <td>${data.hotels[0].name}</td>
                                 </tr>
                                 <tr>
-                                    <td>房间类型：</td>
+                                    <td>酒店类型：</td>
                                     <td><input type="text" required="required" class="form-control" name="type"
-                                               placeholder="请输入房间类型" value="${data.rooms[0].type}" align="center"></td>
+                                               placeholder="请输入酒店类型" value="${data.rooms[0].type}" align="center"></td>
                                 </tr>
                                 <tr>
-                                    <td>房间级别：</td>
+                                    <td>酒店级别：</td>
                                     <td><input type="text" required="required" class="form-control" name="level"
-                                               placeholder="请输入房间级别" value="${data.rooms[0].level}" align="center"></td>
+                                               placeholder="请输入酒店级别" value="${data.rooms[0].level}" align="center"></td>
                                 </tr>
                                 <tr>
-                                    <td>房间面积：</td>
+                                    <td>酒店面积：</td>
                                     <td><input type="text" required="required" class="form-control" name="area"
-                                               placeholder="请输入房间面积(10-300)" value="${data.rooms[0].area}"
+                                               placeholder="请输入酒店面积(10-300)" value="${data.rooms[0].area}"
                                                align="center"></td>
                                 </tr>
                                 <tr>
                                     <td>床宽：</td>
                                     <td>
                                         <input type="text" required="required" class="form-control" name="bedWidth"
-                                               placeholder="请输入房间床宽(1-5)" value="${data.rooms[0].bedWidth}"
+                                               placeholder="请输入酒店床宽(1-5)" value="${data.rooms[0].bedWidth}"
                                                align="center">
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>房间价格：</td>
+                                    <td>酒店价格：</td>
                                     <td><input type="text" required="required" class="form-control" name="price"
-                                               placeholder="请输入房间价格(0-100000)" value="${data.rooms[0].price}"
+                                               placeholder="请输入酒店价格(0-100000)" value="${data.rooms[0].price}"
                                                align="center"></td>
                                 </tr>
                                 <tr>
@@ -349,11 +290,6 @@
         position: relative;
         float: right;
     }
-    .background{
-        background-image: linear-gradient(to top, #7A88FF, #7AFFAF);
-        position: fixed;
-        height: 100%;
-        width: 100%;
-    }
 </style>
 </html>
+

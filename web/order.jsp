@@ -1,12 +1,12 @@
 <%--
-  ~ Copyright (c) 2019.  黄钰朝
-  ~
+  ~ Copyright (c) 2019.  黄钰朝 
+  ~                            
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
   ~ You may obtain a copy of the License at
-  ~
+  ~                            
   ~      http://www.apache.org/licenses/LICENSE-2.0
-  ~
+  ~                            
   ~ Unless required by applicable law or agreed to in writing, software
   ~ distributed under the License is distributed on an "AS IS" BASIS,
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,8 +17,8 @@
 <%--
   Created by IntelliJ IDEA.
   User: Misterchaos
-  Date: 2019/4/17
-  Time: 18:37
+  Date: 2019/4/21
+  Time: 19:35
   To change this template use File | Settings | File Templates.
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -27,7 +27,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <html>
 <head>
-    <title>房间</title>
+    <title>订单</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet"
@@ -36,6 +36,7 @@
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
+
 <div class="background"  >
 </div>
 
@@ -116,22 +117,13 @@
     </div>
 </nav>
 
-<c:if test="${message!=null}">
-    <div class="alert alert-warning alert-dismissable" style="margin-bottom: 0">
-        <button type="button" class="close" data-dismiss="alert"
-                aria-hidden="true">
-            &times;
-        </button>
-        提示：${message}
-    </div>
-</c:if>
 
 
-<!-- 查看房间信息 -->
-<c:if test="${param.view=='room'}">
+<!-- 查看订单信息 -->
+<c:if test="${param.view=='order'}">
     <c:if test="${data==null}">
         <c:redirect
-                url="${pageContext.request.contextPath}/room?method=${Methods.FIND_DO.name()}&view=${param.view}&find=this&number=${param.number}"/>
+                url="${pageContext.request.contextPath}/order_room?method=${Methods.FIND_DO.name()}&view=${param.view}&find=this&number=${param.number}"/>
     </c:if>
     <%-- 网页主体摘要--%>
     <div class="maxPage-summary" style="height: 500px;width:1920px">
@@ -144,51 +136,48 @@
             <!-- 基本信息 -->
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">房间详情</h3>
+                    <h3 class="panel-title">订单详情</h3>
                 </div>
                 <table class="table">
                     <tr>
-                        <td>房间名称：</td>
-                        <td>${data.rooms[0].name}</td>
+                        <td>订单编号：</td>
+                        <td>${data.orderRooms[0].number}</td>
+                    </tr>
+                    <tr>
+                        <td>用户账号：</td>
+                        <td>${data.users[0].name}</td>
+                    </tr>
+                    <tr>
+                        <td>用户昵称：</td>
+                        <td>${data.users[0].nickName}</td>
                     </tr>
                     <tr>
                         <td>房间编号：</td>
                         <td>${data.rooms[0].number}</td>
                     </tr>
                     <tr>
-                        <td>所属酒店：</td>
-                        <td>${data.rooms[0].number}</td>
+                        <td>房间名：</td>
+                        <td>${data.rooms[0].name}</td>
                     </tr>
                     <tr>
-                        <td>房间类型：</td>
-                        <td>${data.rooms[0].type}</td>
+                        <td>入住时间：</td>
+                        <td>${data.orderRooms[0].startTime}</td>
                     </tr>
                     <tr>
-                        <td>房间级别：</td>
-                        <td>${data.rooms[0].level}</td>
+                        <td>离开时间：</td>
+                        <td>${data.orderRooms[0].endTime}</td>
                     </tr>
                     <tr>
-                        <td>房间面积：</td>
-                        <td>${data.rooms[0].area}</td>
-                    </tr>
-                    <tr>
-                        <td>床宽：</td>
-                        <td>${data.rooms[0].bedWidth}</td>
-                    </tr>
-                    <tr>
-                        <td>预订状态：</td>
-                        <td>${data.rooms[0].bookStatus}</td>
-                    </tr>
-                    <tr>
-                        <td>房间评分：</td>
-                        <td>${data.rooms[0].score}</td>
-                    </tr>
-                    <tr>
-                        <td>房间价格：</td>
-                        <td><strong><p style="color: red">$${data.rooms[0].price}</p></strong></td>
+                        <td>订单金额：</td>
+                        <td>$${data.orderRooms[0].amount}</td>
                     </tr>
                     <tr>
                         <td>备注信息：</td>
+                        <td>${data.orderRooms[0].remark}</td>
+                    </tr>
+                    <tr>
+                        <td>创建时间：</td>
+                        <td>${data.orderRooms[0].gmtCreate}</td>
                     </tr>
                 </table>
                 <div class="panel-body">
@@ -198,8 +187,9 @@
     </div>
     <!-- 购买链接-->
     <div class="color-input-field">
-        <form action="${pageContext.request.contextPath}/${Pages.ORDER_JSP.toString()}?view=add&roomId=${data.rooms[0].id}&userId=${data.users[0].id}&user=${data.users[0].name}&room=${data.rooms[0].number}&hotel=1234&price=${data.rooms[0].price}" method="post">
-            <input type="submit" class="form-control" value="立即预定" style="background-color: orangered;
+        <form action="${pageContext.request.contextPath}/order_room?method=${Methods.DELETE_DO}&number=${data.orderRooms[0].number}}"
+              method="post">
+            <input type="submit" class="form-control" value="取消订单" style="background-color: orangered;
         width: 270px;height: 50px;float:right;margin-right: 230px;color:#FFFFFF;">
         </form>
     </div>
@@ -209,104 +199,74 @@
 </c:if>
 
 
-<%--修改/添加房间 --%>
-<c:if test="${param.view=='update'||param.view=='add'}">
-    <c:if test="${param.view=='update'&&data==null}">
-        <c:redirect
-                url="${pageContext.request.contextPath}/room?method=${Methods.FIND_DO}&view=${param.view}&find=this&number=${param.number}"/>
-    </c:if>
+<%--添加订单 --%>
+<c:if test="${param.view=='add'}">
+
     <%-- 网页主体摘要--%>
     <div class="maxPage-summary" style="height: 500px;width:1920px">
         <div class="info-panel">
-            <c:if test="${param.view=='update'}">
             <form class="input-info"
-                  action="${pageContext.request.contextPath}/room?method=${Methods.UPDATE_DO}&view=${param.view}"
-                  method="post" enctype="multipart/form-data"></c:if>
-                <c:if test="${param.view=='add'}">
-                <form class="input-info"
-                      action="${pageContext.request.contextPath}/room?method=${Methods.ADD_DO}&view=${param.view}"
-                      method="post" enctype="multipart/form-data"></c:if>
-                        <%-- 主图和名称--%>
-                    <div class="photo-name">
-                        <img class="main_info" src="/file/${data.rooms[0].photo}" width="300" height="300" alt="房间图片">
-                        <h3>${data.rooms[0].name}</h3>
-                        <input type="file" class="file" name="photo" multiple>
+                  action="${pageContext.request.contextPath}/order_room?method=${Methods.ADD_DO}&view=${param.view}"
+                  method="post">
+                <!-- 基本信息 -->
+                <div class="panel panel-default" style="margin-left: 30px ;width: 510px">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">订单详情</h3>
                     </div>
+                    <div class="color-input-field" style="float: left;width: 500px;height: 520px">
 
-                    <!-- 基本信息 -->
-                    <div class="panel panel-default" style="margin-left: 30px ;width: 510px">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">房间详情</h3>
-                        </div>
-                        <div class="color-input-field" style="float: left;width: 500px;height: 520px">
+                        <table class="table">
+                            <tr>
+                                <td>订单编号：</td>
+                                <td><input type="text" readonly="readonly" required="required" class="form-control"
+                                           name="number"
+                                           value="${param.hotel+param.room+param.price}" align="center">
+                                </td>
+                            </tr>
+                            <tr>
 
-                            <table class="table">
-                                <tr>
-                                    <td>房间名称：</td>
-                                    <td><input type="text" required="required" class="form-control" name="name"
-                                               placeholder="请输入房间名称" value="${data.rooms[0].name}" align="center"></td>
-                                </tr>
-                                <tr>
-                                    <td>房间编号：</td>
-                                    <td><input type="text" required="required" class="form-control" name="number"
-                                               placeholder="请输入房间编号(唯一标识)" value="${data.rooms[0].number}"
-                                               align="center">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>所属酒店：</td>
-                                    <td>${data.hotels[0].name}</td>
-                                </tr>
-                                <tr>
-                                    <td>房间类型：</td>
-                                    <td><input type="text" required="required" class="form-control" name="type"
-                                               placeholder="请输入房间类型" value="${data.rooms[0].type}" align="center"></td>
-                                </tr>
-                                <tr>
-                                    <td>房间级别：</td>
-                                    <td><input type="text" required="required" class="form-control" name="level"
-                                               placeholder="请输入房间级别" value="${data.rooms[0].level}" align="center"></td>
-                                </tr>
-                                <tr>
-                                    <td>房间面积：</td>
-                                    <td><input type="text" required="required" class="form-control" name="area"
-                                               placeholder="请输入房间面积(10-300)" value="${data.rooms[0].area}"
-                                               align="center"></td>
-                                </tr>
-                                <tr>
-                                    <td>床宽：</td>
-                                    <td>
-                                        <input type="text" required="required" class="form-control" name="bedWidth"
-                                               placeholder="请输入房间床宽(1-5)" value="${data.rooms[0].bedWidth}"
-                                               align="center">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>房间价格：</td>
-                                    <td><input type="text" required="required" class="form-control" name="price"
-                                               placeholder="请输入房间价格(0-100000)" value="${data.rooms[0].price}"
-                                               align="center"></td>
-                                </tr>
-                                <tr>
-                                    <td>备注信息：</td>
-                                    <td><input type="text" class="form-control" name="remark"
-                                               placeholder="请输入备注信息(选填)" align="center"></td>
-                                </tr>
-                                <tr>
-                                    <td>执行操作：</td>
-                                    <td><input type="submit" class="form-control" value="提交" style="background-color: orangered;
+                                <input type="text" readonly="readonly" hidden="hidden" value="${param.userId}" name="userId">
+
+                            </tr>
+                            <tr>
+                                <td>房间编号：</td>
+                                <td><input type="text" readonly="readonly" required="required" class="form-control"
+                                           name="roomNumber"
+                                           value="${param.room}" align="center"></td>
+                                <input type="text" readonly="readonly" hidden="hidden" value="${param.roomId}" name="roomId">
+
+                            </tr>
+                            <tr>
+                                <td>入住时间：</td>
+                                <td><input type="date" required="required" class="form-control" name="startTime"
+                                           placeholder="请选择入住时间" align="center"></td>
+                            </tr>
+                            <tr>
+                                <td>离开时间：</td>
+                                <td><input type="date" required="required" class="form-control" name="endTime"
+                                           placeholder="请选择离开时间" align="center"></td>
+                            </tr>
+                            <tr>
+                                <td>订单金额：</td>
+                                <td><input type="text" readonly="readonly" required="required" class="form-control"
+                                           name="price"
+                                           value="${param.price}" align="center"></td>
+                            </tr>
+                            <tr>
+                                <td>备注信息：</td>
+                                <td><input type="text" class="form-control" name="remark"
+                                          placeholder="请输入备注信息" align="center"></td>
+                            </tr>
+                            <tr>
+                                <td>执行操作：</td>
+                                <td><input type="submit" class="form-control" value="提交订单" style="background-color: orangered;
                         width: 270px;height: 50px;float:right;margin-right: 10px;color:#FFFFFF;"></td>
-                                </tr>
-
-                            </table>
-                        </div>
+                            </tr>
+                        </table>
                     </div>
-                </form>
+                </div>
+            </form>
         </div>
-    </div>
-    <%-- 网页主体细节--%>
-    <div class="maxPage-detail">
-
     </div>
 
 
@@ -348,12 +308,6 @@
         width: 150px;
         position: relative;
         float: right;
-    }
-    .background{
-        background-image: linear-gradient(to top, #7A88FF, #7AFFAF);
-        position: fixed;
-        height: 100%;
-        width: 100%;
     }
 </style>
 </html>
