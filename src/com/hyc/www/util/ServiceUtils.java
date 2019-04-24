@@ -19,6 +19,7 @@ package com.hyc.www.util;
 import com.hyc.www.po.OrderRoom;
 import com.hyc.www.po.Room;
 import com.hyc.www.po.User;
+import com.hyc.www.service.Result;
 import com.hyc.www.service.constant.Status;
 import com.hyc.www.vo.PagesVo;
 
@@ -40,120 +41,135 @@ public class ServiceUtils {
      **************************************************************
      */
 
+
     /**
-     * 负责给Service层返回的Status设置数据
+     * 负责给Service层返回数据和状态
+     *
+     * @param rooms   房间数据
+     * @param status 状态量
+     * @name setResult
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/20
+     */
+    public static Result setResult(LinkedList<Room> rooms, Status status) {
+        /**
+         * 把数据装入vo
+         */
+        PagesVo vo = new PagesVo();
+        vo.setRooms(rooms);
+        /**
+         * 把vo和枚举类装入Result对象
+         */
+        return new Result(status, vo);
+    }
+
+
+    /**
+     * 负责给Service层返回数据和状态
      *
      * @param room   房间数据
      * @param status 状态量
      * @return com.hyc.www.service.constant.Status
-     * @name setData
+     * @name setResult
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/20
      */
-    public static Status setData(Room room, Status status) {
+    public static Result setResult(Room room, Status status) {
         PagesVo vo = new PagesVo();
-        LinkedList list = new LinkedList();
+        LinkedList<Room> list = new LinkedList();
         list.add(room);
         vo.setRooms(list);
-        status.setData(vo);
-        return status;
+        return new Result(status,vo);
     }
 
 
     /**
-     * 负责给Service层返回的Status设置数据
-     *
-     * @param rooms  房间数据集合
-     * @param status 状态量
-     * @return com.hyc.www.service.constant.Status
-     * @name setData
-     * @notice none
-     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
-     * @date 2019/4/20
-     */
-    public static Status setData(LinkedList<Room> rooms, Status status) {
-        PagesVo vo = new PagesVo();
-        vo.setRooms(rooms);
-        status.setData(vo);
-        return status;
-    }
-
-
-    /**
-     * 负责给Service层返回的Status设置数据
+     * 负责给Service层返回数据和状态
      *
      * @param user   用户数据
      * @param status 状态量
      * @return com.hyc.www.service.constant.Status
-     * @name setData
+     * @name setResult
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/20
      */
-    public static Status setData(User user, Status status) {
+    public static Result setResult(User user, Status status) {
         PagesVo vo = new PagesVo();
         LinkedList<User> list = new LinkedList<>();
         list.add(user);
         vo.setUsers(list);
-        status.setData(vo);
-        return status;
+        return new Result(status,vo);
     }
 
     /**
-     * 负责给Service层返回的Status设置数据
+     * 负责给Service层返回数据和状态
      *
      * @param users  用户数据集合
      * @param status 状态量
      * @return com.hyc.www.service.constant.Status
-     * @name setData
+     * @name setResult
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/20
      */
-    public static Status setUsersData(LinkedList<User> users, Status status) {
+    public static Result setUserResult(LinkedList<User> users, Status status) {
         PagesVo vo = new PagesVo();
         vo.setUsers(users);
-        status.setData(vo);
-        return status;
+        return new Result(status,vo);
     }
 
     /**
-     * 负责给Service层返回的Status设置数据
+     * 负责给Service层返回数据和状态
      *
      * @param orderRooms 订单数据集合
      * @param status     状态量
      * @return com.hyc.www.service.constant.Status
-     * @name setData
+     * @name setResult
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/20
      */
-    public static Status setOrderRoomData(LinkedList<OrderRoom> orderRooms, Status status) {
+    public static Result setOrderRoomResult(LinkedList<OrderRoom> orderRooms, Status status) {
         PagesVo vo = new PagesVo();
         vo.setOrderRooms(orderRooms);
-        status.setData(vo);
-        return status;
+        return new Result(status,vo);
     }
 
     /**
-     * 负责给Service层返回的Status设置数据
+     * 负责给Service层返回数据和状态
      *
      * @param orderRoom 订单数据
      * @param status    状态量
      * @return com.hyc.www.service.constant.Status
-     * @name setData
+     * @name setResult
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/20
      */
-    public static Status setData(OrderRoom orderRoom, Status status) {
+    public static Result setResult(OrderRoom orderRoom, Status status) {
         PagesVo vo = new PagesVo();
         LinkedList<OrderRoom> list = new LinkedList<>();
         list.add(orderRoom);
         vo.setOrderRooms(list);
-        status.setData(vo);
-        return status;
+        return new Result(status,vo);
+    }
+
+
+    /**
+     * 负责给Service层返回状态
+     *
+     * @param status    状态量
+     * @return com.hyc.www.service.constant.Status
+     * @name setResult
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/20
+     */
+    public static Result setResult(Status status){
+        return new Result(status,null);
     }
 
 
@@ -223,10 +239,10 @@ public class ServiceUtils {
     }
 
     /**
-     * 合理长度32
+     * 合理长度100
      */
     private static boolean isValidName(Room room) {
-        return room != null && room.getName().length() < 32;
+        return room != null && room.getName().length() < 100;
     }
 
     /**
@@ -239,7 +255,7 @@ public class ServiceUtils {
     }
 
     /**
-     * 床宽合理范围1-5
+     * 床宽合理范围1-10
      *
      * @param room
      */
@@ -266,6 +282,7 @@ public class ServiceUtils {
      * 检查订单
      */
     public static boolean isValidRoomOrder(OrderRoom order) {
+        //TODO 需要检查重复性
         return true;
     }
 

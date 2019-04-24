@@ -71,7 +71,6 @@ public class ControllerUtils {
      * @param data    返回的数据
      * @param message 返回的消息
      * @param pages   转发的目标页面
-     * @return void
      * @name forward
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
@@ -80,9 +79,6 @@ public class ControllerUtils {
     public static void forward(HttpServletRequest req, HttpServletResponse resp, PagesVo data, String message, Pages pages) throws ServletException, IOException {
         req.setAttribute("data", data);
         req.setAttribute("message", message);
-        //TODO
-        System.out.println("转发到 " + pages.toString() + "method=" + req.getParameter("method") + "view=" + req.getParameter("view"));
-
         req.getRequestDispatcher(pages.toString()).forward(req, resp);
     }
 
@@ -97,7 +93,6 @@ public class ControllerUtils {
      * @param data    返回的数据
      * @param message 返回的消息
      * @param path   转发的目标路径
-     * @return void
      * @name forward
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>

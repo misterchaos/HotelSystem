@@ -29,6 +29,7 @@ import java.util.Set;
 
 import static com.hyc.www.util.ReflectUtils.getFields;
 import static com.hyc.www.util.ReflectUtils.getMethods;
+import static com.hyc.www.util.StringUtils.toLegalText;
 
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
@@ -92,6 +93,10 @@ public class BeanUtils {
                          * 编码格式转换
                          */
                         param[0]=new String (param[0].getBytes(), StandardCharsets.UTF_8);
+                        /**
+                         * 过滤非法字符
+                         */
+                        param[0]=toLegalText(param[0]);
                         value = cons.newInstance(param[0]);
                     }
                     for (Method m : methods) {

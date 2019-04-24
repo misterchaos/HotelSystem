@@ -44,7 +44,7 @@ public class BeanFactory {
          * Dao实现类
          */
         UserDao("UserDao"), RoomDao("RoomDao"), OrderRoomDao("OrderRoomDao"),
-        HotelDao("HotelDao");
+        HotelDao("HotelDao"),RemarkDao("RemarkDao");
 
         private String name;
         DaoType(String name) {
@@ -55,7 +55,7 @@ public class BeanFactory {
         /**
          * Service实现类
          */
-        UserService("UserService"),RoomService("RoomService"),OrderRoomService("OrderRoomService");
+        UserService("UserService"),RoomService("RoomService"),OrderRoomService("OrderRoomService"),RemarkService("RemarkService");
         private String name;
         ServiceType(String name) {
             this.name=name;

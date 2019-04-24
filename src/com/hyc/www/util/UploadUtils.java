@@ -55,10 +55,8 @@ public class UploadUtils {
 
     /**
      * 用于上传照片
-     *
-     * @param
-     * @return
-     * @name
+     * @param obj 照片的所有者，比如一个user或room
+     * @name uploadPhoto
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/20
