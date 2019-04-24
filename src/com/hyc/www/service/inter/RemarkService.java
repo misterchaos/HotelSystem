@@ -16,43 +16,36 @@
 
 package com.hyc.www.service.inter;
 
-import com.hyc.www.po.OrderRoom;
 import com.hyc.www.service.Result;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.LinkedList;
-
-import static com.hyc.www.service.constant.Status.NO_RESULT;
-import static com.hyc.www.service.constant.Status.SUCCESS;
-import static com.hyc.www.util.ServiceUtils.setOrderRoomResult;
 
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
  * @program XHotel
- * @description 负责房间预约订单的服务
- * @date 2019-04-17 01:11
+ * @description 负责评论的CRUD
+ * @date 2019-04-23 01:27
  */
-public interface OrderRoomService {
-    Result add(HttpServletRequest req, HttpServletResponse resp);
-
-    Result delete(HttpServletRequest req, HttpServletResponse resp);
-
-
-    Result find(HttpServletRequest req, HttpServletResponse resp);
+public interface RemarkService {
 
     /**
-     * 返回该用户用户名对应的订单
+     * 添加记录
      *
-     * @param req  请求
-     * @param resp 响应
-     * @return 该用户名对应的所有订单
-     * @name listByUserName
+     * @name add
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
-     * @date 2019/4/22
+     * @date 2019/4/23
      */
-    Result listByUserName(HttpServletRequest req, HttpServletResponse resp);
+    Result add(HttpServletRequest req, HttpServletResponse resp);
 
-
+    /**
+     * 返回所有评论
+     *
+     * @name
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/23
+     */
+    Result listAll(HttpServletRequest req, HttpServletResponse resp);
 }

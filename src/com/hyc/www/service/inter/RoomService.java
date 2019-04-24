@@ -16,7 +16,7 @@
 
 package com.hyc.www.service.inter;
 
-import com.hyc.www.service.constant.Status;
+import com.hyc.www.service.Result;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,13 +29,13 @@ import javax.servlet.http.HttpServletResponse;
  * @date 2019-04-16 23:32
  */
 public interface RoomService {
-    Status add(HttpServletRequest req, HttpServletResponse resp);
+    Result add(HttpServletRequest req, HttpServletResponse resp);
 
-    Status delete(HttpServletRequest req, HttpServletResponse resp);
+    Result delete(HttpServletRequest req, HttpServletResponse resp);
 
-    Status update(HttpServletRequest req, HttpServletResponse resp);
+    Result update(HttpServletRequest req, HttpServletResponse resp);
 
-    Status find(HttpServletRequest req, HttpServletResponse resp);
+    Result find(HttpServletRequest req, HttpServletResponse resp);
 
 
     /**
@@ -47,7 +47,7 @@ public interface RoomService {
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/21
      */
-    Status listAll(HttpServletRequest req, HttpServletResponse resp);
+    Result listAll(HttpServletRequest req, HttpServletResponse resp);
 
 
     /**
@@ -59,5 +59,5 @@ public interface RoomService {
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/21
      */
-    Status listByName(HttpServletRequest req, HttpServletResponse resp);
+    Result listByName(HttpServletRequest req, HttpServletResponse resp);
 }

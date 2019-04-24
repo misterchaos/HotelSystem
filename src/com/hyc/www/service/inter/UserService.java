@@ -16,6 +16,7 @@
 
 package com.hyc.www.service.inter;
 
+import com.hyc.www.service.Result;
 import com.hyc.www.service.constant.Status;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,86 +33,94 @@ public interface UserService {
 
     /**
      * 用于添加一个用户
-     *
+     * @param req 请求
+     * @param resp 响应
      * @name add
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/21
      */
-    Status add(HttpServletRequest req, HttpServletResponse resp);
+    Result add(HttpServletRequest req, HttpServletResponse resp);
 
 
     /**
      * 负责用户的注册功能
-     *
+     * @param req 请求
+     * @param resp 响应
      * @name regist
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/13
      */
-    Status regist(HttpServletRequest req, HttpServletResponse resp);
+    Result regist(HttpServletRequest req, HttpServletResponse resp);
 
     /**
      * 负责用户的登陆功能
-     *
+     * @param req 请求
+     * @param resp 响应
      * @name login
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/13
      */
-    Status login(HttpServletRequest req, HttpServletResponse resp);
+    Result login(HttpServletRequest req, HttpServletResponse resp);
 
 
     /**
      * 负责更新用户信息的功能
-     *
+     * @param req 请求
+     * @param resp 响应
      * @name updateInfo
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/13
      */
-    Status updateInfo(HttpServletRequest req, HttpServletResponse resp);
+    Result updateInfo(HttpServletRequest req, HttpServletResponse resp);
 
     /**
      * 负责用户更新登陆密码的功能
-     *
+     * @param req 请求
+     * @param resp 响应
      * @name updatePwd
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/13
      */
-    Status updatePwd(HttpServletRequest req, HttpServletResponse resp);
+    Result updatePwd(HttpServletRequest req, HttpServletResponse resp);
 
     /**
      * 负责用户更新支付密码的功能
-     *
+     * @param req 请求
+     * @param resp 响应
      * @name updatePayPwd
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/13
      */
-    Status updatePayPwd(HttpServletRequest req, HttpServletResponse resp);
+    Result updatePayPwd(HttpServletRequest req, HttpServletResponse resp);
 
 
     /**
      * 负责返回用户的个人信息
-     *
+     * @param req 请求
+     * @param resp 响应
      * @name myInfo
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/16
      */
-    Status find(HttpServletRequest req, HttpServletResponse resp);
+    Result find(HttpServletRequest req, HttpServletResponse resp);
 
 
     /**
      * 负责查找用户
-     *
+     * @param req 请求
+     * @param resp 响应
      * @return com.hyc.www.service.constant.Status
      * @name listAll
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/20
      */
-    Status listAll(HttpServletRequest req, HttpServletResponse resp);
+    Result listAll(HttpServletRequest req, HttpServletResponse resp);
 
 }

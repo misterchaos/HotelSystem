@@ -101,17 +101,4 @@ public enum Status {
      * 服务错误
      */
     ERROR;
-
-    /**
-     * 返回数据
-     */
-    PagesVo data;
-
-    public PagesVo getData() {
-        return data;
-    }
-
-    public void setData(PagesVo data) {
-        this.data = data;
-    }
 }

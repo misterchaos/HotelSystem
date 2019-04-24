@@ -19,6 +19,7 @@ package com.hyc.www.controller.servlet;
 import com.hyc.www.controller.constant.CacheConst;
 import com.hyc.www.controller.constant.Methods;
 import com.hyc.www.controller.constant.Pages;
+import com.hyc.www.service.Result;
 import com.hyc.www.service.constant.Status;
 import com.hyc.www.service.inter.UserService;
 
@@ -81,23 +82,24 @@ public class UserServlet extends HttpServlet {
 
     private void add(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UserService serv = (UserService) getServletContext().getAttribute("userService");
-        Status status = serv.add(req, resp);
-        //TODO debug
-        System.out.println(status.name());
+        Result result = serv.add(req, resp);
+        Status status = result.getStatus();
+
         switch (status) {
             case DATA_ILLEGAL:
-                forward(req, resp, status.getData(), "数据不合法！", Pages.USER_JSP);
+                forward(req, resp, result.getData(), "数据不合法！", Pages.USER_JSP);
                 return;
             case ACCOUNT_ALREADY_EXIST:
-                forward(req, resp, status.getData(), "该账户已经存在！", Pages.USER_JSP);
+                forward(req, resp, result.getData(), "该账户已经存在！", Pages.USER_JSP);
                 return;
             case SUCCESS:
-                forward(req, resp, status.getData(), "用户添加成功！", Pages.USER_JSP);
+                forward(req, resp, result.getData(), "用户添加成功！", Pages.USER_JSP);
                 return;
             default:
         }
 
     }
+
     private void logout(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getSession().invalidate();
         forward(req, resp, null, "您已成功退出登陆！", Pages.LOGIN_JSP);
@@ -106,19 +108,19 @@ public class UserServlet extends HttpServlet {
 
     private void regist(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UserService serv = (UserService) getServletContext().getAttribute("userService");
-        Status status = serv.regist(req, resp);
-//TODO
-        System.out.println(status.name());
+        Result result = serv.regist(req, resp);
+        Status status = result.getStatus();
+
 
         switch (status) {
             case ACCOUNT_ALREADY_EXIST:
-                forward(req, resp, status.getData(), "此账户已经存在！", Pages.REGIST_JSP);
+                forward(req, resp, result.getData(), "此账户已经存在！", Pages.REGIST_JSP);
                 return;
             case DATA_ILLEGAL:
-                forward(req, resp, status.getData(), "输入不合法！(6-20位英文字母，数字或下划线)", Pages.REGIST_JSP);
+                forward(req, resp, result.getData(), "输入不合法！(6-20位英文字母，数字或下划线)", Pages.REGIST_JSP);
                 return;
             case SUCCESS:
-                redirect(resp, Pages.LOGIN_JSP.toString());
+                forward(req,resp,result.getData(),"注册成功！请使用用户名登陆！",Pages.LOGIN_JSP);
             default:
         }
 
@@ -126,30 +128,29 @@ public class UserServlet extends HttpServlet {
 
     private void login(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UserService serv = (UserService) getServletContext().getAttribute("userService");
-        Status status = serv.login(req, resp);
-        //TODO debug
-        System.out.println(status.name());
+        Result result = serv.login(req, resp);
+        Status status = result.getStatus();
+
         switch (status) {
             case NOT_FOUNT:
-                forward(req, resp, status.getData(), "找不到该用户！", Pages.LOGIN_JSP);
+                forward(req, resp, result.getData(), "找不到该用户！", Pages.LOGIN_JSP);
                 return;
             case DATA_ILLEGAL:
-                forward(req, resp, status.getData(), "输入不合法！(6-20位英文字母，数字或下划线)", Pages.LOGIN_JSP);
+                forward(req, resp, result.getData(), "输入不合法！(6-20位英文字母，数字或下划线)", Pages.LOGIN_JSP);
 
                 return;
             case PASSWORD_INCORRECT:
-                forward(req, resp, status.getData(), "密码不正确！", Pages.LOGIN_JSP);
+                forward(req, resp, result.getData(), "密码不正确！", Pages.LOGIN_JSP);
 
                 return;
             case SUCCESS:
-                String userType = status.getData().getUsers().get(0).getType();
-                String userName = status.getData().getUsers().get(0).getName();
+                String userType = result.getData().getUsers().get(0).getType();
+                String userName = result.getData().getUsers().get(0).getName();
                 /**
                  * 用户登陆
                  */
                 HttpSession session = req.getSession();
-                //TODO
-                System.out.println("用户类型为" + userType);
+
                 CacheConst type = CacheConst.valueOf(userType);
                 switch (type) {
                     case USER:
@@ -174,7 +175,7 @@ public class UserServlet extends HttpServlet {
                         break;
                     default:
                 }
-                redirect(resp, Pages.INDEX_JSP.toString());
+                forward(req,resp,null,"登陆成功！欢迎回来！",Pages.INDEX_JSP);
             default:
         }
     }
@@ -192,29 +193,29 @@ public class UserServlet extends HttpServlet {
     private void find(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UserService serv = (UserService) getServletContext().getAttribute("userService");
         FindType type = FindType.valueOf(req.getParameter("find").toUpperCase());
+        Result result = null;
         Status status = null;
         switch (type) {
             case THIS:
-                status = serv.find(req, resp);
+                result = serv.find(req, resp);
+                status = result.getStatus();
                 if (status == SUCCESS) {
-                    forward(req, resp, status.getData(), null, Pages.USER_JSP);
-
+                    forward(req, resp, result.getData(), null, Pages.USER_JSP);
                 } else if (status == NOT_FOUNT) {
-                    forward(req, resp, status.getData(), "找不到该用户！", Pages.USER_JSP);
+                    forward(req, resp, result.getData(), "找不到该用户！", Pages.USER_JSP);
                 }
                 return;
             case ALL:
-                status = serv.listAll(req, resp);
+                result = serv.listAll(req, resp);
+                status = result.getStatus();
+
                 if (status == SUCCESS) {
-                    //TODO 要转发到管理员页面
-                    forward(req, resp, status.getData(), null, Pages.INDEX_JSP);
+                    forward(req, resp, result.getData(), null, Pages.INDEX_JSP);
                 }
                 return;
             default:
                 redirect(resp, Pages.ERROR_JSP.toString());
         }
-        //TODO debug
-        System.out.println(status.name());
 
     }
 
@@ -223,31 +224,33 @@ public class UserServlet extends HttpServlet {
         UserService serv = (UserService) getServletContext().getAttribute("userService");
         UpdateType type = UpdateType.valueOf(req.getParameter("update").toUpperCase());
         Status status = null;
+        Result result = null;
         switch (type) {
             case INFO:
-                status = serv.updateInfo(req, resp);
+                result = serv.updateInfo(req,resp);
+                status = result.getStatus();
                 break;
             case PWD:
-                status = serv.updatePwd(req, resp);
+                result = serv.updatePwd(req,resp);
+                status = result.getStatus();
                 break;
             case PAY_PWD:
-                status = serv.updatePayPwd(req, resp);
+                result = serv.updatePayPwd(req,resp);
+                status = result.getStatus();
                 break;
             default:
                 break;
         }
-        //TODO debug
-        System.out.println(status.name());
         switch (status) {
 
             case DATA_ILLEGAL:
-                forward(req, resp, status.getData(), "输入不合法!", Pages.USER_JSP);
+                forward(req, resp, result.getData(), "输入不合法!", Pages.USER_JSP);
                 return;
             case PASSWORD_INCORRECT:
-                forward(req, resp, status.getData(), "密码不正确！", Pages.USER_JSP);
+                forward(req, resp, result.getData(), "密码不正确！", Pages.USER_JSP);
             case SUCCESS:
-                String name = status.getData().getUsers().get(0).getName();
-                redirect(resp, Pages.USER_JSP.toString() + "?view=user&name=" + name);
+                String name = result.getData().getUsers().get(0).getName();
+                forward(req,resp,result.getData(),"更新数据成功！",Pages.USER_JSP);
                 return;
             default:
         }
@@ -280,9 +283,6 @@ public class UserServlet extends HttpServlet {
          * 查找所有用户
          */
         ALL,
-        /**
-         *
-         */
     }
 
 }

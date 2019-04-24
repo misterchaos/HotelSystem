@@ -18,10 +18,11 @@ package com.hyc.www.service.impl;
 
 import com.hyc.www.dao.inter.RoomDao;
 import com.hyc.www.po.Room;
-import com.hyc.www.service.constant.Status;
+import com.hyc.www.service.Result;
 import com.hyc.www.service.inter.RoomService;
 import com.hyc.www.util.BeanFactory;
 import com.hyc.www.util.BeanUtils;
+import com.hyc.www.util.ServiceUtils;
 import com.hyc.www.vo.PagesVo;
 
 import javax.servlet.annotation.MultipartConfig;
@@ -31,7 +32,7 @@ import java.util.LinkedList;
 
 import static com.hyc.www.service.constant.Status.*;
 import static com.hyc.www.util.ServiceUtils.isValidRoom;
-import static com.hyc.www.util.ServiceUtils.setData;
+import static com.hyc.www.util.ServiceUtils.setResult;
 import static com.hyc.www.util.UUIDUtils.getUUID;
 import static com.hyc.www.util.UploadUtils.uploadPhoto;
 
@@ -41,37 +42,36 @@ import static com.hyc.www.util.UploadUtils.uploadPhoto;
  * @description 负责房间相关的服务
  * @date 2019-04-16 23:33
  */
-@MultipartConfig(location = "C:/Users/Misterchaos/Documents/Java Develop Workplaces/IDEA workspace/HotelSystem/web/file/photo")
 public class RoomServiceImpl implements RoomService {
 
     private RoomDao dao = (RoomDao) BeanFactory.getBean(BeanFactory.DaoType.RoomDao);
 
     @Override
-    public Status add(HttpServletRequest req, HttpServletResponse resp) {
+    public Result add(HttpServletRequest req, HttpServletResponse resp) {
         Room room = (Room) BeanUtils.toObject(req.getParameterMap(), Room.class);
         if (dao.isExist(room.getNumber())) {
-            return setData(room, ROOM_ALREADY_EXIST);
+            return ServiceUtils.setResult(room, ROOM_ALREADY_EXIST);
         }
         if (!isValidRoom(room)) {
-            return setData(room, DATA_ILLEGAL);
+            return ServiceUtils.setResult(room, DATA_ILLEGAL);
         }
         room.setId(getUUID());
 
         uploadPhoto(req, room);
         //TODO 处理房间编号，计算编号
         if (dao.addRoom(room)) {
-            return setData(room, SUCCESS);
+            return ServiceUtils.setResult(room, SUCCESS);
         }
-        return ERROR;
+        return setResult(ERROR);
 
     }
 
 
     @Override
-    public Status delete(HttpServletRequest req, HttpServletResponse resp) {
+    public Result delete(HttpServletRequest req, HttpServletResponse resp) {
         Room room = (Room) BeanUtils.toObject(req.getParameterMap(), Room.class);
         if (!dao.isExist(room.getNumber())) {
-            return NOT_FOUNT;
+            return setResult(NOT_FOUNT);
         }
 
         //TODO 处理房间已经有人预定的情况
@@ -79,41 +79,41 @@ public class RoomServiceImpl implements RoomService {
             room.setId(dao.getId(room.getNumber()));
         }
         if (dao.delete(room)) {
-            return setData(room, SUCCESS);
+            return ServiceUtils.setResult(room, SUCCESS);
         }
-        return ERROR;
+        return setResult(ERROR);
     }
 
     @Override
-    public Status update(HttpServletRequest req, HttpServletResponse resp) {
+    public Result update(HttpServletRequest req, HttpServletResponse resp) {
         Room room = (Room) BeanUtils.toObject(req.getParameterMap(), Room.class);
         if (!isValidRoom(room)) {
             /**
              * 重新加载头像
              */
             room.setPhoto(dao.getRoom(room.getNumber()).getPhoto());
-            return setData(room, DATA_ILLEGAL);
+            return ServiceUtils.setResult(room, DATA_ILLEGAL);
         }
         if (room.getId() == null) {
             room.setId(dao.getId(room.getNumber()));
         }
         uploadPhoto(req, room);
         if (dao.update(room)) {
-            return setData(room, SUCCESS);
+            return ServiceUtils.setResult(room, SUCCESS);
         }
-        return ERROR;
+        return setResult(ERROR);
 
     }
 
 
     @Override
-    public Status find(HttpServletRequest req, HttpServletResponse resp) {
+    public Result find(HttpServletRequest req, HttpServletResponse resp) {
         Room room = (Room) BeanUtils.toObject(req.getParameterMap(), Room.class);
         room = dao.getRoom(room.getNumber());
         if (room != null) {
-            return setData(room, SUCCESS);
+            return ServiceUtils.setResult(room, SUCCESS);
         }
-        return ERROR;
+        return setResult(ERROR);
 
     }
 
@@ -127,13 +127,13 @@ public class RoomServiceImpl implements RoomService {
      * @date 2019/4/21
      */
     @Override
-    public Status listAll(HttpServletRequest req, HttpServletResponse resp) {
+    public Result listAll(HttpServletRequest req, HttpServletResponse resp) {
         int page = Integer.parseInt(req.getParameter("page"));
         LinkedList<Room> rooms = dao.findByName(null, page);
         if (rooms != null && rooms.size() > 0) {
-            return setData(rooms, SUCCESS);
+            return setResult(rooms, SUCCESS);
         }
-        return ERROR;
+        return setResult(ERROR);
     }
 
 
@@ -147,7 +147,7 @@ public class RoomServiceImpl implements RoomService {
      * @date 2019/4/21
      */
     @Override
-    public Status listByName(HttpServletRequest req, HttpServletResponse resp) {
+    public Result listByName(HttpServletRequest req, HttpServletResponse resp) {
         int page = Integer.parseInt(req.getParameter("page"));
         String name = req.getParameter("name");
         LinkedList<Room> rooms = dao.findByName(name, page);
@@ -155,10 +155,9 @@ public class RoomServiceImpl implements RoomService {
             PagesVo vo = new PagesVo();
             vo.setRooms(rooms);
             vo.setMaxPage(dao.getMaxPageByName(name));
-            SUCCESS.setData(vo);
-            return SUCCESS;
+            return new Result(SUCCESS,vo);
         }
-        return setData(rooms, NO_RESULT);
+        return setResult(rooms, NO_RESULT);
     }
 
 

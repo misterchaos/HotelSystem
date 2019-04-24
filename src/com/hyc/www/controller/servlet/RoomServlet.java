@@ -19,6 +19,7 @@ package com.hyc.www.controller.servlet;
 import com.hyc.www.controller.constant.Methods;
 import com.hyc.www.controller.constant.Pages;
 import com.hyc.www.exception.ServiceException;
+import com.hyc.www.service.Result;
 import com.hyc.www.service.constant.Status;
 import com.hyc.www.service.inter.RoomService;
 
@@ -51,8 +52,7 @@ public class RoomServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Methods method = getMethod(req, resp);
-        //TODO
-        System.out.println(method.name());
+
         switch (method) {
             case ADD_DO:
                 add(req, resp);
@@ -75,18 +75,18 @@ public class RoomServlet extends HttpServlet {
 
     private void add(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         RoomService serv = (RoomService) getServletContext().getAttribute("roomService");
-        Status status = serv.add(req, resp);
-        //TODO debug
-        System.out.println(status.name());
+        Result result  = serv.add(req, resp);
+       Status status = result.getStatus();
+
         switch (status) {
             case DATA_ILLEGAL:
-                forward(req, resp, status.getData(), "数据不合法！", Pages.ROOM_JSP);
+                forward(req, resp, result.getData(), "数据不合法！", Pages.ROOM_JSP);
                 return;
             case ROOM_ALREADY_EXIST:
-                forward(req, resp, status.getData(), "该房间编号已经存在！", Pages.ROOM_JSP);
+                forward(req, resp, result.getData(), "该房间编号已经存在！", Pages.ROOM_JSP);
                 return;
             case SUCCESS:
-                forward(req, resp, status.getData(), "房间添加成功！", Pages.ROOM_JSP);
+                forward(req, resp, result.getData(), "房间添加成功！", Pages.ROOM_JSP);
                 return;
             default:
         }
@@ -95,9 +95,9 @@ public class RoomServlet extends HttpServlet {
 
     private void delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         RoomService serv = (RoomService) getServletContext().getAttribute("roomService");
-        Status status = serv.delete(req, resp);
-        //TODO debug
-        System.out.println(status.name());
+        Result result  = serv.delete(req, resp);
+        Status status = result.getStatus();
+
         switch (status) {
             case SUCCESS:
                 redirect(resp, Pages.INDEX_JSP.toString());
@@ -115,19 +115,17 @@ public class RoomServlet extends HttpServlet {
         RoomService serv = (RoomService) getServletContext().getAttribute("roomService");
         String message = null;
         Status status = null;
+        Result result  = null;
         try {
-            status = serv.update(req, resp);
+             result  = serv.update(req, resp);
+            status = result.getStatus();
         } catch (ServiceException e) {
             message = "上传图片不成功";
         }
-        //TODO debug
-        System.out.println(status.name());
-        System.out.println("用户名: " + req.getParameter("name"));
-
 
         switch (status) {
             case DATA_ILLEGAL:
-                forward(req, resp, status.getData(), "数据不合法！", Pages.ROOM_JSP);
+                forward(req, resp, result.getData(), "数据不合法！", Pages.ROOM_JSP);
                 return;
             case SUCCESS:
                 redirect(resp, Pages.ROOM_JSP.toString() + "?view=update&message=" + message + "&number=" + req.getParameter("number"));
@@ -149,26 +147,30 @@ public class RoomServlet extends HttpServlet {
     private void find(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         RoomService serv = (RoomService) getServletContext().getAttribute("roomService");
         Status status = null;
+        Result result = null;
         findType type = findType.valueOf(req.getParameter("find").toUpperCase());
         switch (type) {
             case NAME:
-                status = serv.listByName(req, resp);
+                result=serv.listByName(req, resp);
+                status = result.getStatus();
                 if (status == SUCCESS) {
-                    forward(req, resp, status.getData(), "查询的结果如下", Pages.INDEX_JSP);
+                    forward(req, resp, result.getData(), "查询的结果如下", Pages.INDEX_JSP);
                 }else if(status==NO_RESULT){
-                    forward(req,resp,status.getData(),"没有相关房间！",Pages.INDEX_JSP);
+                    forward(req,resp,result.getData(),"没有相关房间！",Pages.INDEX_JSP);
                 }
                 return;
             case ALL:
-                status = serv.listByName(req, resp);
-                if (status == SUCCESS && status.getData() != null) {
-                    forward(req, resp, status.getData(), null, Pages.INDEX_JSP);
+                result=serv.listByName(req, resp);
+                status = result.getStatus();
+                if (status == SUCCESS && result.getData() != null) {
+                    forward(req, resp, result.getData(), req.getParameter("message"), Pages.INDEX_JSP);
                 }
                 return;
             case THIS:
-                status = serv.find(req, resp);
-                if (status == SUCCESS && status.getData() != null) {
-                    forward(req, resp, status.getData(), null, Pages.ROOM_JSP);
+                result=serv.find(req, resp);
+                status = result.getStatus();
+                if (status == SUCCESS && result.getData() != null) {
+                    forward(req, resp, result.getData(), req.getParameter("message"), Pages.ROOM_JSP);
                     return;
                 } else {
                     break;

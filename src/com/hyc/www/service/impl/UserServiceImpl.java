@@ -18,10 +18,11 @@ package com.hyc.www.service.impl;
 
 import com.hyc.www.dao.inter.UserDao;
 import com.hyc.www.po.User;
-import com.hyc.www.service.constant.Status;
+import com.hyc.www.service.Result;
 import com.hyc.www.service.inter.UserService;
 import com.hyc.www.util.BeanFactory;
 import com.hyc.www.util.BeanUtils;
+import com.hyc.www.util.ServiceUtils;
 
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
@@ -40,7 +41,6 @@ import static com.hyc.www.util.UploadUtils.uploadPhoto;
  * @description 负责用户相关的业务逻辑，包括用户注册登陆的功能
  * @date 2019-04-13 18:24
  */
-@MultipartConfig(location = "C:/Users/Misterchaos/Documents/Java Develop Workplaces/IDEA workspace/HotelSystem/web/file/photo")
 public class UserServiceImpl implements UserService {
 
     private UserDao dao = (UserDao) BeanFactory.getBean(BeanFactory.DaoType.UserDao);
@@ -54,21 +54,21 @@ public class UserServiceImpl implements UserService {
      * @date 2019/4/21
      */
     @Override
-    public Status add(HttpServletRequest req, HttpServletResponse resp) {
+    public Result add(HttpServletRequest req, HttpServletResponse resp) {
         User user = (User) BeanUtils.toObject(req.getParameterMap(), User.class);
         if (dao.isExist(user.getName())) {
-            return setData(user, Status.NOT_FOUNT);
+            return ServiceUtils.setResult(user, NOT_FOUNT);
         }
         if (!isValidUserInfo(user)) {
-            return setData(user, DATA_ILLEGAL);
+            return ServiceUtils.setResult(user, DATA_ILLEGAL);
         }
         user.setId(getUUID());
         user.setPassword(getDigest(user.getPassword()));
         uploadPhoto(req, user);
         if (dao.addUser(user)) {
-            return setData(user, SUCCESS);
+            return ServiceUtils.setResult(user, SUCCESS);
         }
-        return ERROR;
+        return setResult(ERROR);
 
     }
 
@@ -82,22 +82,20 @@ public class UserServiceImpl implements UserService {
      * @date 2019/4/13
      */
     @Override
-    public Status regist(HttpServletRequest req, HttpServletResponse resp) {
+    public Result regist(HttpServletRequest req, HttpServletResponse resp) {
         User user = (User) BeanUtils.toObject(req.getParameterMap(), User.class);
-        //TODO
-        System.out.println(user.getName());
         if (!isValidRegist(user)) {
-            return DATA_ILLEGAL;
+            return setResult(DATA_ILLEGAL);
         }
         if (dao.isExist(user.getName())) {
-            return ACCOUNT_ALREADY_EXIST;
+            return setResult(ACCOUNT_ALREADY_EXIST);
         }
         user.setPassword(getDigest(user.getPassword()));
         user.setId(getUUID());
         if (dao.addUser(user)) {
-            return setData(user, SUCCESS);
+            return ServiceUtils.setResult(user, SUCCESS);
         }
-        return ERROR;
+        return setResult(ERROR);
     }
 
 
@@ -109,16 +107,16 @@ public class UserServiceImpl implements UserService {
      * @date 2019/4/13
      */
     @Override
-    public Status login(HttpServletRequest req, HttpServletResponse resp) {
+    public Result login(HttpServletRequest req, HttpServletResponse resp) {
         User user = (User) BeanUtils.toObject(req.getParameterMap(), User.class);
         if (!dao.isExist(user.getName())) {
-            return Status.NOT_FOUNT;
+            return setResult(NOT_FOUNT);
         }
         if (!dao.getPassword(user.getName()).equals(getDigest(user.getPassword()))) {
-            return PASSWORD_INCORRECT;
+            return setResult(PASSWORD_INCORRECT);
         }
         user.setType(dao.getUser(user.getName()).getType());
-        return setData(user, SUCCESS);
+        return ServiceUtils.setResult(user, SUCCESS);
     }
 
 
@@ -131,16 +129,16 @@ public class UserServiceImpl implements UserService {
      * @date 2019/4/13
      */
     @Override
-    public Status updateInfo(HttpServletRequest req, HttpServletResponse resp) {
+    public Result updateInfo(HttpServletRequest req, HttpServletResponse resp) {
         User user = (User) BeanUtils.toObject(req.getParameterMap(), User.class);
         if (!isValidUserInfo(user)) {
-            return setData(user, DATA_ILLEGAL);
+            return ServiceUtils.setResult(user, DATA_ILLEGAL);
         }
         uploadPhoto(req, user);
         if (dao.update(user)) {
-            return setData(user, SUCCESS);
+            return ServiceUtils.setResult(user, SUCCESS);
         }
-        return ERROR;
+        return setResult(ERROR);
     }
 
     /**
@@ -152,25 +150,25 @@ public class UserServiceImpl implements UserService {
      * @date 2019/4/13
      */
     @Override
-    public Status updatePwd(HttpServletRequest req, HttpServletResponse resp) {
+    public Result updatePwd(HttpServletRequest req, HttpServletResponse resp) {
         User user = (User) BeanUtils.toObject(req.getParameterMap(), User.class);
         String newPwd = req.getParameter("newPwd");
 
         if (!isValidPwd(newPwd)) {
-            return setData(user, DATA_ILLEGAL);
+            return ServiceUtils.setResult(user, DATA_ILLEGAL);
         }
         if (!dao.getPassword(user.getName()).equals(getDigest(user.getPassword()))) {
-            return setData(user, PASSWORD_INCORRECT);
+            return ServiceUtils.setResult(user, PASSWORD_INCORRECT);
         }
         user = dao.getUser(user.getName());
         if (user == null) {
-            return setData(user, Status.NOT_FOUNT);
+            return ServiceUtils.setResult(user, NOT_FOUNT);
         }
         user.setPassword(getDigest(newPwd));
         if (dao.updateAll(user)) {
-            return setData(user, SUCCESS);
+            return ServiceUtils.setResult(user, SUCCESS);
         }
-        return ERROR;
+        return setResult(ERROR);
     }
 
     /**
@@ -182,60 +180,60 @@ public class UserServiceImpl implements UserService {
      * @date 2019/4/13
      */
     @Override
-    public Status updatePayPwd(HttpServletRequest req, HttpServletResponse resp) {
+    public Result updatePayPwd(HttpServletRequest req, HttpServletResponse resp) {
         User user = (User) BeanUtils.toObject(req.getParameterMap(), User.class);
         String newPwd = req.getParameter("newPwd");
         String oldPwd = user.getPayPwd();
         user = dao.getUser(user.getName());
         if (!isValidPwd(newPwd)) {
-            return setData(user, DATA_ILLEGAL);
+            return ServiceUtils.setResult(user, DATA_ILLEGAL);
         }
         if (user == null) {
-            return setData(user, Status.NOT_FOUNT);
+            return ServiceUtils.setResult(user, NOT_FOUNT);
         }
         if (!user.getPayPwd().equals(getDigest(oldPwd))) {
-            return setData(user, PASSWORD_INCORRECT);
+            return ServiceUtils.setResult(user, PASSWORD_INCORRECT);
         }
         user.setPayPwd(getDigest(newPwd));
         if (dao.updateAll(user)) {
-            return setData(user, SUCCESS);
+            return ServiceUtils.setResult(user, SUCCESS);
         }
-        return ERROR;
+        return setResult(ERROR);
     }
 
     /**
      * 负责返回用户的个人信息
      *
-     * @param req
-     * @param resp
+     * @param req 请求
+     * @param resp 响应
      * @name myInfo
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/16
      */
     @Override
-    public Status find(HttpServletRequest req, HttpServletResponse resp) {
+    public Result find(HttpServletRequest req, HttpServletResponse resp) {
         User user = (User) BeanUtils.toObject(req.getParameterMap(), User.class);
 
         user = dao.getUser(user.getName());
 
         if (user != null) {
-            return setData(user, SUCCESS);
+            return ServiceUtils.setResult(user, SUCCESS);
         } else {
 
-            return setData(user, Status.NOT_FOUNT);
+            return ServiceUtils.setResult(user, NOT_FOUNT);
         }
     }
 
     @Override
-    public Status listAll(HttpServletRequest req, HttpServletResponse resp) {
+    public Result listAll(HttpServletRequest req, HttpServletResponse resp) {
 
         LinkedList<User> users = dao.getAllUsers();
         if (users != null && users.size() > 0) {
-            return setUsersData(users, SUCCESS);
+            return setUserResult(users, SUCCESS);
         }
 
-        return ERROR;
+        return setResult(ERROR);
     }
 
 

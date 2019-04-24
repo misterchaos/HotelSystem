@@ -17,6 +17,7 @@
 package com.hyc.www.controller.listener;
 
 import com.hyc.www.service.inter.OrderRoomService;
+import com.hyc.www.service.inter.RemarkService;
 import com.hyc.www.service.inter.RoomService;
 import com.hyc.www.service.inter.UserService;
 import com.hyc.www.util.BeanFactory;
@@ -47,6 +48,8 @@ public class MyServletContextListener implements ServletContextListener {
         sc.setAttribute("roomService",roomService);
         OrderRoomService orderRoomService = (OrderRoomService)BeanFactory.getBean(BeanFactory.ServiceType.OrderRoomService);
         sc.setAttribute("orderRoomService",orderRoomService);
+        RemarkService remarkService = (RemarkService) BeanFactory.getBean((BeanFactory.ServiceType.RemarkService));
+        sc.setAttribute("remarkService",remarkService);
     }
 
     @Override

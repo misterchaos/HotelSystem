@@ -33,9 +33,18 @@ public class PagesVo {
     private LinkedList<User> users;
     private LinkedList<OrderRoom> orderRooms;
     private LinkedList<Picture> pictures;
+    private LinkedList<Remark> remarks;
     private String message;
     private int maxPage;
     private int count;
+
+    public LinkedList<Remark> getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(LinkedList<Remark> remarks) {
+        this.remarks = remarks;
+    }
 
     public LinkedList<Room> getRooms() {
         return rooms;
@@ -101,4 +110,6 @@ public class PagesVo {
     public void setCount(int count) {
         this.count = count;
     }
+
+
 }

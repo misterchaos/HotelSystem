@@ -18,6 +18,7 @@ package com.hyc.www.controller.servlet;
 
 import com.hyc.www.controller.constant.Methods;
 import com.hyc.www.controller.constant.Pages;
+import com.hyc.www.service.Result;
 import com.hyc.www.service.constant.Status;
 import com.hyc.www.service.inter.OrderRoomService;
 
@@ -47,8 +48,7 @@ public class OrderRoomServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Methods method = getMethod(req, resp);
-        //TODO
-        System.out.println(method.name());
+
         switch (method) {
             case ADD_DO:
                 add(req, resp);
@@ -67,17 +67,28 @@ public class OrderRoomServlet extends HttpServlet {
 
     private void find(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         OrderRoomService serv = (OrderRoomService) getServletContext().getAttribute("orderRoomService");
-        Status status = serv.find(req, resp);
-        //TODO debug
-        System.out.println(status.name());
+        FindType type = FindType.valueOf(req.getParameter("find").toUpperCase());
+        Result result = null;
 
+
+        switch (type) {
+            case NUMBER:
+                result = serv.find(req, resp);
+                break;
+            case USER:
+                result = serv.listByUserName(req, resp);
+                break;
+            default:
+        }
+
+        Status status = result.getStatus();
 
         switch (status) {
             case NOT_FOUNT:
-                forward(req, resp, status.getData(), "没有相关订单！", Pages.ORDER_JSP);
+                forward(req, resp, result.getData(), "没有相关订单！", Pages.ORDER_JSP);
                 return;
             case SUCCESS:
-                forward(req, resp, status.getData(), "您的订单如下！", Pages.ORDER_JSP);
+                forward(req, resp, result.getData(), "您的订单如下！", Pages.ORDER_JSP);
                 return;
             default:
         }
@@ -85,25 +96,42 @@ public class OrderRoomServlet extends HttpServlet {
 
     private void add(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         OrderRoomService serv = (OrderRoomService) getServletContext().getAttribute("orderRoomService");
-        Status status = serv.add(req, resp);
-        //TODO debug
-        System.out.println(status.name());
+        Result result = serv.add(req, resp);
+        Status status = result.getStatus();
+
         switch (status) {
             case ALREADY_BOOKED:
-                forward(req, resp, status.getData(), "房间已被预订！", Pages.ORDER_JSP);
+                forward(req, resp, result.getData(), "房间已被预订！", Pages.ORDER_JSP);
                 return;
             case SUCCESS:
-                forward(req, resp, status.getData(), "订单添加成功！", Pages.SUCCESS_JSP);
+                forward(req, resp, result.getData(), "订单添加成功！请手动返回主页", Pages.SUCCESS_JSP);
                 return;
             default:
         }
     }
 
-    private void delete(HttpServletRequest req, HttpServletResponse resp) {
+    private void delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         OrderRoomService serv = (OrderRoomService) getServletContext().getAttribute("orderRoomService");
-        Status status = serv.delete(req, resp);
-        //TODO debug
-        System.out.println(status.name());
+        Result result = serv.delete(req, resp);
+        Status status = result.getStatus();
+
+        switch (status) {
+            case SUCCESS:
+                forward(req, resp, result.getData(), "订单取消成功！", Pages.SUCCESS_JSP);
+                return;
+            default:
+        }
+    }
+
+    enum FindType {
+        /**
+         * 通过订单编号
+         */
+        NUMBER,
+        /**
+         * 通过用户id
+         */
+        USER,
     }
 
 }

@@ -60,6 +60,10 @@ public enum Pages {
      */
     SUCCESS_JSP,
     /**
+     * 评论界面
+     */
+    REMARK_JSP,
+    /**
      * 相册页面
      */
     PICTRUES_JSP;
@@ -76,4 +80,5 @@ public enum Pages {
     @Override
     public String toString() {
         return super.toString().toLowerCase().replace("_", ".");
-    }}
+    }
+}
