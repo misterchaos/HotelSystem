@@ -23,6 +23,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import static com.hyc.www.util.StringUtils.toLegalText;
 import static com.hyc.www.util.UUIDUtils.getUUID;
 
 /**
@@ -33,13 +34,8 @@ import static com.hyc.www.util.UUIDUtils.getUUID;
  */
 public class TestStringUtils {
     public static void main(String[] args) throws NoSuchFieldException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
-        System.out.println(StringUtils.field2GetMethod("userName"));
-        System.out.println(StringUtils.field2SqlField("userName"));
-        Field f = User.class.getDeclaredField("userName");
-        Method m = User.class.getDeclaredMethod("setName",f.getType());
-        Object obj = User.class.newInstance();
-            m.invoke(obj,"test");
-        System.out.println(((User) obj).getName());
+
         System.out.println(getUUID());
+        System.out.println(toLegalText("<h1>"));
     }
 }

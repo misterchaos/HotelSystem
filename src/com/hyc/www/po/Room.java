@@ -34,6 +34,7 @@ public class Room extends Product {
     private BigDecimal area;
     private BigDecimal bedWidth;
     private String bookStatus;
+    private String remark;
 
 
 
@@ -69,6 +70,11 @@ public class Room extends Product {
         this.bookStatus = bookStatus;
     }
 
+    public String getRemark() {
+        return remark;
+    }
 
-
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 }

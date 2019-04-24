@@ -29,7 +29,7 @@
 <head>
     <title>个人中心</title>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=1920,initial-scale=1.0,maximum-scale=1.0,user-scalable=yes">
     <link rel="stylesheet"
           href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
@@ -41,7 +41,7 @@
 </div>
 
 <%-- 网页头部 --%>
-<nav class="navbar navbar-default" role="navigation">
+<nav class="navbar navbar-default" role="navigation" style="margin-bottom: 0px">
     <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse"
@@ -73,7 +73,7 @@
                                 <a href="${Pages.USER_JSP.toString()}?view=update&update=pay_pwd&name=${USER}">修改支付密码</a>
                             </li>
                             <li>
-                                <a href="#${Pages.ORDER_JSP.toString()}?view=order&user=${USER}">查看个人订单(暂不可用)</a>
+                                <a href="${Pages.ORDER_JSP.toString()}?view=order&user=${USER}">查看个人订单</a>
                             </li>
                             <li><a href="/user?method=${Methods.LOGOUT_DO.toString()}">退出登陆</a></li>
                         </ul>
@@ -94,6 +94,7 @@
                 </c:if>
 
                 <li><a href="${Pages.REGIST_JSP.toString()}">注册</a></li>
+                <li><a href="${Pages.REMARK_JSP.toString()}">留言板</a></li>
                 <li>
                     <form id="search" class="bs-example bs-example-form" role="form"
                           action="room?method=${Methods.FIND_DO}&find=name&page=1"
@@ -116,6 +117,21 @@
         </div>
     </div>
 </nav>
+<div class="background"  style="        background-image: linear-gradient(45deg,#40B028,#1B6EC6);
+        position: fixed;
+        height: 100%;
+        width: 100%;">
+</div>
+
+<c:if test="${message!=null}">
+    <div class="alert alert-warning alert-dismissable" style="margin-bottom: 0">
+        <button type="button" class="close" data-dismiss="alert"
+                aria-hidden="true">
+            &times;
+        </button>
+        提示：${message}
+    </div>
+</c:if>
 
 
 <!-- 查看个人信息 -->
@@ -126,7 +142,7 @@
     </c:if>
     <%-- 网页主体摘要--%>
     <div class="maxPage-summary" style="height: 500px;width:1920px">
-        <div class="info-panel">
+        <div class="info-panel" style="margin-top: 30px">
                 <%-- 主图和名称--%>
             <div class="photo-name">
                 <img class="main_info" src="/file/${data.users[0].photo}" width="300" height="300">
@@ -177,8 +193,8 @@
             </div>
         </div>
     </div>
-    <!-- 链接-->
     <div class="color-input-field">
+    <!-- 链接-->
         <form action="${pageContext.request.contextPath}/${Pages.USER_JSP.toString()}?view=update&update=info&name=${data.users[0].name}"
               method="post">
             <input type="submit" class="form-control" value="修改信息" style="background-color: orangered;
@@ -194,7 +210,7 @@
 <c:if test="${param.view=='add'}">
     <%-- 网页主体摘要--%>
     <div class="maxPage-summary" style="height: 500px;width:1920px">
-        <div class="info-panel">
+        <div class="info-panel" style="margin-top: 30px">
             <form class="input-info"
                   action="${pageContext.request.contextPath}/user?method=${Methods.ADD_DO}&view=${param.view}"
                   method="post" enctype="multipart/form-data">
@@ -210,7 +226,7 @@
                     <div class="panel-heading">
                         <h3 class="panel-title">添加新用户</h3>
                     </div>
-                    <div class="color-input-field" style="float: left;width: 500px;height: 520px">
+                    <div class="color-input-field" style="float: left;width: 500px;height:fit-content">
                         <table class="table">
                             <tr>
                                 <td>用户名：</td>
@@ -283,15 +299,14 @@
                     <div class="photo-name">
                         <img class="main_info" src="/file/${data.users[0].photo}" width="300" height="300" alt="用户图片">
                         <h3>${data.users[0].name}</h3>
-                        <input type="file" required="required" class="file" name="photo">
+                        <input type="file"  class="file" name="photo">
                     </div>
-
                     <!-- 基本信息 -->
                     <div class="panel panel-default" style="margin-left: 30px ;width: 510px">
                         <div class="panel-heading">
                             <h3 class="panel-title">更新用户信息</h3>
                         </div>
-                        <div class="color-input-field" style="float: left;width: 500px;height: 520px">
+                        <div class="color-input-field" style="float: left;width: 500px;height:fit-content">
                             <table class="table">
                                 <tr>
                                     <td>用户名：</td>
@@ -349,7 +364,7 @@
                         <div class="panel-heading">
                             <h3 class="panel-title">修改登陆密码</h3>
                         </div>
-                        <div class="color-input-field" style="float: left;width: 500px;height: 520px">
+                        <div class="color-input-field" style="float: left;width: 500px;height:fit-content">
                             <table class="table">
                                 <tr>
                                     <td>用户名：</td>
@@ -399,7 +414,7 @@
                         <div class="panel-heading">
                             <h3 class="panel-title">修改支付密码</h3>
                         </div>
-                        <div class="color-input-field" style="float: left;width: 500px;height: 520px">
+                        <div class="color-input-field" style="float: left;width: 500px;height:fit-content">
                             <table class="table">
                                 <tr>
                                     <td>用户名：</td>
@@ -473,6 +488,14 @@
         width: 150px;
         position: relative;
         float: right;
+    }
+
+    .alert-warning {
+        margin-bottom: 0;
+        z-index: 998;
+        position: fixed;
+        margin-top: 0px;
+        width: 100%;
     }
 </style>
 </html>

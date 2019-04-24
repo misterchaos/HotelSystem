@@ -44,10 +44,10 @@ public class RoomDaoImpl extends BaseDaoImpl implements RoomDao {
      * 表中所有字段对应的查询语句
      */
     private final String ALL_FIELD_NAME = " id,name,number,photo,type,area,bed_width,price,book_status,level,"
-            + "score,remark_num,hotel_id,status,gmt_create,gmt_modified ";
+            + "score,remark,remark_num,hotel_id,status,gmt_create,gmt_modified ";
 
     private final String[] ALL_FIELD_ARRAY = new String[]{"id", "name", "number", "photo", "type", "area", "bed_width",
-            "price", "book_status", "score", "remark_num", "hotel_id", "status", "gmt_create", "gmt_modified"};
+            "price", "book_status", "score", "remark","remark_num", "hotel_id", "status", "gmt_create", "gmt_modified"};
 
 
     /**
@@ -167,7 +167,6 @@ public class RoomDaoImpl extends BaseDaoImpl implements RoomDao {
      * 通过房间名进行模糊查询
      *
      * @param name 房间名
-     * @return java.util.LinkedList<com.hyc.www.po.Room>
      * @name findByName
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
@@ -187,7 +186,6 @@ public class RoomDaoImpl extends BaseDaoImpl implements RoomDao {
      *
      * @param name 房间名
      * @param page 页数
-     * @return java.util.LinkedList<com.hyc.www.po.Room>
      * @name findByName
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>

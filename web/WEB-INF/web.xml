@@ -26,33 +26,21 @@
             <taglib-location>/WEB-INF/fmt.tld</taglib-location>
         </taglib>
         <taglib>
-            <taglib-uri>http://java.sun.com/jsp/jstl/fmt-rt</taglib-uri>
-            <taglib-location>/WEB-INF/fmt-rt.tld</taglib-location>
-        </taglib>
-        <taglib>
             <taglib-uri>http://java.sun.com/jsp/jstl/core</taglib-uri>
             <taglib-location>/WEB-INF/c.tld</taglib-location>
         </taglib>
-        <taglib>
-            <taglib-uri>http://java.sun.com/jsp/jstl/core-rt</taglib-uri>
-            <taglib-location>/WEB-INF/c-rt.tld</taglib-location>
-        </taglib>
+
         <taglib>
             <taglib-uri>http://java.sun.com/jsp/jstl/sql</taglib-uri>
             <taglib-location>/WEB-INF/sql.tld</taglib-location>
         </taglib>
-        <taglib>
-            <taglib-uri>http://java.sun.com/jsp/jstl/sql-rt</taglib-uri>
-            <taglib-location>/WEB-INF/sql-rt.tld</taglib-location>
-        </taglib>
+
         <taglib>
             <taglib-uri>http://java.sun.com/jsp/jstl/x</taglib-uri>
             <taglib-location>/WEB-INF/x.tld</taglib-location>
         </taglib>
-        <taglib>
-            <taglib-uri>http://java.sun.com/jsp/jstl/x-rt</taglib-uri>
-            <taglib-location>/WEB-INF/x-rt.tld</taglib-location>
-        </taglib>
+
     </jsp-config>
+
 </web-app>
 

@@ -30,23 +30,22 @@
 <head>
     <title>Xhotel</title>
     <meta charset="utf-8">
-    <meta content="width=1920,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"
+    <meta content="width=1920,initial-scale=1.0,maximum-scale=1.0,user-scalable=yes"
           id="viewport" name="viewport">
     <link rel="stylesheet"
           href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
-<body >
+<body style="background-image: linear-gradient(45deg, #40B028, #1B6EC6)" >
 <c:if test="${data==null}">
     <c:redirect url="${pageContext.request.contextPath}/room?method=${Methods.FIND_DO.name()}&find=all&name=&page=1"/>
 </c:if>
 
-<div class="background"  >
-</div>
+
 
 <%-- 网页头部 --%>
-<nav class="navbar navbar-default" role="navigation">
+<nav class="navbar navbar-default" role="navigation" style="margin-bottom: 0px">
     <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse"
@@ -78,7 +77,7 @@
                                 <a href="${Pages.USER_JSP.toString()}?view=update&update=pay_pwd&name=${USER}">修改支付密码</a>
                             </li>
                             <li>
-                                <a href="#${Pages.ORDER_JSP.toString()}?view=order&user=${USER}">查看个人订单(暂不可用)</a>
+                                <a href="${Pages.ORDER_JSP.toString()}?view=order&user=${USER}">查看个人订单</a>
                             </li>
                             <li><a href="/user?method=${Methods.LOGOUT_DO.toString()}">退出登陆</a></li>
                         </ul>
@@ -99,6 +98,7 @@
                 </c:if>
 
                 <li><a href="${Pages.REGIST_JSP.toString()}">注册</a></li>
+                <li><a href="${Pages.REMARK_JSP.toString()}">留言板</a></li>
                 <li>
                     <form id="search" class="bs-example bs-example-form" role="form"
                           action="room?method=${Methods.FIND_DO}&find=name&page=1"
@@ -108,7 +108,7 @@
                                 <div class="input-group"
                                      style="width: 400px; position: relative; left: 20%;margin-top: 15px">
                                     <input type="text" required="required" class="form-control" name="name"
-                                           placeholder="请输入关键词" value="${param.name}">
+                                           placeholder="文莱帝国酒店" value="${param.name}">
                                     <span class="input-group-btn"><input type="submit" value="搜索"
                                                                          class="btn btn-default"></span>
 
@@ -121,6 +121,7 @@
         </div>
     </div>
 </nav>
+
 
 <c:if test="${message!=null}">
     <div class="alert alert-warning alert-dismissable">
@@ -139,9 +140,11 @@
     <li>
         <a href="room?method=${Methods.FIND_DO}&find=${param.find}&name=${param.name}&page=${param.page>1?param.page-1:1}">&laquo;</a>
     </li>
-    <c:forEach var="i" begin="1" end="${data.maxPage}">
+<c:if test="${data.maxPage>0}">
+<c:forEach var="i" begin="1" end="${data.maxPage-1}">
         <li><a href="room?method=${Methods.FIND_DO}&find=${param.find}&name=${param.name}&page=${i}">${i}</a></li>
     </c:forEach>
+</c:if>
     <li>
         <a href="room?method=${Methods.FIND_DO}&find=${param.find}&name=${param.name}&page=${param.page<data.maxPage?param.page+1:data.maxPage}">&raquo;</a>
     </li>
@@ -151,7 +154,7 @@
 <c:if test="${data.rooms.size()>0}">
     <c:forEach var="i" begin="0" end="${data.rooms.size()-1}">
         <div class="info-panel">
-            <div class="well well-lg" style="height: 234px;width: 80%">
+            <div class="well well-lg" style="height: 280px;width: 80%">
                 <a href="${pageContext.request.contextPath}/room.jsp?view=room&number=${data.rooms[i].number}">
                         <%-- 主图和名称--%>
                     <div class="photo-name">
@@ -192,6 +195,8 @@
                 </a>
             </div>
         </div>
+        <c:if test="${ADMIN!=null}">
+
         <div class="color-input-field" style="
     height: 40px;">
             <form name="delete" onsubmit="return deleteRoom()"
@@ -231,6 +236,7 @@
             }
 
         </script>
+        </c:if>
     </c:forEach>
 </c:if>
 <style>
@@ -278,7 +284,7 @@
         width: 100%;
     }
     .background{
-        background-image: linear-gradient(to top, #7A88FF, #7AFFAF);
+        background-image: linear-gradient(45deg,#40B028,#1B6EC6);
         position: fixed;
         height: 100%;
         width: 100%;

@@ -29,7 +29,7 @@
 <head>
     <title>订单</title>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=1920,initial-scale=1.0,maximum-scale=1.0,user-scalable=yes">
     <link rel="stylesheet"
           href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
@@ -37,11 +37,10 @@
 </head>
 <body>
 
-<div class="background"  >
-</div>
+
 
 <%-- 网页头部 --%>
-<nav class="navbar navbar-default" role="navigation">
+<nav class="navbar navbar-default" role="navigation" style="margin-bottom: 0px">
     <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse"
@@ -73,7 +72,7 @@
                                 <a href="${Pages.USER_JSP.toString()}?view=update&update=pay_pwd&name=${USER}">修改支付密码</a>
                             </li>
                             <li>
-                                <a href="#${Pages.ORDER_JSP.toString()}?view=order&user=${USER}">查看个人订单(暂不可用)</a>
+                                <a href="${Pages.ORDER_JSP.toString()}?view=order&user=${USER}">查看个人订单</a>
                             </li>
                             <li><a href="/user?method=${Methods.LOGOUT_DO.toString()}">退出登陆</a></li>
                         </ul>
@@ -94,6 +93,7 @@
                 </c:if>
 
                 <li><a href="${Pages.REGIST_JSP.toString()}">注册</a></li>
+                <li><a href="${Pages.REMARK_JSP.toString()}">留言板</a></li>
                 <li>
                     <form id="search" class="bs-example bs-example-form" role="form"
                           action="room?method=${Methods.FIND_DO}&find=name&page=1"
@@ -117,85 +117,112 @@
     </div>
 </nav>
 
+<div class="background"  style="        background-image: linear-gradient(45deg,#40B028,#1B6EC6);
+        position: fixed;
+        height: 100%;
+        width: 100%;">
+</div>
 
 
 <!-- 查看订单信息 -->
 <c:if test="${param.view=='order'}">
     <c:if test="${data==null}">
         <c:redirect
-                url="${pageContext.request.contextPath}/order_room?method=${Methods.FIND_DO.name()}&view=${param.view}&find=this&number=${param.number}"/>
+                url="${pageContext.request.contextPath}/order_room?method=${Methods.FIND_DO.name()}&view=${param.view}&find=user&user=${param.user}"/>
     </c:if>
-    <%-- 网页主体摘要--%>
-    <div class="maxPage-summary" style="height: 500px;width:1920px">
-        <div class="info-panel">
-                <%-- 主图和名称--%>
-            <div class="photo-name">
-                <img class="main_info" src="/file/${data.rooms[0].photo}" width="300" height="300">
-                <h3>${data.rooms[0].name}</h3>
-            </div>
-            <!-- 基本信息 -->
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">订单详情</h3>
+    <c:if test="${data.orderRooms.size()==0}">
+        <div class="alert alert-warning alert-dismissable" style="margin-bottom: 0">
+            <button type="button" class="close" data-dismiss="alert"
+                    aria-hidden="true">
+                &times;
+            </button>
+            提示：您目前没有订单！
+        </div>
+    </c:if>
+    <c:if test="${data.orderRooms.size()>0}">
+
+    <c:forEach begin="0" end="${data.orderRooms.size()-1}" var="i">
+
+        <%-- 网页主体摘要--%>
+        <div class="maxPage-summary" style="height: 0px;width:1920px">
+            <div class="info-panel" style="height: 0px;margin-top: 0px;padding-top:100px">
+                    <%-- 主图和名称--%>
+                <div class="photo-name">
+                    <a href="${pageContext.request.contextPath}/room.jsp?view=room&number=${data.rooms[i].number}">
+                    <img class="main_info" src="/file/${data.rooms[i].photo}" width="300" height="300">
+                        <h3>${data.rooms[i].name}</h3></a>
                 </div>
-                <table class="table">
-                    <tr>
-                        <td>订单编号：</td>
-                        <td>${data.orderRooms[0].number}</td>
-                    </tr>
-                    <tr>
-                        <td>用户账号：</td>
-                        <td>${data.users[0].name}</td>
-                    </tr>
-                    <tr>
-                        <td>用户昵称：</td>
-                        <td>${data.users[0].nickName}</td>
-                    </tr>
-                    <tr>
-                        <td>房间编号：</td>
-                        <td>${data.rooms[0].number}</td>
-                    </tr>
-                    <tr>
-                        <td>房间名：</td>
-                        <td>${data.rooms[0].name}</td>
-                    </tr>
-                    <tr>
-                        <td>入住时间：</td>
-                        <td>${data.orderRooms[0].startTime}</td>
-                    </tr>
-                    <tr>
-                        <td>离开时间：</td>
-                        <td>${data.orderRooms[0].endTime}</td>
-                    </tr>
-                    <tr>
-                        <td>订单金额：</td>
-                        <td>$${data.orderRooms[0].amount}</td>
-                    </tr>
-                    <tr>
-                        <td>备注信息：</td>
-                        <td>${data.orderRooms[0].remark}</td>
-                    </tr>
-                    <tr>
-                        <td>创建时间：</td>
-                        <td>${data.orderRooms[0].gmtCreate}</td>
-                    </tr>
-                </table>
-                <div class="panel-body">
+                <!-- 基本信息 -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">订单详情</h3>
+                    </div>
+                    <table class="table">
+                        <tr>
+                            <td>订单编号：</td>
+                            <td>${data.orderRooms[i].number}</td>
+                        </tr>
+                        <tr>
+                            <td>用户账号：</td>
+                            <td>${data.users[i].name}</td>
+                        </tr>
+                        <tr>
+                            <td>用户昵称：</td>
+                            <td>${data.users[i].nickName}</td>
+                        </tr>
+                        <tr>
+                            <td>房间编号：</td>
+                            <td>${data.rooms[i].number}</td>
+                        </tr>
+                        <tr>
+                            <td>房间名：</td>
+                            <td>${data.rooms[i].name}</td>
+                        </tr>
+                        <tr>
+                            <td>入住时间：</td>
+                            <td>${data.orderRooms[i].startTime}</td>
+                        </tr>
+                        <tr>
+                            <td>离开时间：</td>
+                            <td>${data.orderRooms[i].endTime}</td>
+                        </tr>
+                        <tr>
+                            <td>订单金额：</td>
+                            <td>$${data.orderRooms[i].amount}</td>
+                        </tr>
+                        <tr>
+                            <td>备注信息：</td>
+                            <td>${data.orderRooms[i].remark}</td>
+                        </tr>
+                        <tr>
+                            <td>创建时间：</td>
+                            <td>${data.orderRooms[i].gmtCreate}</td>
+                        </tr>
+                    </table>
+                    <div class="panel-body">
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- 购买链接-->
-    <div class="color-input-field">
-        <form action="${pageContext.request.contextPath}/order_room?method=${Methods.DELETE_DO}&number=${data.orderRooms[0].number}}"
-              method="post">
-            <input type="submit" class="form-control" value="取消订单" style="background-color: orangered;
-        width: 270px;height: 50px;float:right;margin-right: 230px;color:#FFFFFF;">
-        </form>
-    </div>
-    <%-- 网页主体细节--%>
-    <div class="maxPage-detail">
-    </div>
+        <!-- 购买链接-->
+        <div class="color-input-field" style="    margin-bottom: 50px;width: 100%">
+            <form action="${pageContext.request.contextPath}/order_room?method=${Methods.DELETE_DO}&number=${data.orderRooms[i].number}"
+                  method="post" onsubmit="return delete_order()">
+                <input type="submit" class="form-control" value="取消订单" style="background-color: orangered;
+        width: 270px;height: 50px;float:right;margin-right: 230px;margin-bottom:50px;color:#FFFFFF;z-index: 999" >
+            </form>
+        </div>
+        <script>
+            function delete_order() {
+                if (confirm("此操作将会永久删除此订单，是否继续？")) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        </script>
+    </c:forEach>
+    </c:if>
 </c:if>
 
 
@@ -209,7 +236,7 @@
                   action="${pageContext.request.contextPath}/order_room?method=${Methods.ADD_DO}&view=${param.view}"
                   method="post">
                 <!-- 基本信息 -->
-                <div class="panel panel-default" style="margin-left: 30px ;width: 510px">
+                <div class="panel panel-default" style="margin-left: 30px ;width: 510px;margin-top: 100px">
                     <div class="panel-heading">
                         <h3 class="panel-title">订单详情</h3>
                     </div>
@@ -220,12 +247,13 @@
                                 <td>订单编号：</td>
                                 <td><input type="text" readonly="readonly" required="required" class="form-control"
                                            name="number"
-                                           value="${param.hotel+param.room+param.price}" align="center">
+                                           value="${Math.random()}" align="center">
                                 </td>
                             </tr>
                             <tr>
 
-                                <input type="text" readonly="readonly" hidden="hidden" value="${param.userId}" name="userId">
+                                <input type="text" readonly="readonly" hidden="hidden" value="${param.userId}"
+                                       name="userId">
 
                             </tr>
                             <tr>
@@ -233,8 +261,15 @@
                                 <td><input type="text" readonly="readonly" required="required" class="form-control"
                                            name="roomNumber"
                                            value="${param.room}" align="center"></td>
-                                <input type="text" readonly="readonly" hidden="hidden" value="${param.roomId}" name="roomId">
+                                <input type="text" readonly="readonly" hidden="hidden" value="${param.roomId}"
+                                       name="roomId">
 
+                            </tr>
+                            <tr>
+                                <td>用户账号：</td>
+                                <td><input type="text" readonly="readonly" required="required" class="form-control"
+                                           name="user"
+                                           value="${param.user}" align="center"></td>
                             </tr>
                             <tr>
                                 <td>入住时间：</td>
@@ -249,13 +284,13 @@
                             <tr>
                                 <td>订单金额：</td>
                                 <td><input type="text" readonly="readonly" required="required" class="form-control"
-                                           name="price"
+                                           name="amount"
                                            value="${param.price}" align="center"></td>
                             </tr>
                             <tr>
                                 <td>备注信息：</td>
                                 <td><input type="text" class="form-control" name="remark"
-                                          placeholder="请输入备注信息" align="center"></td>
+                                           placeholder="请输入备注信息" align="center"></td>
                             </tr>
                             <tr>
                                 <td>执行操作：</td>
@@ -309,5 +344,21 @@
         position: relative;
         float: right;
     }
+    .navbar-default {
+        width: 100%;
+        position: fixed;
+        z-index: 999;
+        margin-top: 0;
+    }
+
+    .alert-warning {
+        margin-bottom: 0;
+        z-index: 998;
+        position: fixed;
+        margin-top: 65px;
+        width: 100%;
+    }
 </style>
+
+
 </html>

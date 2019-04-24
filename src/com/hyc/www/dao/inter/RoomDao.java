@@ -156,7 +156,7 @@ public interface RoomDao {
      *
      * @param name 房间名
      * @param page 页数
-     * @return java.util.LinkedList<com.hyc.www.po.Room>
+     * @return java.util.LinkedList
      * @name findByName
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
@@ -169,7 +169,6 @@ public interface RoomDao {
      * 通过房间名进行模糊查询
      *
      * @param name 房间名
-     * @return java.util.LinkedList<com.hyc.www.po.Room>
      * @name findByName
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>

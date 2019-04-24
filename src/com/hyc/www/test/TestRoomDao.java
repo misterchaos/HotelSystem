@@ -106,11 +106,16 @@ public class TestRoomDao {
         for (int i = 0; i < 0; i++) {
             room=new Room();
             room.setId(getUUID());
-            room.setNumber("01020"+i);
-            room.setName("广州精品酒店第"+i+"号房间");
+            room.setNumber("452834"+i);
+            room.setName("文莱帝国酒店(Empire Hotel& Country Club)商务间"+"452834"+i);
             room.setArea(new BigDecimal(i+110));
+            room.setType("多人");
+            room.setLevel("8星级");
+            room.setScore(new BigDecimal(4.9));
             room.setBedWidth(new BigDecimal(3));
-            room.setPrice(new BigDecimal(599+i*100));
+            room.setPhoto("e93f57968f8d413f853b9130ff00bf0f.jpg");
+            room.setPrice(new BigDecimal(8999+i*100));
+            room.setRemark("“十万元一晚的帝王级享受，对于懂得享受和追求奢华感觉的人士绝对是最佳的选择”");
             System.out.println("add room");
             roomDao.addRoom(room);
         }

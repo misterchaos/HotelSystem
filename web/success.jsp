@@ -77,6 +77,9 @@
                             <li>
                                 <a href="${Pages.USER_JSP.toString()}?view=update&update=pay_pwd&name=${USER}">修改支付密码</a>
                             </li>
+                            <li>
+                                <a href="${Pages.ORDER_JSP.toString()}?view=order&user=${USER}">查看个人订单</a>
+                            </li>
                             <li><a href="/user?method=${Methods.LOGOUT_DO.toString()}">退出登陆</a></li>
                         </ul>
                     </li>

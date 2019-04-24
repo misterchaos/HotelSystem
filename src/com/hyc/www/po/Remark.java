@@ -14,24 +14,33 @@
  * limitations under the License.
  */
 
-package com.hyc.www.test;
+package com.hyc.www.po;
 
-
-import com.hyc.www.service.constant.Status;
-
-import java.io.File;
-
-import static com.hyc.www.service.constant.Status.SUCCESS;
+import com.hyc.www.po.abs.BaseEntity;
 
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
  * @program XHotel
- * @description 用于测试与文件路径相关的方法
- * @date 2019-04-08 02:19
+ * @description 评论的实体类
+ * @date 2019-04-23 01:08
  */
-public class TestFile {
-    public static void main(String[] args) {
-        File file = new File("./src/db_config.properties");
-        System.out.println(file.getAbsolutePath());
+public class Remark extends BaseEntity {
+    String userName;
+    String remark;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

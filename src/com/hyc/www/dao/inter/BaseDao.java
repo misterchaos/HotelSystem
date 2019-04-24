@@ -204,7 +204,7 @@ public interface BaseDao {
      *                     则会匹配所有id为1的用户记录，如果属性全为null<br>
      *                     则会匹配所有用户记录
      * @param conj         where语句的连接词，如 and, or
-     * @param condition    where语句的比较条件，如 = ,< ,> , <= ,>=
+     * @param condition    where语句的比较条件
      * @return java.util.LinkedList
      * @name queryWhere
      * @notice 连接词不能为not

@@ -30,11 +30,19 @@
 <head>
     <title>${param.title}</title>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=1920,initial-scale=1.0,maximum-scale=1.0,user-scalable=yes">
     <link rel="stylesheet"
           href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://www.recaptcha.net/recaptcha/api.js"></script>
+    <script>
+        grecaptcha.ready(function() {
+            grecaptcha.execute('reCAPTCHA_site_key', {action: 'homepage'}).then(function(token) {
+            ...
+            });
+        });
+    </script>
 </head>
 
 <body>
@@ -58,30 +66,38 @@
 
 
 <div class="login-body" style="overflow: hidden;position: absolute">
-    <img src="${pageContext.request.contextPath}/login.jpg" width="1920" height="674">
+    <div class="background"  style="        background-image: linear-gradient(45deg,#40B028,#1B6EC6);
+        position: fixed;
+        height: 100%;
+        width: 100%;">
+    </div>
 </div>
 
 
 <div class="login-body">
     <div class="login-layout">
         <div class="login-box">
-            <div class="panel panel-default" style="padding: 55px;font-style: inherit">
+            <div class="panel panel-default" style="padding: 20px;font-style: inherit">
                 <strong>
                     <h2 class="panel-title" style="text-align: center">注册账号</h2>
                 </strong>
                 <div class="panel-body">
                     <div class="color-input-field">
                         <form name="login" action="${pageContext.request.contextPath}/user?method=${Methods.REGIST_DO}"
-                              method="post">
+                              method="post" onsubmit="return agree()">
                             <input type="text" required="required" class="form-control" name="name"
                                    placeholder="请输入用户名(6-20位英文字母，数字或下划线)" align="center">
                             <br>
                             <input type="password" required="required" class="form-control" name="password"
                                    placeholder="请输入密码(6-20位英文字母，数字或下划线)"
                                    align="center"><br>
+
+                            <input  id="agree" type="checkbox" name="agreement" checked="checked" value="true" style="margin-bottom: 13px">我已阅读并同意《XHotel用户协议》
+
                             <input type="submit" class="form-control" value="注册"
                                    style="background-color: darkorchid;color: #FFFFFF">
                         </form>
+
                         <br>
                         已有账号？<a href="${Pages.LOGIN_JSP.toString()}">请登陆</a>
                     </div>
@@ -91,6 +107,7 @@
     </div>
 </div>
 </body>
+
 <style type="text/css">
 
     .form-control {
@@ -107,10 +124,12 @@
     .login-layout {
         position: relative;
         float: right;
-        width: 500px;
+        width: 80%;
         min-height: 540px;
+        max-width: 450px;
         margin-right: 72px;
         margin-top: 40px;
+        margin-left: 72px;
     }
 
     .login-box {
@@ -119,8 +138,8 @@
         right: 0;
         top: 50%;
         background: #fff;
-        padding: 20px 20px 20px, 20px;
-        min-height: 370px;
+        padding: 20px 20px 20px,20px;
+        min-height: 300px;
         border-radius: 4px;
         -webkit-box-shadow: 0 1px 6px rgba(0, 0, 0, .1);
         box-shadow: 0 1px 6px rgba(0, 0, 0, .1);

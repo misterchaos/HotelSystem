@@ -139,4 +139,17 @@ public interface OrderRoomDao {
      * @date 2019/4/12
      */
     boolean update(OrderRoom order);
+
+
+    /**
+     * 通过一个用户id返回该用户的所有订单
+     *
+     * @param userId 查询订单对应的的用户id
+     * @return
+     * @name listByUserId
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/22
+     */
+    LinkedList<OrderRoom> listByUserId(String userId);
 }

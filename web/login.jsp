@@ -54,20 +54,29 @@
 
 
 <div class="login-body" style="overflow: hidden;position: absolute">
-    <img src="${pageContext.request.contextPath}/login.jpg" width="1920" height="674">
+    <div class="background"  style="        background-image: linear-gradient(45deg,#40B028,#1B6EC6);
+        position: fixed;
+        height: 100%;
+        width: 100%;">
+    </div>
 </div>
 
 <div class="login-body">
     <div class="login-layout">
         <div class="login-box">
-            <div class="panel panel-default" style="padding: 55px;font-style: inherit">
+            <div class="panel panel-default" style="padding: 20px;font-style: inherit">
                 <strong>
                     <h2 class="panel-title" style="text-align: center">用户名登陆</h2>
                 </strong>
                 <div class="panel-body">
                     <div class="color-input-field">
                         <form name="login" action="${pageContext.request.contextPath}/user?method=${Methods.LOGIN_DO}" method="post">
-                            <input type="text" required="required" class="form-control" name="name" placeholder="请输入用户名" align="center">
+                            <c:if test="${data!=null}">
+                                <input type="text" required="required" class="form-control" name="name" value="${data.users[0].name}" placeholder="请输入用户名" align="center">
+                            </c:if>
+                            <c:if test="${data==null}">
+                                <input type="text" required="required" class="form-control" name="name" placeholder="请输入用户名" align="center">
+                            </c:if>
                             <br>
                             <input type="password" required="required" class="form-control" name="password" placeholder="请输入密码"
                                    align="center">
@@ -100,10 +109,12 @@
     .login-layout {
         position: relative;
         float: right;
-        width: 500px;
+        width: 80%;
         min-height: 540px;
+        max-width: 450px;
         margin-right: 72px;
         margin-top: 40px;
+        margin-left: 72px;
     }
 
     .login-box {
@@ -113,7 +124,7 @@
         top: 50%;
         background: #fff;
         padding: 20px 20px 20px,20px;
-        min-height: 370px;
+        min-height: 300px;
         border-radius: 4px;
         -webkit-box-shadow: 0 1px 6px rgba(0, 0, 0, .1);
         box-shadow: 0 1px 6px rgba(0, 0, 0, .1);

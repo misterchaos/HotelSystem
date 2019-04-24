@@ -142,7 +142,6 @@ public interface HotelDao {
      * 通过酒店名进行模糊查询
      *
      * @param name 酒店名
-     * @return java.util.LinkedList<com.hyc.www.po.Hotel>
      * @name findByName
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>

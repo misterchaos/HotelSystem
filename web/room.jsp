@@ -29,7 +29,7 @@
 <head>
     <title>房间</title>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=1920,initial-scale=1.0,maximum-scale=1.0,user-scalable=yes">
     <link rel="stylesheet"
           href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
@@ -40,7 +40,7 @@
 </div>
 
 <%-- 网页头部 --%>
-<nav class="navbar navbar-default" role="navigation">
+<nav class="navbar navbar-default" role="navigation" style="margin-bottom: 0px">
     <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse"
@@ -72,7 +72,7 @@
                                 <a href="${Pages.USER_JSP.toString()}?view=update&update=pay_pwd&name=${USER}">修改支付密码</a>
                             </li>
                             <li>
-                                <a href="#${Pages.ORDER_JSP.toString()}?view=order&user=${USER}">查看个人订单(暂不可用)</a>
+                                <a href="${Pages.ORDER_JSP.toString()}?view=order&user=${USER}">查看个人订单</a>
                             </li>
                             <li><a href="/user?method=${Methods.LOGOUT_DO.toString()}">退出登陆</a></li>
                         </ul>
@@ -93,6 +93,7 @@
                 </c:if>
 
                 <li><a href="${Pages.REGIST_JSP.toString()}">注册</a></li>
+                <li><a href="${Pages.REMARK_JSP.toString()}">留言板</a></li>
                 <li>
                     <form id="search" class="bs-example bs-example-form" role="form"
                           action="room?method=${Methods.FIND_DO}&find=name&page=1"
@@ -116,6 +117,7 @@
     </div>
 </nav>
 
+
 <c:if test="${message!=null}">
     <div class="alert alert-warning alert-dismissable" style="margin-bottom: 0">
         <button type="button" class="close" data-dismiss="alert"
@@ -135,7 +137,7 @@
     </c:if>
     <%-- 网页主体摘要--%>
     <div class="maxPage-summary" style="height: 500px;width:1920px">
-        <div class="info-panel">
+        <div class="info-panel" style="padding-top: 30px">
                 <%-- 主图和名称--%>
             <div class="photo-name">
                 <img class="main_info" src="/file/${data.rooms[0].photo}" width="300" height="300">
@@ -185,22 +187,22 @@
                     </tr>
                     <tr>
                         <td>房间价格：</td>
-                        <td><strong><p style="color: red">$${data.rooms[0].price}</p></strong></td>
+                        <td>$${data.rooms[0].price}</td>
                     </tr>
                     <tr>
                         <td>备注信息：</td>
+                        <td>${data.rooms[0].remark}</td>
                     </tr>
                 </table>
-                <div class="panel-body">
-                </div>
+
             </div>
         </div>
     </div>
     <!-- 购买链接-->
     <div class="color-input-field">
-        <form action="${pageContext.request.contextPath}/${Pages.ORDER_JSP.toString()}?view=add&roomId=${data.rooms[0].id}&userId=${data.users[0].id}&user=${data.users[0].name}&room=${data.rooms[0].number}&hotel=1234&price=${data.rooms[0].price}" method="post">
+        <form action="${pageContext.request.contextPath}/${Pages.ORDER_JSP.toString()}?view=add&roomId=${data.rooms[0].id}&userId=${data.users[0].id}&user=${USER}&room=${data.rooms[0].number}&hotel=1234&price=${data.rooms[0].price}" method="post">
             <input type="submit" class="form-control" value="立即预定" style="background-color: orangered;
-        width: 270px;height: 50px;float:right;margin-right: 230px;color:#FFFFFF;">
+        width: 270px;height: 50px;float:right;margin-right: 230px;color:#FFFFFF;margin-top: 10px">
         </form>
     </div>
     <%-- 网页主体细节--%>
@@ -230,7 +232,7 @@
                     <div class="photo-name">
                         <img class="main_info" src="/file/${data.rooms[0].photo}" width="300" height="300" alt="房间图片">
                         <h3>${data.rooms[0].name}</h3>
-                        <input type="file" class="file" name="photo" multiple>
+                        <input type="file" class="file" name="photo">
                     </div>
 
                     <!-- 基本信息 -->
@@ -353,6 +355,14 @@
         background-image: linear-gradient(to top, #7A88FF, #7AFFAF);
         position: fixed;
         height: 100%;
+        width: 100%;
+    }
+
+    .alert-warning {
+        margin-bottom: 0;
+        z-index: 998;
+        position: fixed;
+        margin-top: 0px;
         width: 100%;
     }
 </style>

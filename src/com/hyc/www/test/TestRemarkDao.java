@@ -16,22 +16,18 @@
 
 package com.hyc.www.test;
 
-
-import com.hyc.www.service.constant.Status;
-
-import java.io.File;
-
-import static com.hyc.www.service.constant.Status.SUCCESS;
+import com.hyc.www.dao.impl.RemarkDaoImpl;
+import com.hyc.www.dao.inter.RemarkDao;
 
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
  * @program XHotel
- * @description 用于测试与文件路径相关的方法
- * @date 2019-04-08 02:19
+ * @description 测试RemarkDao
+ * @date 2019-04-23 01:24
  */
-public class TestFile {
+public class TestRemarkDao {
     public static void main(String[] args) {
-        File file = new File("./src/db_config.properties");
-        System.out.println(file.getAbsolutePath());
+        RemarkDao dao  = new RemarkDaoImpl();
+        System.out.printf(dao.listAll().get(0).getRemark());
     }
 }

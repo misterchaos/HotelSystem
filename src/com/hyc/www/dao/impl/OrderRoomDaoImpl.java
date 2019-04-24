@@ -18,10 +18,8 @@ package com.hyc.www.dao.impl;
 
 import com.hyc.www.dao.inter.OrderRoomDao;
 import com.hyc.www.po.OrderRoom;
-import com.hyc.www.po.Room;
 import com.hyc.www.util.JdbcUtils;
 
-import java.math.BigInteger;
 import java.util.LinkedList;
 
 /**
@@ -34,7 +32,7 @@ public class OrderRoomDaoImpl extends BaseDaoImpl implements OrderRoomDao {
     /**
      * 本类操作的数据库表名
      */
-    private final String TABLE_NAME = " "+ JdbcUtils.getTableName(OrderRoom.class)+" ";
+    private final String TABLE_NAME = " " + JdbcUtils.getTableName(OrderRoom.class) + " ";
 
     /**
      * 表中所有字段对应的查询语句
@@ -58,7 +56,8 @@ public class OrderRoomDaoImpl extends BaseDaoImpl implements OrderRoomDao {
         return getOrderRoom(orderNumber) != null;
     }
 
-    /**     * 添加一个订单到数据库
+    /**
+     * 添加一个订单到数据库
      *
      * @param order 要添加的订单
      * @return boolean
@@ -72,7 +71,7 @@ public class OrderRoomDaoImpl extends BaseDaoImpl implements OrderRoomDao {
         if (order == null || order.getNumber() == null) {
             return false;
         }
-        return super.insert(order)==1;
+        return super.insert(order) == 1;
     }
 
     /**
@@ -123,7 +122,29 @@ public class OrderRoomDaoImpl extends BaseDaoImpl implements OrderRoomDao {
     @Override
     public LinkedList<OrderRoom> getAllOrderRooms() {
         String sql = "select " + ALL_FIELD_NAME + " from " + TABLE_NAME;
-        LinkedList<Object> list = super.queryList(sql, null, OrderRoom.class);
+        return toOrderList(sql, null);
+    }
+
+
+    /**
+     * 通过一个用户id返回该用户的所有订单
+     *
+     * @param userId 查询订单对应的的用户id
+     * @return
+     * @name listByUserId
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/22
+     */
+    @Override
+    public LinkedList<OrderRoom> listByUserId(String userId) {
+        String sql = "select " + ALL_FIELD_NAME + " from " + TABLE_NAME + " where user_id = ?";
+        return toOrderList(sql, new String[]{userId});
+    }
+
+
+    private LinkedList<OrderRoom> toOrderList(String sql, Object[] params) {
+        LinkedList<Object> list = super.queryList(sql, params, OrderRoom.class);
         LinkedList<OrderRoom> orders = new LinkedList<>();
         for (int i = 0; i < list.size(); i++) {
             OrderRoom order = (OrderRoom) list.get(i);
@@ -136,7 +157,7 @@ public class OrderRoomDaoImpl extends BaseDaoImpl implements OrderRoomDao {
     /**
      * 将该id对应的订单从数据库中删除
      *
-     * @param Id 要删除订单的id
+     * @param id 要删除订单的id
      * @return boolean
      * @name deleteById
      * @notice none
@@ -145,7 +166,7 @@ public class OrderRoomDaoImpl extends BaseDaoImpl implements OrderRoomDao {
      */
     @Override
     public boolean deleteById(String id) {
-        if(id==null){
+        if (id == null) {
             return false;
         }
         OrderRoom orderRoom = new OrderRoom();
@@ -165,7 +186,7 @@ public class OrderRoomDaoImpl extends BaseDaoImpl implements OrderRoomDao {
      * @date 2019/4/12
      */
     @Override
-    public  boolean deleteByNumber(String orderNumber) {
+    public boolean deleteByNumber(String orderNumber) {
         return deleteById(getId(orderNumber));
     }
 
@@ -202,4 +223,6 @@ public class OrderRoomDaoImpl extends BaseDaoImpl implements OrderRoomDao {
         }
         return super.update(order) == 1;
     }
+
+
 }
