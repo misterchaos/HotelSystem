@@ -1,0 +1,18 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="XHotel:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/XHotel_war_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="XHotel/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="XHotel" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="mysql-connector-java-8.0.15" />
+          <element id="library" level="project" name="jstl" />
+          <element id="library" level="project" name="standard" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

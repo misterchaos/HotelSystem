@@ -1,0 +1,18 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="xhotel">
+    <output-path>$PROJECT_DIR$/out/artifacts/xhotel</output-path>
+    <root id="archive" name="xhotel.war">
+      <element id="dir-copy" path="$PROJECT_DIR$/web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="XHotel" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="mysql-connector-java-8.0.15" />
+          <element id="library" level="project" name="jstl" />
+          <element id="library" level="project" name="standard" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>
