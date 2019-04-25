@@ -22,8 +22,11 @@ import com.hyc.www.po.User;
 import com.hyc.www.service.Result;
 import com.hyc.www.service.constant.Status;
 import com.hyc.www.vo.PagesVo;
+import jdk.nashorn.internal.parser.JSONParser;
 
 import java.math.BigDecimal;
+import java.text.*;
+import java.util.Date;
 import java.util.LinkedList;
 
 /**
@@ -45,7 +48,7 @@ public class ServiceUtils {
     /**
      * 负责给Service层返回数据和状态
      *
-     * @param rooms   房间数据
+     * @param rooms  房间数据
      * @param status 状态量
      * @name setResult
      * @notice none
@@ -81,7 +84,7 @@ public class ServiceUtils {
         LinkedList<Room> list = new LinkedList();
         list.add(room);
         vo.setRooms(list);
-        return new Result(status,vo);
+        return new Result(status, vo);
     }
 
 
@@ -101,7 +104,7 @@ public class ServiceUtils {
         LinkedList<User> list = new LinkedList<>();
         list.add(user);
         vo.setUsers(list);
-        return new Result(status,vo);
+        return new Result(status, vo);
     }
 
     /**
@@ -118,7 +121,7 @@ public class ServiceUtils {
     public static Result setUserResult(LinkedList<User> users, Status status) {
         PagesVo vo = new PagesVo();
         vo.setUsers(users);
-        return new Result(status,vo);
+        return new Result(status, vo);
     }
 
     /**
@@ -135,7 +138,7 @@ public class ServiceUtils {
     public static Result setOrderRoomResult(LinkedList<OrderRoom> orderRooms, Status status) {
         PagesVo vo = new PagesVo();
         vo.setOrderRooms(orderRooms);
-        return new Result(status,vo);
+        return new Result(status, vo);
     }
 
     /**
@@ -154,22 +157,22 @@ public class ServiceUtils {
         LinkedList<OrderRoom> list = new LinkedList<>();
         list.add(orderRoom);
         vo.setOrderRooms(list);
-        return new Result(status,vo);
+        return new Result(status, vo);
     }
 
 
     /**
      * 负责给Service层返回状态
      *
-     * @param status    状态量
+     * @param status 状态量
      * @return com.hyc.www.service.constant.Status
      * @name setResult
      * @notice none
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/20
      */
-    public static Result setResult(Status status){
-        return new Result(status,null);
+    public static Result setResult(Status status) {
+        return new Result(status, null);
     }
 
 
@@ -282,8 +285,32 @@ public class ServiceUtils {
      * 检查订单
      */
     public static boolean isValidRoomOrder(OrderRoom order) {
+
         //TODO 需要检查重复性
-        return true;
+        return isValidDate(order);
+    }
+
+    public static boolean isValidDate(OrderRoom order) {
+        /**
+         * 检查订单日期
+         */
+        Date start = null;
+        Date end = null;
+
+        try {
+            start = new SimpleDateFormat("yyyy-mm-dd").parse(order.getStartTime());
+            end = new SimpleDateFormat("yyyy-mm-dd").parse(order.getEndTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        //TODO debug
+        if(start.before(end)){
+            System.out.println("start 在 end 之前");
+        }
+        else {
+            System.out.println("start 在 end 之后");
+        }
+        return start.before(end);
     }
 
 }

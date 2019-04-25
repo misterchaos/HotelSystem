@@ -51,7 +51,7 @@ public class StringUtils {
     /**
      * 去除输入中的不合法字符，防止标签注入
      *
-     * @param
+     * @param str 需要被过滤的字符
      * @return
      * @name
      * @notice none

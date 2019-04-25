@@ -233,7 +233,7 @@
     <div class="maxPage-summary" style="height: 500px;width:1920px">
         <div class="info-panel">
             <form class="input-info"
-                  action="${pageContext.request.contextPath}/order_room?method=${Methods.ADD_DO}&view=${param.view}"
+                  action="${pageContext.request.contextPath}/order_room?method=${Methods.ADD_DO}&view=add&roomId=${param.roomId}&userId=${param.userId}&user=${USER}&room=${param.room}&hotel=1234&price=${param.price}"
                   method="post">
                 <!-- 基本信息 -->
                 <div class="panel panel-default" style="margin-left: 30px ;width: 510px;margin-top: 100px">

@@ -100,6 +100,9 @@ public class OrderRoomServlet extends HttpServlet {
         Status status = result.getStatus();
 
         switch (status) {
+            case DATA_ILLEGAL:
+                forward(req,resp,result.getData(),"订单日期不合法！",Pages.ORDER_JSP);
+                return;
             case ALREADY_BOOKED:
                 forward(req, resp, result.getData(), "房间已被预订！", Pages.ORDER_JSP);
                 return;

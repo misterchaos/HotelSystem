@@ -255,13 +255,35 @@ serialized-form.html
 stylesheet.css
 TOC-Created-By-Easy-CHM.HHC
 Index-Created-By-Easy-CHM.HHK
+com\hyc\www\controller\servlet\OrderRoomServlet.FindType.html
+com\hyc\www\po\Remark.html
+com\hyc\www\dao\inter\RemarkDao.html
+com\hyc\www\dao\impl\RemarkDaoImpl.html
+com\hyc\www\service\inter\RemarkService.html
+com\hyc\www\service\impl\RemarkServiceImpl.html
+com\hyc\www\controller\servlet\RemarkServlet.html
+com\hyc\www\service\Result.html
+com\hyc\www\test\TestRemarkDao.html
+com\hyc\www\controller\servlet\class-use\OrderRoomServlet.FindType.html
+com\hyc\www\dao\inter\class-use\RemarkDao.html
+com\hyc\www\service\package-summary.html
+com\hyc\www\service\package-tree.html
+com\hyc\www\po\class-use\Remark.html
+com\hyc\www\service\inter\class-use\RemarkService.html
+com\hyc\www\service\package-frame.html
+com\hyc\www\dao\impl\class-use\RemarkDaoImpl.html
+com\hyc\www\service\impl\class-use\RemarkServiceImpl.html
+com\hyc\www\controller\servlet\class-use\RemarkServlet.html
+com\hyc\www\service\class-use\Result.html
+com\hyc\www\test\class-use\TestRemarkDao.html
+com\hyc\www\service\package-use.html
 
 Compile time: 0 minutes, 2 seconds
-250	Topics
-10,514	Local links
+272	Topics
+11,446	Local links
 0	Internet links
 0	Graphics
 
 
-Created c:\Users\Misterchaos\Documents\Java Develop Workplaces\IDEA workspace\HotelSystem\docs.CHM, 393,094 bytes
-Compression decreased file by 2,381,237 bytes.
+Created c:\Users\Misterchaos\Documents\Java Develop Workplaces\IDEA workspace\HotelSystem\docs.CHM, 431,336 bytes
+Compression decreased file by 2,613,097 bytes.

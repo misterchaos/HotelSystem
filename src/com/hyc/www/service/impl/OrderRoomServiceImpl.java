@@ -52,9 +52,6 @@ public class OrderRoomServiceImpl implements OrderRoomService {
     public Result add(HttpServletRequest req, HttpServletResponse resp) {
         OrderRoom order = (OrderRoom) BeanUtils.toObject(req.getParameterMap(), OrderRoom.class);
         String userName = req.getParameter("user");
-        if (!isValidRoomOrder(order)) {
-            return setResult(order, ALREADY_BOOKED);
-        }
         order.setId(getUUID());
         order.setUserId(userDao.getId(userName));
         if (dao.addOrderRoom(order)) {
