@@ -1,7 +1,7 @@
 # HotelSystem
 This is 黄钰朝’s hotel_system
 ## 附：项目链接（已部署于阿里云服务器）
-http://www.cxkball.club:2333/regist.jsp
+http://www.cxkball.club:2333/xhotel/regist.jsp
 ## 实现的功能
 
 ### 用户模块
