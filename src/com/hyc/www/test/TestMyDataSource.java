@@ -18,6 +18,7 @@ package com.hyc.www.test;
 
 import com.hyc.www.dao.impl.MyDataSourceImpl;
 import com.hyc.www.dao.inter.MyDataSource;
+import com.hyc.www.util.JdbcUtils;
 
 import java.sql.Connection;
 
@@ -34,7 +35,6 @@ public class TestMyDataSource {
 
     public static void main(String[] args) throws ClassNotFoundException {
 
-
         getConnection();
         System.out.println("测试直接从连接池获取连接");
         MyDataSource dataSource = MyDataSourceImpl.getInstance();
@@ -44,16 +44,17 @@ public class TestMyDataSource {
         System.out.println("当前已创建连接数 = " + dataSource.getCurrentCount());
         System.out.println("当前空闲连接数 = " + dataSource.getfreeCount());
         System.out.println("释放一个连接");
-        dataSource.free(conn);
+        dataSource.freeConnection(conn);
         for (int i = 0; i < 10; i++) {
             conn = dataSource.getConnection();
             System.out.println(conn);
-            dataSource.free(conn);
+            dataSource.freeConnection(conn);
         }
         System.out.println("释放一个连接");
-        dataSource.free(conn);
+        dataSource.freeConnection(conn);
         System.out.println("当前已创建连接数 = " + dataSource.getCurrentCount());
         System.out.println("当前空闲连接数 = " + dataSource.getfreeCount());
+
 
 
     }

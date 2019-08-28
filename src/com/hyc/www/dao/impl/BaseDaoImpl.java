@@ -20,6 +20,7 @@ import com.hyc.www.dao.inter.BaseDao;
 import com.hyc.www.dao.inter.ResultMapper;
 import com.hyc.www.dao.inter.SqlMapper;
 import com.hyc.www.exception.DaoException;
+import com.hyc.www.po.User;
 import com.hyc.www.util.JdbcUtils;
 
 import java.lang.reflect.Field;
@@ -47,6 +48,36 @@ public class BaseDaoImpl implements BaseDao {
      *          负责数据库insert,update,delete等功能
      **************************************************************
      */
+    /**
+     * 执行一条预编译指令，并且填入参数
+     *
+     * @param sql    要执行的预编译sql语句
+     * @param params 参数,如果没有参数需要填，则赋值为null即可
+     * @return java.lang.Object
+     * @name executeUpdate
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/9
+     */
+    public int executeUpdate(String sql, Object[] params) {
+        Connection conn = JdbcUtils.getConnection();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            JdbcUtils.setParams(ps, params);
+            /**
+             * 将ps填入参数后的完整语句赋值给sql
+             */
+            sql = ps.toString();
+            System.out.println(sql);
+            return ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DaoException("预编译更新语句异常：" + sql, e);
+        } finally {
+            JdbcUtils.close(conn);
+        }
+    }
+
+
 
     /**
      * 将一个对象映射成预编译sql语句并执行<br>
@@ -426,7 +457,7 @@ public class BaseDaoImpl implements BaseDao {
      */
 
     /**
-     * 返回一个where A ? B and/or/not C ? D 形式查询语句的查询结果
+     * 返回一个where A ? B and/or C ? D 形式查询语句的查询结果
      *
      * @param selectFields 查询的字段数组，如{"user_name","password"}
      *                     * @param obj          用于描述附加查询条件的对象<br>

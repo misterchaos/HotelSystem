@@ -46,11 +46,11 @@ public interface MyDataSource {
      * 用于将数据库连接放回连接池中
      *
      * @param conn 数据库连接
-     * @name free
+     * @name freeConnection
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/8
      */
-    void free(Connection conn);
+    void freeConnection(Connection conn);
 
 
     /**

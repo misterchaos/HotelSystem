@@ -18,10 +18,7 @@ package com.hyc.www.dao.impl;
 
 import com.hyc.www.dao.inter.MyDataSource;
 import com.hyc.www.exception.DaoException;
-import com.hyc.www.util.JdbcUtils;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -39,15 +36,19 @@ public class MyDataSourceImpl implements MyDataSource {
     /**
      * 配置文件路径
      */
-    private static final String PROP_PATH ="data_source.properties";
+    private static String PROP_PATH ="data_source.properties";
+    /**
+     * 测试数据库连接的等待时长
+     */
+    private static int TIMEOUT;
     /**
      * 初始连接数
      */
-    private static int initCount;
+    private static int INIT_SIZE;
     /**
      * 最大连接数
      */
-    private static int maxCount;
+    private static int MAX_SIZE;
     /**
      * 当前已经创建的连接数
      */
@@ -76,12 +77,14 @@ public class MyDataSourceImpl implements MyDataSource {
             url = prop.getProperty("url");
             user = prop.getProperty("user");
             password = prop.getProperty("password");
-            maxCount = Integer.parseInt(prop.getProperty("maxCount"));
-            initCount = Integer.parseInt(prop.getProperty("initCount"));
+            MAX_SIZE = Integer.parseInt(prop.getProperty("MAX_SIZE"));
+            INIT_SIZE = Integer.parseInt(prop.getProperty("INIT_SIZE"));
+            TIMEOUT = Integer.parseInt(prop.getProperty("TIMEOUT"));
             /**
              * 注册驱动
              */
             Class.forName(driver);
+            instance= new MyDataSourceImpl();
         } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
             throw new ExceptionInInitializerError(e);
@@ -98,9 +101,6 @@ public class MyDataSourceImpl implements MyDataSource {
      * @date 2019/4/8
      */
     public static MyDataSourceImpl getInstance() {
-        if (instance == null) {
-            instance = new MyDataSourceImpl();
-        }
         return instance;
     }
 
@@ -118,8 +118,21 @@ public class MyDataSourceImpl implements MyDataSource {
     @Override
     public Connection getConnection() throws DaoException {
         if (connPool.size() > 0) {
-            return connPool.removeLast();
-        } else if (currentCount < maxCount) {
+            /**
+             * 先检查连接是否可用，如果不可用，关闭该连接，返回一个新连接
+             */
+            Connection conn = connPool.removeLast();
+            try {
+                if(conn.isValid(TIMEOUT)){
+                    return conn;
+                }else {
+                    destroyConnection(conn);
+                    return createConnection();
+                }
+            } catch (SQLException e) {
+                throw new DaoException("测试数据库连接产生异常",e);
+            }
+        } else if (currentCount < MAX_SIZE) {
             return createConnection();
         } else {
             throw new DaoException("数据库连接数已达到最大值");
@@ -131,12 +144,12 @@ public class MyDataSourceImpl implements MyDataSource {
      * 用于将数据库连接放回连接池中
      *
      * @param conn 数据库连接
-     * @name free
+     * @name freeConnection
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/8
      */
     @Override
-    public void free(Connection conn) {
+    public void freeConnection(Connection conn) {
         this.connPool.addLast(conn);
     }
 
@@ -184,6 +197,26 @@ public class MyDataSourceImpl implements MyDataSource {
         }
     }
 
+
+    /**
+     * 关闭数据库连接
+     *
+     * @return java.sql.Connection
+     * @name createConnection
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/30
+     */
+    private void destroyConnection(Connection conn) throws DaoException {
+        try {
+            if(conn!=null){
+                conn.close();
+            }
+        } catch (SQLException e) {
+            throw new DaoException("关闭数据库连接异常",e);
+        }
+    }
+
+
     /**
      * 创建连接池实例，初始化数据库连接池
      *
@@ -192,7 +225,7 @@ public class MyDataSourceImpl implements MyDataSource {
      * @date 2019/4/8
      */
     private MyDataSourceImpl() {
-        for (int i = 0; i < initCount; i++) {
+        for (int i = 0; i < INIT_SIZE; i++) {
             this.connPool.add(this.createConnection());
         }
     }

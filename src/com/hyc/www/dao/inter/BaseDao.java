@@ -16,6 +16,9 @@
 
 package com.hyc.www.dao.inter;
 
+import com.hyc.www.annotation.InsertSQL;
+import com.hyc.www.po.User;
+
 import java.util.LinkedList;
 
 /**
@@ -25,6 +28,9 @@ import java.util.LinkedList;
  * @date 2019-04-08 23:05
  */
 public interface BaseDao {
+
+
+
     /*
      **************************************************************
      *          负责数据库insert,update,delete等功能
@@ -56,6 +62,7 @@ public interface BaseDao {
      * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
      * @date 2019/4/9
      */
+    @InsertSQL()
     int insert(Object obj);
 
     /**

@@ -77,7 +77,7 @@ public class JdbcUtils {
             e.printStackTrace();
         }
         if (conn != null) {
-            dataSrc.free(conn);
+            dataSrc.freeConnection(conn);
         }
     }
 
@@ -91,7 +91,7 @@ public class JdbcUtils {
      */
     public static void close(Connection conn) {
         if (conn != null) {
-            dataSrc.free(conn);
+            dataSrc.freeConnection(conn);
         }
     }
 

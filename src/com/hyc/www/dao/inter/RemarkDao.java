@@ -50,5 +50,15 @@ public interface RemarkDao {
      * @date 2019/4/23
      */
     LinkedList<Remark> listAll();
-
+    /**
+     * 返回该用户名对应留言数量
+     *
+     * @param userName 用户名
+     * @return
+     * @name getUserRemarkCount
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/26
+     */
+    int getUserRemarkCount(String userName);
 }

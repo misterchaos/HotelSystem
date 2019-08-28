@@ -38,12 +38,18 @@
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body style="background-image: linear-gradient(45deg, #40B028, #1B6EC6)">
-<c:if test="${data==null}">
-    <c:redirect url="${pageContext.request.contextPath}/remark?method=${Methods.FIND_DO.name()}"/>
+
+<c:if test="${message!=null}">
+    <div class="alert alert-warning alert-dismissable" style="margin-bottom: 0">
+        <button type="button" class="close" data-dismiss="alert"
+                aria-hidden="true">
+            &times;
+        </button>
+        提示：${message}
+    </div>
 </c:if>
 
-
-    <%-- 网页头部 --%>
+<%-- 网页头部 --%>
     <nav class="navbar navbar-default" role="navigation" style="margin-bottom: 0px    ; top: 0;width: 100%;
         position: fixed;
         z-index: 999;
@@ -128,6 +134,11 @@
 
 
 
+
+
+<c:if test="${data==null}">
+        <c:redirect url="${pageContext.request.contextPath}/remark?method=${Methods.FIND_DO}"/>
+    </c:if>
     <div class="well well-lg" style="height:fit-content;width: 80%;margin: 50px;max-width: 800px;padding: 10px;margin-top: 100px">
 
         <form action="/remark?method=${Methods.ADD_DO}" method="post">
@@ -178,7 +189,13 @@
     .navbar-default {
 
     }
-
+    .alert-warning {
+        margin-bottom: 0;
+        z-index: 998;
+        position: fixed;
+        margin-top: 0px;
+        width: 100%;
+    }
 </style>
 
 </body>

@@ -14,21 +14,23 @@
  * limitations under the License.
  */
 
-package com.hyc.www.test;
+package com.hyc.www.dao.inter;
 
-import com.hyc.www.dao.impl.RemarkDaoImpl;
-import com.hyc.www.dao.inter.RemarkDao;
+import com.hyc.www.annotation.DML;
+import com.hyc.www.annotation.InsertSQL;
+import com.hyc.www.annotation.SQLParam;
+import com.hyc.www.po.User;
 
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
  * @program XHotel
- * @description 测试RemarkDao
- * @date 2019-04-23 01:24
+ * @description
+ * @date 2019-05-01 10:46
  */
-public class TestRemarkDao {
-    public static void main(String[] args) {
-        RemarkDao dao  = new RemarkDaoImpl();
-        System.out.printf(dao.listAll().get(0).getRemark());
-        System.out.println(dao.getUserRemarkCount("test8888(我的新昵称)"));
-    }
+public interface MyUserDao extends BaseDao {
+
+    @InsertSQL("insert into t_user (id,name) values (?,?) ")
+    boolean insert(@SQLParam() String id,@SQLParam (index = 2)String name);
+
+
 }

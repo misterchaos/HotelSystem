@@ -67,7 +67,7 @@ public class RemarkDaoImpl extends BaseDaoImpl implements RemarkDao {
      */
     @Override
     public LinkedList<Remark> listAll() {
-        String sql = "select id,user_name,remark,status,gmt_create,gmt_modified from " + TABLE_NAME+" order by gmt_create desc";
+        String sql = "select id,user_name,remark,status,gmt_create,gmt_modified from " + TABLE_NAME + " order by gmt_create desc";
         LinkedList<Remark> remarks = new LinkedList<>();
         List list = super.queryList(sql, new String[0], Remark.class);
         if (list != null) {
@@ -78,5 +78,22 @@ public class RemarkDaoImpl extends BaseDaoImpl implements RemarkDao {
             return remarks;
         }
         return null;
+    }
+
+
+    /**
+     * 返回该用户名对应留言数量
+     *
+     * @param userName 用户名
+     * @return
+     * @name getUserRemarkCount
+     * @notice none
+     * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
+     * @date 2019/4/26
+     */
+    @Override
+    public int getUserRemarkCount(String userName) {
+        String sql = "select count(*) from " + TABLE_NAME + " where user_name = ? ";
+        return Math.toIntExact((Long) super.queryValue(sql, new String[]{userName}));
     }
 }
