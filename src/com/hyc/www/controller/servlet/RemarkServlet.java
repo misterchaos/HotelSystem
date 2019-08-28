@@ -68,8 +68,14 @@ public class RemarkServlet extends HttpServlet {
         Status status = result.getStatus();
 
         switch (status) {
+            case DATA_TOO_MUCH:
+                forward(req, resp, result.getData(), "您的留言次数已达上限！如果您是测试所需，请联系作者", Pages.REMARK_JSP);
+                return;
+            case DATA_ILLEGAL:
+                forward(req, resp, result.getData(), "数据不合法！（不可为空）", Pages.REMARK_JSP);
+                return;
             case SUCCESS:
-                forward(req, resp, result.getData(), "添加留言成功", Pages.REMARK_JSP);
+                redirect(resp,Pages.REMARK_JSP.toString());
                 return;
             case ERROR:
                 forward(req, resp, result.getData(), "添加留言失败！", Pages.REMARK_JSP);

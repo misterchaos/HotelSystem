@@ -16,6 +16,7 @@
 
 package com.hyc.www.po;
 
+import com.hyc.www.annotation.TableName;
 import com.hyc.www.po.abs.BaseEntity;
 
 import java.math.BigDecimal;
@@ -26,6 +27,7 @@ import java.math.BigDecimal;
  * @description 对应数据库中的用户表，用来存储用户信息
  * @date 2019-04-09 20:12
  */
+@TableName(value = "t_user")
 public class User extends BaseEntity implements Cloneable {
     private String name;
     private String password;

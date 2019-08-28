@@ -17,7 +17,6 @@
 package com.hyc.www.service.impl;
 
 import com.hyc.www.dao.inter.RemarkDao;
-import com.hyc.www.dao.inter.UserDao;
 import com.hyc.www.po.Remark;
 import com.hyc.www.service.Result;
 import com.hyc.www.service.inter.RemarkService;
@@ -29,8 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.LinkedList;
 
-import static com.hyc.www.service.constant.Status.ERROR;
-import static com.hyc.www.service.constant.Status.SUCCESS;
+import static com.hyc.www.service.constant.Status.*;
 import static com.hyc.www.util.ServiceUtils.setResult;
 import static com.hyc.www.util.StringUtils.toLegalText;
 import static com.hyc.www.util.UUIDUtils.getUUID;
@@ -58,18 +56,27 @@ public class RemarkServiceImpl implements RemarkService {
     @Override
     public Result add(HttpServletRequest req, HttpServletResponse resp) {
         Remark remark = (Remark) BeanUtils.toObject(req.getParameterMap(), Remark.class);
+        String user = remark.getUserName();
+        if (dao.getUserRemarkCount(user) > 20) {
+            PagesVo vo = new PagesVo();
+            vo.setRemarks(dao.listAll());
+            return new Result(DATA_TOO_MUCH, vo);
+        }
         remark.setId(getUUID());
         /**
          * 使用toLegalText过滤非法字符
          */
         remark.setRemark(toLegalText(remark.getRemark()));
+        if (remark.getRemark().trim().isEmpty()) {
+            PagesVo vo = new PagesVo();
+            vo.setRemarks(dao.listAll());
+            return new Result(DATA_ILLEGAL, vo);
+        }
         /**
          * 此处将留言中的用户名字段修改为用户的昵称
          */
-        UserDao userDao = (UserDao) BeanFactory.getBean(BeanFactory.DaoType.UserDao);
         String userName = remark.getUserName();
-        String nickName = userDao.getUser(remark.getUserName()).getNickName();
-        remark.setUserName(userName+"("+nickName+")");
+        remark.setUserName(userName);
         if (dao.add(remark)) {
             PagesVo vo = new PagesVo();
             vo.setRemarks(dao.listAll());

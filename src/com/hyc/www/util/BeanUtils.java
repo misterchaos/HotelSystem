@@ -67,8 +67,9 @@ public class BeanUtils {
             e.printStackTrace();
             throw new RuntimeException("无法实例化类：" + clazz.getName());
         }
-        for (Field f : fields) {
 
+
+        for (Field f : fields) {
             /**
              * 获取每个属性的String类型参数的构造器
              */

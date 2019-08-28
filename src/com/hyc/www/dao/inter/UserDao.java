@@ -16,6 +16,7 @@
 
 package com.hyc.www.dao.inter;
 
+import com.hyc.www.annotation.TableName;
 import com.hyc.www.po.User;
 
 import java.math.BigInteger;

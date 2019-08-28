@@ -41,6 +41,10 @@ public enum Status {
      * 数据不合法
      */
     DATA_ILLEGAL,
+    /**
+     * 输入次数过多
+     */
+    DATA_TOO_MUCH,
 
 
     /*

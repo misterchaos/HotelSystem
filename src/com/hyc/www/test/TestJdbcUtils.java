@@ -21,6 +21,9 @@ import com.hyc.www.po.User;
 import com.hyc.www.util.JdbcUtils;
 
 import java.sql.Connection;
+import java.sql.SQLException;
+
+import static com.hyc.www.util.JdbcUtils.getConnection;
 
 /**
  * @author <a href="mailto:kobe524348@gmail.com">黄钰朝</a>
@@ -29,21 +32,30 @@ import java.sql.Connection;
  * @date 2019-04-08 23:24
  */
 public class TestJdbcUtils {
-    public static void main(String[] args) {
-        System.out.println("测试通过jdbcUtil获取连接");
-        Connection conn = JdbcUtils.getConnection();
+    public static void main(String[] args) throws SQLException {
 
-        for (int i = 0; i < 9; i++) {
-            conn = JdbcUtils.getConnection();
-            System.out.println(conn);
-            JdbcUtils.close(conn);
+        /*
+         ***************************************************************
+         *              测试从jdbcUtils取链接
+         * ************************************************************
+         * */
+
+        System.out.println("当前连接数：" + JdbcUtils.getCurrentCount());
+        System.out.println("空闲连接数：" + JdbcUtils.getfreeCount());
+        for (int i = 0; i < 3; i++) {
+
+            System.out.println(getConnection());
         }
-        System.out.println("释放一个连接");
-        JdbcUtils.close(null,null,conn);
-        System.out.println("当前已创建连接数 = " + JdbcUtils.getCurrentCount());
-        System.out.println("当前空闲连接数 = " + JdbcUtils.getfreeCount());
+        System.out.println("当前连接数：" + JdbcUtils.getCurrentCount());
+        System.out.println("空闲连接数：" + JdbcUtils.getfreeCount());
 
-        System.out.println(JdbcUtils.getTableName(new User()));
-        System.out.println(JdbcUtils.getTableName(new Room()));
+        Connection conn=null;
+        for (int i = 0; i < 10; i++) {
+            conn = getConnection();
+            JdbcUtils.close(conn);
+            System.out.println(conn);
+        }
+        System.out.println("当前连接数：" + JdbcUtils.getCurrentCount());
+        System.out.println("空闲连接数：" + JdbcUtils.getfreeCount());
     }
 }

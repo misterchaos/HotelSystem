@@ -36,13 +36,6 @@
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://www.recaptcha.net/recaptcha/api.js"></script>
-    <script>
-        grecaptcha.ready(function() {
-            grecaptcha.execute('reCAPTCHA_site_key', {action: 'homepage'}).then(function(token) {
-            ...
-            });
-        });
-    </script>
 </head>
 
 <body>
@@ -84,7 +77,7 @@
                 <div class="panel-body">
                     <div class="color-input-field">
                         <form name="login" action="${pageContext.request.contextPath}/user?method=${Methods.REGIST_DO}"
-                              method="post" onsubmit="return agree()">
+                              method="post" >
                             <input type="text" required="required" class="form-control" name="name"
                                    placeholder="请输入用户名(6-20位英文字母，数字或下划线)" align="center">
                             <br>

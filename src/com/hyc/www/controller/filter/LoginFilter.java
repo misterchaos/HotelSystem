@@ -59,7 +59,8 @@ public class LoginFilter implements Filter {
         if (!(("/"+Pages.LOGIN_JSP.toString()).equalsIgnoreCase(path)
                 || ("/"+Pages.REGIST_JSP.toString()).equalsIgnoreCase(path)
                 || (Methods.LOGIN_DO.toString()).equalsIgnoreCase(method)
-                || (Methods.REGIST_DO.toString()).equalsIgnoreCase(method))) {
+                || (Methods.REGIST_DO.toString()).equalsIgnoreCase(method)
+                || uri.endsWith("jpg"))) {
             /**
              * 如果session不存在则检查cookie
              */
