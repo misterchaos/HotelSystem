@@ -33,7 +33,7 @@ xhotel是一个酒店管理系统，提供查看房间，预订房间，个人�
 
 #### 2.首页
 
-#### ![img](https://github.com/misterchaos/HotelSystem/blob/dev/项目截图/首页.jpg)
+#### ![img](https://github.com/misterchaos/HotelSystem/blob/dev/项目截图/主页.jpg)
 
 #### 3.模糊查询房间
 
