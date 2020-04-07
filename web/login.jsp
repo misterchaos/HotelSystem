@@ -39,7 +39,7 @@
 <%-- 页面头部--%>
 <div class="login-head" style="height: 100px">
     <div class="jumbotron" style="padding-bottom: 20px;padding-top:20px;margin:0px">
-        <a href="/${Pages.INDEX_JSP.toString()}"><h2 style="text-align: left">Xhotel酒店管理系统</h2></a>
+        <a href="${pageContext.request.contextPath}/${Pages.INDEX_JSP.toString()}"><h2 style="text-align: left">Xhotel酒店管理系统</h2></a>
     </div>
 </div>
 <c:if test="${message!=null}">
@@ -54,11 +54,7 @@
 
 
 <div class="login-body" style="overflow: hidden;position: absolute">
-    <div class="background"  style="        background-image: linear-gradient(45deg,#40B028,#1B6EC6);
-        position: fixed;
-        height: 100%;
-        width: 100%;">
-    </div>
+    <img src="${pageContext.request.contextPath}/login.jpg" width="1920" height="674">
 </div>
 
 <div class="login-body">

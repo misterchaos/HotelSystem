@@ -51,7 +51,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/${Pages.INDEX_JSP.toString()}">X-HOTEL</a>
+            <a class="navbar-brand" href="${pageContext.request.contextPath}/${Pages.INDEX_JSP.toString()}">X-HOTEL</a>
         </div>
         <div class="collapse navbar-collapse" id="example-navbar-collapse">
             <ul class="nav navbar-nav">
@@ -138,7 +138,7 @@
 <c:if test="${param.view=='user'}">
     <c:if test="${data==null}">
         <c:redirect
-                url="${pageContext.request.contextPath}/user?method=${Methods.FIND_DO.toString()}&view=${param.view}&find=this&name=${param.name}"/>
+                url="/user?method=${Methods.FIND_DO.toString()}&view=${param.view}&find=this&name=${param.name}"/>
     </c:if>
     <%-- 网页主体摘要--%>
     <div class="maxPage-summary" style="height: 500px;width:1920px">
@@ -284,7 +284,7 @@
 <c:if test="${param.view=='update'}">
     <c:if test="${data==null}">
         <c:redirect
-                url="${pageContext.request.contextPath}/user?method=${Methods.FIND_DO}&find=this&update=${param.update}&view=${param.view}&name=${param.name}"/>
+                url="/user?method=${Methods.FIND_DO}&find=this&update=${param.update}&view=${param.view}&name=${param.name}"/>
     </c:if>
 
     <%--更新基本信息--%>

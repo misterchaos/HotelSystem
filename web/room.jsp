@@ -50,7 +50,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/${Pages.INDEX_JSP.toString()}">X-HOTEL</a>
+            <a class="navbar-brand" href="${pageContext.request.contextPath}/${Pages.INDEX_JSP.toString()}">X-HOTEL</a>
         </div>
         <div class="collapse navbar-collapse" id="example-navbar-collapse">
             <ul class="nav navbar-nav">
@@ -133,7 +133,7 @@
 <c:if test="${param.view=='room'}">
     <c:if test="${data==null}">
         <c:redirect
-                url="${pageContext.request.contextPath}/room?method=${Methods.FIND_DO.name()}&view=${param.view}&find=this&number=${param.number}"/>
+                url="/room?method=${Methods.FIND_DO.name()}&view=${param.view}&find=this&number=${param.number}"/>
     </c:if>
     <%-- 网页主体摘要--%>
     <div class="maxPage-summary" style="height: 500px;width:1920px">
@@ -215,7 +215,7 @@
 <c:if test="${param.view=='update'||param.view=='add'}">
     <c:if test="${param.view=='update'&&data==null}">
         <c:redirect
-                url="${pageContext.request.contextPath}/room?method=${Methods.FIND_DO}&view=${param.view}&find=this&number=${param.number}"/>
+                url="/room?method=${Methods.FIND_DO}&view=${param.view}&find=this&number=${param.number}"/>
     </c:if>
     <%-- 网页主体摘要--%>
     <div class="maxPage-summary" style="height: 500px;width:1920px">

@@ -128,7 +128,7 @@
 <c:if test="${param.view=='order'}">
     <c:if test="${data==null}">
         <c:redirect
-                url="${pageContext.request.contextPath}/order_room?method=${Methods.FIND_DO.name()}&view=${param.view}&find=user&user=${param.user}"/>
+                url="/order_room?method=${Methods.FIND_DO.name()}&view=${param.view}&find=user&user=${param.user}"/>
     </c:if>
     <c:if test="${data.orderRooms.size()==0}">
         <div class="alert alert-warning alert-dismissable" style="margin-bottom: 0">
