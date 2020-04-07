@@ -39,7 +39,7 @@
 </head>
 <body >
 <c:if test="${data==null}">
-    <c:redirect url="${pageContext.request.contextPath}/room?method=${Methods.FIND_DO.name()}&find=all&name=&page=1"/>
+    <c:redirect url="/room?method=${Methods.FIND_DO.name()}&find=all&name=&page=1"/>
 </c:if>
 
 <div class="background"  >
@@ -56,7 +56,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/${Pages.INDEX_JSP.toString()}">X-HOTEL</a>
+            <a class="navbar-brand" href="${pageContext.request.contextPath}/${Pages.INDEX_JSP.toString()}">X-HOTEL</a>
         </div>
         <div class="collapse navbar-collapse" id="example-navbar-collapse">
             <ul class="nav navbar-nav">

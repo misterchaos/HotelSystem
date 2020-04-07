@@ -63,7 +63,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/${Pages.INDEX_JSP.toString()}">X-HOTEL</a>
+                <a class="navbar-brand" href="${pageContext.request.contextPath}/${Pages.INDEX_JSP.toString()}">X-HOTEL</a>
             </div>
             <div class="collapse navbar-collapse" id="example-navbar-collapse">
                 <ul class="nav navbar-nav">
@@ -137,7 +137,7 @@
 
 
 <c:if test="${data==null}">
-        <c:redirect url="${pageContext.request.contextPath}/remark?method=${Methods.FIND_DO}"/>
+        <c:redirect url="/remark?method=${Methods.FIND_DO}"/>
     </c:if>
     <div class="well well-lg" style="height:fit-content;width: 80%;margin: 50px;max-width: 800px;padding: 10px;margin-top: 100px">
 
