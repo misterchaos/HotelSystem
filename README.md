@@ -5,6 +5,7 @@
 [![release](https://img.shields.io/badge/version-beta-orange)](https://github.com/misterchaos/HotelSystem/releases)
 [![release](https://img.shields.io/badge/build-passing-green)](https://github.com/misterchaos/HotelSystem/releases)
 
+[![Stargazers over time](https://starchart.cc/misterchaos/HotelSystem.svg)](https://starchart.cc/misterchaos/HotelSystem)
 ## :smile:Introduction
 
 TopView工作室一轮考核项目：酒店管理系统（黄钰朝）
