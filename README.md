@@ -15,7 +15,7 @@ xhotel是一个酒店管理系统，提供查看房间，预订房间，个人�
 
 ## :heavy_check_mark:Quick Start
 
-### :point_right:[点击这里](http://47.102.210.203:8080/xhotel)立即体验
+### :point_right:[点击这里](https://app.hellochaos.cn/xhotel)立即体验
 
 ## :bulb:Information
 
